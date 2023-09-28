@@ -45,5 +45,12 @@ $\alpha_{ij} = \alpha_{2} + \beta_{i}S_{j} + \beta_{j}S_{j} +  ...$
 
 Where $X_{ij}$ represents the observed network, $x_{ij}$ represents the "true network," $\sigma_{ij}$ represents the measurement error and $P_{1}$ to $P_{n}$ are the predictors of research interest. This is the 'measurement error approach'.
 
+We can use 'dyadic connections model' to estimate ($\sigma_{ij}$) as the outcome of the sampling effort of individual $i$ ($S_{j}$) and individual $j$ ($S_{j}$). Additionally, we can include any additional phenothypic traits ($...$) that might influence link observations (e.g., sex, age, hierarchical rank of $i$ and $j$) while examining their effects on $x_{ij}$.
 
-We can use 'dyadic connections model' to estimate ($\sigma_{ij}$) as the outcome of the sampling effort of individual $i$ ($S_{j}$) and individual $j$ ($S_{j}$). Additionally, we can include any other predictors that might influence link observations (e.g., sex, age, hierarchical rank of $i$ and $j$) while examining their effects on $x_{ij}$.
+### 1.5 Interaction bias
+We could introduce an extra layer to the Bayesian approach we've developed to account for this bias. However, unlike sampling effort bias, interaction bias remains unknown to the observer and can't be defined within the model. Therefore, we anticipate that neither approach can effectively address this bias.
+
+Currently, two potential methods may estimate interaction bias:
+
+1. Running telemetric experiments concurrently with observations.
+2. Use $\sigma_{ij}$ results as a proxy for interaction bias. For instance, if gender affects sampling effort, we could assume it also influences interaction bias to the same degree. Yet, it's important to note that this approach may yield unreliable results.
