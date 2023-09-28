@@ -12,7 +12,7 @@ The objective of this project is to assess the reliability of animal social netw
 Since 2000, the main standard for ASNA has been permutations. However, recent simulations have highlighted problems related to the rates of type I and type II errors. These simulations follow a scenario outlined by Farine in 2017, but even this scenario has some issues.
 The main problem with the simulation is that when links to certain individuals are removed, entire observations are often lost, resulting in a new bias in sampling effort between different phenotypes in the population. Additionally, these simulations assume that females can be equally social or have higher sociality, but never lower sociality. Refer to the R script "1. current simulation issue.R" for more details.
 
-###1.2. Introducing a new simulation approach
+### 1.2. Introducing a new simulation approach
 To address these concerns, I have developed a new simulation that allows for the specification of differences between two categorical phenotypes of individuals, while independently controlling the degree of bias introduced in sampling effort and interactions. For more information, please see the R script "2. generate_biased_network.R".
 
 Cody has also created a simulation that provides more refined details and can generate both types of biases. This simulation is documented in the R script "3. cody_simulation.R," which we will use for our publications.
@@ -33,4 +33,17 @@ We employ different ASNA methods aimed at correcting for sampling biases. These 
   3.  Bayesian approach developed by our team.
 
 ### 1.4. Bayesian approach developed by our team
-Using rethinking approaches, we model dyadic connections (as discussed in video 15) utilizing a measurement error approach (as explained in video 17). The model can be summarized as follows, considering that predictors are centered:
+Using rethinking approaches, we use [model dyadic connections](https://www.youtube.com/watch?v=XDoAglqd7ss&list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN&index=15&pp=iAQB&ab_channel=RichardMcElreath)  combine with [measurement error approach](https://www.youtube.com/watch?v=PIuqxOBJqLU&list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN&index=17&ab_channel=RichardMcElreath). The model can be summarized as follows, considering that predictors are centered:
+<p align="center">
+$X_{ij} \sim binomial(x_{ij}, \sigma_{ij})$
+<p align="center">
+$x_{ij} = \alpha + \beta_{1}P_{1} + ... + \beta_{n}P_{n}$
+<p align="center">
+$\sigma_{ij} \sim binomial(\alpha_{ij})$
+<p align="center">
+$\alpha_{ij} = \alpha_{2} + \beta_{i}S_{j} + \beta_{j}S_{j} +  ...$
+
+Where $X_{ij}$ represents the observed network, $x_{ij}$ represents the "true network," $\sigma_{ij}$ represents the measurement error and $P_{1}$ to $P_{n}$ are the predictors of research interest. This is the 'measurement error approach'.
+
+
+We can use 'dyadic connections model' to estimate ($\sigma_{ij}$) as the outcome of the sampling effort of individual $i$ ($S_{j}$) and individual $j$ ($S_{j}$). Additionally, we can include any other predictors that might influence link observations (e.g., sex, age, hierarchical rank of $i$ and $j$) while examining their effects on $x_{ij}$.
