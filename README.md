@@ -37,9 +37,9 @@ Using rethinking approaches, we use [model dyadic connections](https://www.youtu
 <p align="center">
 $X_{ij} \sim binomial(x_{ij}, \sigma_{ij})$
 <p align="center">
-$x_{ij} = logistic(\alpha + \beta_{i1}P_{i1} + \beta_{j1}P_{j1} ++... + \beta_{in}P_{in} + \beta_{jn}P_{jn})$
+$x_{ij} = logistic(\alpha + \beta_{i1}P_{i1} + \beta_{j1}P_{j1} +... + \beta_{in}P_{in} + \beta_{jn}P_{jn})$
 <p align="center">
-$\sigma_{ij} = \alpha_{2} + \beta_{i}S_{j} + \beta_{j}S_{j} +  ...$
+$\sigma_{ij} = \alpha_{2} + \beta_{i}S_{i} + \beta_{j}S_{j} +  ...$
 
 Where $X_{ij}$ represents "true network", $x_{ij}$ represents the the observed network,  $\sigma_{ij}$ represents the measurement error and $P_{1}$ to $P_{n}$ are the predictors of research interest for individuals $i$ and $j$. This is the 'measurement error approach' where we model the "true network" as a function of the observed network and a variance based on the error measurement.
 
