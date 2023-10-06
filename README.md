@@ -15,7 +15,7 @@ The main problem with the simulation is that when links to certain individuals a
 ### 1.2. Introducing a new simulation approach
 To address these concerns, I have developed a new simulation that allows for the specification of differences between two categorical phenotypes of individuals, while independently controlling the degree of bias introduced in sampling effort and interactions. For more information, please see the R script ["2. generate_biased_network.R"](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/2.%20generate_biased_network.R).
 
-Cody has also created a simulation that provides more refined details and can generate both types of biases. This simulation is documented in the R script ["3. cody_simulation.R"](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/3.%20cody_simulation.R), which we will use for our publications.
+Cody has also created a simulation that provides more refined details and can generate both types of biases. This simulation is documented in the R script ["3. Data simulation.R"](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/3.%20Data%20simulation.R), which we will use for our publications.
 
 With these new simulation approaches, we can now test various scenarios while controlling for sociality differences between phenotypes["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/4.%20Simulation.R). The scenarios include:
 
