@@ -137,8 +137,6 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
     }
   }
 
-
-
   # !! Sum dyad and interaction probabilities and create ties probabilities matrix.
   for ( i in 1:(N_id-1) ){
     for ( j in (i+1):N_id){
