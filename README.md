@@ -17,7 +17,7 @@ To address these concerns, I have developed a new simulation that allows for the
 
 Cody has also created a simulation that provides more refined details and can generate both types of biases. This simulation is documented in the R script ["3. Data simulation.R"](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/3.%20Data%20simulation.R), which we will use for our publications.
 
-With these new simulation approaches, we can now test various scenarios while controlling for sociality differences between phenotypes["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/4.%20Simulation.R). The scenarios include:
+With these new simulation approaches, we can now test various scenarios while controlling for sociality differences between phenotypes. The scenarios include:
 
   1.  No sampling effort bias and no interaction bias.
   2.  Transition from negative to positive sampling effort bias.
@@ -26,7 +26,7 @@ With these new simulation approaches, we can now test various scenarios while co
 
 ### 1.3. Reliability estimation
 
-We employ different ASNA methods aimed at correcting for sampling biases. These methods include:
+We employ different ASNA methods aimed at correcting for sampling biases, see ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/4.%20Simulation.R). These methods include:
 
   1.  Rates of interactions per unit of time (commonly used by primatologists).
   2.  Proportion of time a dyad has been observed together, known as SRI (typically used by behavioral ecologists).
