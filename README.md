@@ -52,3 +52,7 @@ Currently, two potential methods may estimate interaction bias:
 
 1. Running telemetric experiments concurrently with observations.
 2. Use $\sigma_{ij}$ results as a proxy for interaction bias. For instance, if gender affects sampling effort, we could assume it also influences interaction bias to the same degree. Yet, it's important to note that this approach may yield unreliable results.
+
+# To-Do
+1.  Simulation doesn't have interaction bias.
+2.  Run simulations.
