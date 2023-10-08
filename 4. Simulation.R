@@ -176,6 +176,7 @@ simulations <- function(
 
 result = simulations(Reps = 10, strand = T)
 result$resid = result$detect_effect - result$hair
+
 # Plot ----------
 library(ggpubr)
 require(ggplot2)
@@ -196,8 +197,8 @@ p1 = ggplot(result, aes(x=hair,  y= detect_effect, xmin=result[,2], xmax=result[
 p2 = ggplot(result, aes(x = resid, y = detect_effect, color = approach))+
   geom_point()+
   geom_vline(xintercept = 0, linetype = "dashed")+
-  xlab("Difference between True efect size and Estimated effect size")+
-  ylab("True efect size")+
+  xlab("Difference between true effect size and estimated effect size")+
+  ylab("True effect size")+
   theme(axis.text = element_text(size = 14))+
   theme(axis.title = element_text(size = 14))
 
