@@ -60,7 +60,8 @@ Currently, two potential methods may estimate interaction bias:
 Script ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/4.%20Simulation.R) provide two types of plots:
 1.  Estimated effect size vs. true effect size for each approach.
 2.  Difference between true effect size and estimated effect size.
-   
+![alt text](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/Simulation%20results.png)
+
 # 4.To-Do
 1.  Simulation doesn't have interaction bias.
 2.  Run simulations.
