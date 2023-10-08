@@ -19,9 +19,9 @@ simulations <- function(
     B = NULL,
     V = 1,
     groups=NULL,
-    sr_sigma = c(0.5, 0.5),
+    sr_sigma = c(0.3, 1.5),
     sr_rho = 0.0,
-    dr_sigma = 1.2,
+    dr_sigma = 1,
     dr_rho = 0.0,
     exposure_sigma = 2.9,
     exposure_baseline = 40,
@@ -165,7 +165,7 @@ simulations <- function(
 }
 
 result = simulations(Reps = 10, strand = T)
-
+result$resid = result$detect_effect - result$hair
 # Plot ----------
 ggplot(result, aes(x=hair,  y= detect_effect, xmin=result[,2], xmax=result[,3], color = as.factor(sim), group = sim, label = hair))+
   geom_crossbar() +
@@ -181,4 +181,5 @@ ggplot(result, aes(x=hair,  y= detect_effect, xmin=result[,2], xmax=result[,3], 
   theme(axis.title = element_text(size = 14))
 
 
-
+ggplot(result, aes(x = resid, y = detect_effect))+
+  geom_point(aes(size = 1)), color = as.factor(sim)
