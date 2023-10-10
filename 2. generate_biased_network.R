@@ -53,6 +53,7 @@ sim <- function(N=30, Obs.mean.bias = 0, obs.sd.bias = 1, diff.soc.pheno = 50, N
       ego.obs = rnorm(1, mean = obs.f, sd = abs((obs.f*obs.sd.bias)/100))
       ego.obs = round(ego.obs)
       sampling.effort = rbind(sampling.effort, data.frame(ego, "sampling.effort" = ego.obs, "sex" = ego.sex))
+
       if(ego.obs < 1 ){next()}
       for (b in 1:ego.obs) {
         cat("Processing individual ", a, " observation #", b, "\r")

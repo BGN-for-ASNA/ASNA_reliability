@@ -9,10 +9,10 @@ simulations <- function(
     B = NULL,
     V = 1,
     groups=NULL,
-    sr_sigma = c(0.3, 1.5),
-    sr_rho = 0.0,
-    dr_sigma = 1,
-    dr_rho = 0.0,
+    sr_sigma = c(1.4, 0.8),
+    sr_rho = 0.5,
+    dr_sigma = 1.2,
+    dr_rho = 0.8,
     exposure_sigma = 2.9,
     exposure_baseline = 40,
     strand = T, # use STRAN model
@@ -22,8 +22,6 @@ simulations <- function(
   require(parallel)
   require(foreach)
   require(doParallel)
-
-
   ########################################
   #######  Create grid of simulations ####
   ########################################
@@ -51,10 +49,23 @@ simulations <- function(
     }
     RESULTS = NULL
     # Make data--------------------------------
-    Clique = rep(1, grid_subsample$N_id[i])
-    Hairy = matrix(rnorm(grid_subsample$N_id[i], 0, 1), nrow=grid_subsample$N_id[i], ncol=1)
+    N_id = grid_subsample$N_id[i]
+
+    ## Block data -----------------
+    V = 1            # One blocking variable
+    G = 3            # Three categories in this variable
+    clique = sample(1:3, N_id, replace=TRUE)
+    B = matrix(-9, nrow=G, ncol=G)
+    diag(B) = -6.5 # Block matrix
+    B[1,3] = -8.9
+    B[3,2] = -7.9
+
+    block = data.frame(Clique=factor(clique))
+
+    Clique = rep(1, N_id)
+    Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
     A = simulate_sbm_plus_srm_network_with_measurement_bias(
-      N_id = grid_subsample$N_id[i],
+      N_id = N_id,
       B=list(B=B),
       V=V,
       groups=groups,
@@ -64,17 +75,18 @@ simulations <- function(
       sr_rho = sr_rho,
       dr_sigma = dr_sigma,
       dr_rho = dr_rho,
-      exposure_predictors = cbind(rep(1,grid_subsample$N_id[i]),Hairy),
+      exposure_predictors = cbind(rep(1,N_id),Hairy),
       exposure_effects = c(-1, grid_subsample$hairy_detect_effect[i]),
       exposure_sigma = exposure_sigma,
-      exposure_baseline =exposure_baseline
+      exposure_baseline =exposure_baseline,
+      int_bias = T
     )
 
     # STRAND--------------------------------
     if(strand){
       nets = list(Grooming = A$network)
       exposure_nets = list(Exposure = A$true_samps)
-      block = data.frame(Clique=factor(Clique))
+
       indiv =  data.frame(Hairy = Hairy)
       model_dat = make_strand_data(outcome = nets,
                                    individual_covariates = indiv,
@@ -84,15 +96,19 @@ simulations <- function(
       )
 
       # !!  I replaced fit_block_plus_social_relations_model by fit_social_relations_model
-      fit =  fit_social_relations_model(data=model_dat,
-                                        focal_regression = ~ Hairy,
-                                        target_regression = ~ Hairy,
-                                        dyad_regression = ~  1,
-                                        mode="mcmc",
-                                        stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
-                                                                    iter_warmup = 1000, iter_sampling = 1000,
-                                                                    max_treedepth = NULL, adapt_delta = .98)
+      fit =  fit_block_plus_social_relations_model(data=model_dat,
+                                                   block_regression = ~ Clique,
+                                                   focal_regression = ~ Hairy,
+                                                   target_regression = ~ Hairy,
+                                                   dyad_regression = ~  1,
+                                                   mode="mcmc",
+                                                   stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
+                                                                               iter_warmup = 1000, iter_sampling = 1000,
+                                                                               max_treedepth = NULL, adapt_delta = .98)
       )
+
+
+
       res = summarize_strand_results(fit)
 
       result = as.data.frame(t(data.frame(as.numeric(unlist(c(unlist(res$summary[2,2:4]), grid_subsample[i,]))))))
@@ -174,17 +190,16 @@ simulations <- function(
   registerDoSEQ()
   return(do.call('rbind', r))
 }
-result = simulations(Reps = 10, strand = F)
-result$resid = result$detect_effect - result$hair
+result = simulations(Reps = 2, strand = T, ncores = 2)
+result$resid = result$tie_effect - result$hair
 
 # Plot ----------
 library(ggpubr)
 require(ggplot2)
-p1 = ggplot(result, aes(x=hair,  y= detect_effect, xmin=result[,2], xmax=result[,3], color = approach, group = sim, label = hair))+
-  geom_errorbar() +
-  geom_point(aes(size = 0.5), show.legend = FALSE, alpha = 0.5) +
+p1 = ggplot(result, aes(x=hair,  y= tie_effect , xmin=result[,2], xmax=result[,3],  group = sim, label = hair))+
+  geom_errorbar(width=1) +
+  geom_point(aes(color = N_id, size = detect_effect), alpha = 0.5) +
   facet_grid( . ~ approach, space="free") +
-  theme(legend.position = 'none')+
   xlim(c(-5,5))+
   ylim(c(-5,5))+
   geom_abline()+
@@ -195,7 +210,7 @@ p1 = ggplot(result, aes(x=hair,  y= detect_effect, xmin=result[,2], xmax=result[
 
 
 p2 = ggplot(result, aes(x = resid, y = detect_effect, color = approach))+
-  geom_point()+
+  geom_point(aes(size = detect_effect), show.legend = FALSE, alpha = 0.5)+
   geom_vline(xintercept = 0, linetype = "dashed")+
   xlab("Difference between true effect size and estimated effect size")+
   ylab("True effect size")+
@@ -203,5 +218,5 @@ p2 = ggplot(result, aes(x = resid, y = detect_effect, color = approach))+
   theme(axis.title = element_text(size = 14))
 
 
-ggarrange(p1, p2, ncol = 1, nrow = 2, common.legend = TRUE)
+ggarrange(p1, p2, ncol = 1, nrow = 2, common.legend = FALSE)
 

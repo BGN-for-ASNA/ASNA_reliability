@@ -51,8 +51,10 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
                                                                exposure_effects = NULL,
                                                                exposure_sigma = 1.9,
                                                                exposure_baseline = 50,
-                                                               int_bias = FALSE
-                                                                ){
+                                                               int_bias = FALSE,
+                                                               int_mu = c(0,0.5),
+                                                               int_sigma = c(0.3, 0.6),
+                                                               int_rho = 0.2){
   require(STRAND)
   ###############################
   ####### Run some checks #######
@@ -80,25 +82,26 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
   ###############################
   # !! True networks make reference to the network without bias.
   # Create correlation matrices (aka matrixes). !! It defines the reciprocity of interactions.
-  Rho_sr = Rho_dr = diag(c(1,1))
+  Rho_sr = Rho_dr = Rho_int = diag(c(1,1))
   Rho_sr[1,2] = Rho_sr[2,1] = sr_rho
   Rho_dr[1,2] = Rho_dr[2,1] = dr_rho
+  Rho_int[1,2] = Rho_int[2,1] = int_rho
 
   # Varying effects on individuals
   # !! ## Determine for each dyad its baseline interaction frequencies (rmvnorm2) +
   # !! ## individuals' characteristics effect on interactions sum(individual_effects[1,] * individual_predictors[i,])
   sr = matrix(NA, nrow=N_id, ncol=2)
   for( i in 1:N_id){
-   sr[i,] = rmvnorm2(1 , Mu=sr_mu, sigma=sr_sigma, Rho= Rho_sr)
+    sr[i,] = rmvnorm2(1 , Mu=sr_mu, sigma=sr_sigma, Rho= Rho_sr)
 
-   if(!is.null(individual_predictors)){
-    sr[i,1] = sr[i,1] + sum(individual_effects[1,]*individual_predictors[i,])
-    sr[i,2] = sr[i,2] + sum(individual_effects[2,]*individual_predictors[i,])
+    if(!is.null(individual_predictors)){
+      sr[i,1] = sr[i,1] + sum(individual_effects[1,]*individual_predictors[i,])
+      sr[i,2] = sr[i,2] + sum(individual_effects[2,]*individual_predictors[i,])
     }
-   }
+  }
 
   # Build true network
-  dr = p = y_true = intB = matrix(NA, N_id, N_id)
+  dr = p = y_true = matrix(NA, N_id, N_id)
   # Loop over upper triangle and create ties from i to j, and j to i
   # !! Determine for each interaction its baseline interaction frequencies (rmvnorm2) +
   # !! dyads' characteristics effect on interactions sum(dyadic_effects * dyadic_predictors[i, j,])
@@ -108,8 +111,8 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
        dr_scrap = rmvnorm2(1, Mu=c(dr_mu), sigma=rep(dr_sigma,2), Rho=Rho_dr)
 
        if(!is.null(dyadic_predictors)){
-        dr_scrap[1] = dr_scrap[1] + sum(dyadic_effects*dyadic_predictors[i,j,])
-        dr_scrap[2] = dr_scrap[2] + sum(dyadic_effects*dyadic_predictors[j,i,])
+         dr_scrap[1] = dr_scrap[1] + sum(dyadic_effects*dyadic_predictors[i,j,])
+         dr_scrap[2] = dr_scrap[2] + sum(dyadic_effects*dyadic_predictors[j,i,])
         }
 
        # !! ## If subgroups are declared, determine within and between group link frequencies.
@@ -123,16 +126,15 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
     }
   }
 
-  int_mu = 10
-  int_sigma = 2
+  # Observations of interactions vary based on individuals' characteristics.
   if(int_bias){
-    for ( i in 1:(N_id-1) ){
-      for ( j in (i+1):N_id){
-        # Dyadic effects
-        dr_scrap = rmvnorm2(1, Mu=c(dr_mu), sigma=rep(dr_sigma,2), Rho=Rho_dr)
+    intB = matrix(NA, nrow=N_id, ncol=2)
+    for( i in 1:N_id){
+      intB[i,]= rmvnorm2(1, Mu= int_mu, sigma= int_sigma, Rho=Rho_int)
 
-        dr[i,j] = dr[i,j] + sum(dyadic_effects*dyadic_predictors[i,j,])
-        dr[j,i] = dr[j,i] + sum(dyadic_effects*dyadic_predictors[j,i,])
+      if(!is.null(individual_predictors)){
+        intB[i,1] = intB[i,1] + sum(individual_effects[1,]*individual_predictors[i,])
+        intB[i,2] = intB[i,2] + sum(individual_effects[2,]*individual_predictors[i,])
       }
     }
   }
@@ -140,8 +142,13 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
   # !! Sum dyad and interaction probabilities and create ties probabilities matrix.
   for ( i in 1:(N_id-1) ){
     for ( j in (i+1):N_id){
-      p[i,j] = inv_logit( sr[i,1] + sr[j,2] + dr[i,j])
-      p[j,i] = inv_logit( sr[j,1] + sr[i,2] + dr[j,i])
+      if(int_bias){
+        p[i,j] = inv_logit( sr[i,1] + sr[j,2] + dr[i,j] + intB[i,1] + intB[j,2])
+        p[j,i] = inv_logit( sr[j,1] + sr[i,2] + dr[j,i] + intB[j,1] + intB[i,2])
+      }else{
+        p[i,j] = inv_logit( sr[i,1] + sr[j,2] + dr[i,j])
+        p[j,i] = inv_logit( sr[j,1] + sr[i,2] + dr[j,i])
+      }
     }
   }
 
