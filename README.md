@@ -64,5 +64,5 @@ Script ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/m
 
 # 4.To-Do
 1.  Simulation doesn't have interaction bias.
-2.  Run simulations.
+2.  P-values
 3.  Manuscript
