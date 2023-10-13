@@ -67,10 +67,12 @@ If none of this information is available, researchers can conduct a sensitivity 
 
 ## 3. Results
 ### 3.1 Bias in observation
-Script ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/4.%20Simulation.R) provide two types of plots:
-1.  Estimated effect size vs. true effect size for each approach.
-2.  Difference between true effect size and estimated effect size.
+Script ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/4.%20Simulation.R) provide 4 types of plots:
+1.  A scatter plot showing the difference between the estimated effect size and the true effect size for each approach. The diagonal line represents a perfect match.
+2.  A scatter plot showing the difference between the true effect size and the estimated effect size. A vertical line at zero represents a perfect match.
 ![alt text](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/Rplot01.png)
+3. Violin plot showing the difference between the true effect size and the estimated effect size for each approach.
+4. Scatter plot showing the relationship between p-values and the true effect size for each approach.
 
 ### 3.2 Bias in interaction
 
