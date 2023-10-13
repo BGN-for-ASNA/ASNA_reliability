@@ -37,7 +37,7 @@ We employ different ASNA methods aimed at correcting for sampling biases, see ["
 ### 2.4. Bayesian approach developed by our team
 Using rethinking approaches, we use [model dyadic connections](https://www.youtube.com/watch?v=XDoAglqd7ss&list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN&index=15&pp=iAQB&ab_channel=RichardMcElreath)  combine with [measurement error approach](https://www.youtube.com/watch?v=PIuqxOBJqLU&list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN&index=17&ab_channel=RichardMcElreath). The model can be summarized as follows, considering that predictors are centered:
 <p align="center">
-$X_{ij} \sim binomial(x_{ij}, \sigma_{ij})$
+$X_{ij} \sim Binomial(x_{ij}, \sigma_{ij})$
 <p align="center">
 $x_{ij} = logistic(\alpha + \beta_{i1}P_{i1} + \beta_{j1}P_{j1} +... + \beta_{in}P_{in} + \beta_{jn}P_{jn})$
 <p align="center">
@@ -45,24 +45,37 @@ $\sigma_{ij} = \alpha_{2} + \beta_{i}S_{i} + \beta_{j}S_{j} +  ...$
 
 Where $X_{ij}$ represents "true network", $x_{ij}$ represents the the observed network,  $\sigma_{ij}$ represents the measurement error and $P_{1}$ to $P_{n}$ are the predictors of research interest for individuals $i$ and $j$. This is the 'measurement error approach' where we model the "true network" as a function of the observed network and a variance based on the error measurement.
 
-We can use 'dyadic connections model' to estimate ($\sigma_{ij}$) as the outcome of the sampling effort of individual $i$ ($S_{j}$) and individual $j$ ($S_{j}$). Additionally, we can include any additional phenothypic traits ($...$) that might influence link observations (e.g., sex, age, hierarchical rank of $i$ and $j$) while examining their effects on $x_{ij}$.
+We can use 'dyadic connections model' to estimate ($\sigma_{ij}$) as the outcome of the sampling effort of individual $i$ ($S_{j}$) and individual $j$ ($S_{j}$). Additionally, we can include any additional phenothypic traits ($...$) that might influence interaction observations (e.g., sex, age, hierarchical rank of $i$ and $j$) while examining their effects on $x_{ij}$.
 
 ### 2.5 Interaction bias
-We could introduce an extra layer to the Bayesian approach we've developed to account for this bias. However, unlike sampling effort bias, interaction bias remains unknown to the observer and can't be defined within the model. Therefore, we anticipate that neither approach can effectively address this bias.
+In contrast to sampling effort bias, interaction bias is not known to the observer. Thus, we expect that neither approach can adequately tackle this bias. To address this, we can add an additional layer to the Bayesian approach outlined above:
 
-Currently, two potential methods may estimate interaction bias:
+<p align="center">
+$\hat{X_{ij}} \sim Binomial(X_{ij}, \hat{\theta_{ij}})$
+  <p align="center">
+$\hat{\theta_{ij}} = \theta{ij}(1- \phi_{i} \phi_{j}) $
 
-1. Running telemetric experiments concurrently with observations.
-2. Use $\sigma_{ij}$ results as a proxy for interaction bias. For instance, if gender affects sampling effort, we could assume it also influences interaction bias to the same degree. Yet, it's important to note that this approach may yield unreliable results.
+Where $\hat{X_{ij}}$ represents the "true network" defined by the previous model $X_{ij}$, including a variance denoted by $\hat{\theta_{ij}}" that indicates the probability of missing interactions between individuals $i$ and $j$, which can be expressed as $\phi_{i} \phi_{j}$.
+
+However, as previously stated, this probability of missing interactions is unknown. Researchers have several potential methods to estimate $\phi_{i} \phi_{j}$:
+
+1. Conduct telemetric experiments concurrently with observations to estimate $\phi_{i} \phi_{j}$.
+2. Utilize mark-recapture information to estimate $\phi_{i} \phi_{j}$.
+3. Calculate the mean duration of individuals' focal points to estimate $\phi_{i} \phi_{j}$.
+
+If none of this information is available, researchers can conduct a sensitivity analysis to assess the extent of bias in interactions needed to unvalidate the hypothesis.
 
 ## 3. Results
-
-Script ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/4.%20Simulation.R) provide two types of plots:
-1.  Estimated effect size vs. true effect size for each approach.
-2.  Difference between true effect size and estimated effect size.
+### 3.1 Bias in observation
+Script ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/4.%20Simulation.R) provide 4 types of plots:
+1.  A scatter plot showing the difference between the estimated effect size and the true effect size for each approach. The diagonal line represents a perfect match.
+2.  A scatter plot showing the difference between the true effect size and the estimated effect size. A vertical line at zero represents a perfect match.
 ![alt text](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/Rplot01.png)
+3. Violin plot showing the difference between the true effect size and the estimated effect size for each approach.
+4. Scatter plot showing the relationship between p-values and the true effect size for each approach.
+
+### 3.2 Bias in interaction
 
 # 4.To-Do
 1.  Simulation doesn't have interaction bias.
-2.  P-values
 3.  Manuscript
