@@ -55,7 +55,7 @@ $\hat{X_{ij}} \sim Binomial(X_{ij}, \hat{\theta_{ij}})$
   <p align="center">
 $\hat{\theta_{ij}} = \theta{ij}(1- \phi_{i} \phi_{j}) $
 
-Where $\hat{X_{ij}}$ represents the "true network" defined by the previous model $X_{ij}$, including a variance denoted by $\hat{\theta_{ij}}" that indicates the probability of missing interactions between individuals $i$ and $j$, which can be expressed as $\phi_{i} \phi_{j}$.
+Where $\hat{X_{ij}}$ represents the "true network" defined by the previous model $X_{ij}$, including a variance denoted by $\hat{\theta_{ij}}$ that indicates the probability of missing interactions between individuals $i$ and $j$, which can be expressed as $\phi_{i} \phi_{j}$.
 
 However, as previously stated, this probability of missing interactions is unknown. Researchers have several potential methods to estimate $\phi_{i} \phi_{j}$:
 
