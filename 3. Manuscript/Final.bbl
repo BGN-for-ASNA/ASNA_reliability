@@ -1,4 +1,4 @@
-\begin{thebibliography}{13}
+\begin{thebibliography}{31}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
@@ -6,6 +6,12 @@
   \providecommand{\doi}[1]{DOI:\discretionary{}{}{}#1}\else
   \providecommand{\doi}{DOI:\discretionary{}{}{}\begingroup
   \urlstyle{rm}\Url}\fi
+
+\bibitem[{Apicella et~al.(2012)Apicella, Marlowe, Fowler and
+  Christakis}]{apicella2012social}
+Apicella CL, Marlowe FW, Fowler JH and Christakis NA (2012) Social networks and
+  cooperation in hunter-gatherers.
+\newblock \emph{Nature} 481(7382): 497--501.
 
 \bibitem[{Back and Kenny(2010)}]{back2010social}
 Back MD and Kenny DA (2010) The social relations model: How to understand
@@ -16,16 +22,51 @@ Back MD and Kenny DA (2010) The social relations model: How to understand
 Batagelj V (1997) Notes on blockmodeling.
 \newblock \emph{Social networks} 19(2): 143--155.
 
-\bibitem[{Farine and Whitehead(2015)}]{farine2015constructing}
-Farine DR and Whitehead H (2015) Constructing, conducting, and interpreting
+\bibitem[{Bateson and Martin(2021)}]{bateson2021measuring}
+Bateson M and Martin P (2021) \emph{Measuring behaviour: an introductory
+  guide}.
+\newblock Cambridge university press.
+
+\bibitem[{Farine(2013)}]{Farine2013}
+Farine DR (2013) Animal social network inference and permutations for
+  ecologists in r using asnipe.
+\newblock \emph{Methods in Ecology and Evolution} 4: 1187--1194.
+
+\bibitem[{Farine and Carter(2022)}]{Farine2022}
+Farine DR and Carter GG (2022) Permutation tests for hypothesis testing with
+  animal social network data: Problems and potential solutions.
+\newblock \emph{Methods in Ecology and Evolution} 13: 144--156.
+\newblock \doi{10.1111/2041-210X.13741}.
+
+\bibitem[{Farine and Whitehead(2015)}]{Farine2015a}
+Farine DR and Whitehead H (2015) Constructing, conducting and interpreting
   animal social network analysis.
-\newblock \emph{Journal of Animal Ecology} 84(5): 1144--1163.
+\newblock \emph{Journal of Animal Ecology} 84: 1144--1163.
+\newblock \doi{10.1111/1365-2656.12418}.
+
+\bibitem[{Hart et~al.(2023)Hart, Weiss, Franks and Brent}]{hart2023bison}
+Hart J, Weiss MN, Franks D and Brent L (2023) Bison: A bayesian framework for
+  inference of social networks.
+\newblock \emph{Methods in Ecology and Evolution} 14(9): 2411--2420.
+
+\bibitem[{Hart et~al.(2022)Hart, Weiss, Brent and Franks}]{Hart2022}
+Hart JD, Weiss MN, Brent LJ and Franks DW (2022) Common permutation methods in
+  animal social network analysis do not control for non-independence.
+\newblock \emph{Behavioral Ecology and Sociobiology} 76: 1--10.
+\newblock \doi{10.1007/S00265-022-03254-X/FIGURES/3}.
+\newblock
+  \urlprefix\url{https://link.springer.com/article/10.1007/s00265-022-03254-x}.
 
 \bibitem[{Holland et~al.(1983)Holland, Laskey and
   Leinhardt}]{holland1983stochastic}
 Holland PW, Laskey KB and Leinhardt S (1983) Stochastic blockmodels: First
   steps.
 \newblock \emph{Social networks} 5(2): 109--137.
+
+\bibitem[{Hubalek(1982)}]{hubalek1982coefficients}
+Hubalek Z (1982) Coefficients of association and similarity, based on binary
+  (presence-absence) data: an evaluation.
+\newblock \emph{Biological Reviews} 57(4): 669--689.
 
 \bibitem[{Karrer and Newman(2011)}]{karrer2011stochastic}
 Karrer B and Newman ME (2011) Stochastic blockmodels and community structure in
@@ -42,33 +83,99 @@ Lewandowski D, Kurowicka D and Joe H (2009) Generating random correlation
   matrices based on vines and extended onion method.
 \newblock \emph{Journal of multivariate analysis} 100(9): 1989--2001.
 
+\bibitem[{Milgram(1967)}]{Milgram1967}
+Milgram S (1967) The small world problem 2: 60--67.
+
 \bibitem[{Peixoto(2019)}]{peixoto2019bayesian}
 Peixoto TP (2019) Bayesian stochastic blockmodeling.
 \newblock \emph{Advances in network clustering and blockmodeling} : 289--332.
+
+\bibitem[{Puga-Gonzalez et~al.(2021)Puga-Gonzalez, Sueur, Sosa,
+  Puga‐Gonzalez, Sueur and Sosa}]{Puga2021}
+Puga-Gonzalez I, Sueur C, Sosa S, Puga‐Gonzalez I, Sueur C and Sosa S (2021)
+  Null models for animal social network analysis and data collected via focal
+  sampling: Pre-network or node network permutation?
+\newblock \emph{Methods in Ecology and Evolution} 12: 22--32.
+\newblock \doi{10.1111/2041-210X.13400}.
+\newblock \urlprefix\url{https://doi.org/10.1111/2041-210X.13400}.
+\newblock <b>From Duplicate 4 (<i>Null models for animal social network
+  analysis and data collected via focal sampling: Pre-network or node network
+  permutation?</i> - Puga-Gonzalez, Ivan; Sueur, Cédric; Sosa,
+  Sebastian)<br/></b><br/>doi: 10.1111/2041-210X.13400.
+
+\bibitem[{Ravasz et~al.(2002)Ravasz, Somera, Mongru, Oltvai and
+  Barab{\'a}si}]{ravasz2002hierarchical}
+Ravasz E, Somera AL, Mongru DA, Oltvai ZN and Barab{\'a}si AL (2002)
+  Hierarchical organization of modularity in metabolic networks.
+\newblock \emph{science} 297(5586): 1551--1555.
 
 \bibitem[{Ready and Power(2021)}]{powerready2021}
 Ready E and Power E (2021) Measuring reciprocity: Double sampling, concordance,
   and network construction.
 
-\bibitem[{Redhead et~al.(2023)Redhead, McElreath and
+\bibitem[{Redhead et~al.(2021)Redhead, McElreath and
   Ross}]{redhead2021reliable}
-Redhead D, McElreath R and Ross CT (2023) Reliable network inference from
-  unreliable data: A tutorial on latent network modeling using {STRAND}.
-\newblock \emph{Psychological Methods} .
+Redhead D, McElreath R and Ross CT (2021) Reliable network inference from
+  unreliable data: A tutorial on latent network modeling using strand .
 
 \bibitem[{Ross et~al.(2023)Ross, McElreath and Redhead}]{ross2022modelling}
 Ross CT, McElreath R and Redhead D (2023) Modelling animal network data in r
   using strand.
 \newblock \emph{Journal of Animal Ecology} .
 
+\bibitem[{Sailer and Gaulin(1984)}]{sailer1984proximity}
+Sailer LD and Gaulin SJ (1984) Proximity, sociality, and observation: the
+  definition of social groups.
+\newblock \emph{American Anthropologist} : 91--98.
+
 \bibitem[{Snijders and Kenny(1999)}]{snijders1999social}
 Snijders TA and Kenny DA (1999) The social relations model for family data: A
   multilevel approach.
 \newblock \emph{Personal Relationships} 6(4): 471--486.
 
+\bibitem[{Sosa et~al.(2021{\natexlab{a}})Sosa, Jacoby, Lihoreau and
+  Sueur}]{sosa2021animal}
+Sosa S, Jacoby DMP, Lihoreau M and Sueur C (2021{\natexlab{a}}) Animal social
+  networks: Towards an integrative framework embedding social interactions,
+  space and time.
+
+\bibitem[{Sosa et~al.(2021{\natexlab{b}})Sosa, Pasquaretta, Puga-Gonzalez,
+  Dobson, Viblanc and Hoppitt}]{sosa2021reliable}
+Sosa S, Pasquaretta C, Puga-Gonzalez I, Dobson FS, Viblanc VA and Hoppitt W
+  (2021{\natexlab{b}}) Reliable hypotheses testing in animal social network
+  analyses: {G}lobal index, index of interactions, and residual regression.
+\newblock \emph{bioRxiv} .
+
 \bibitem[{{Stan Development Team}(2021)}]{stan2021}
 {Stan Development Team} (2021) Stan modeling language users guide and reference
   manual, version 2.21.
 \newblock \urlprefix\url{http://mc-stan.org/}.
+
+\bibitem[{Ter~Wal and Boschma(2009)}]{ter2009applying}
+Ter~Wal AL and Boschma RA (2009) Applying social network analysis in economic
+  geography: framing some key analytic issues.
+\newblock \emph{The Annals of Regional Science} 43: 739--756.
+
+\bibitem[{Ulanowicz et~al.(2014)Ulanowicz, Holt and
+  Barfield}]{ulanowicz2014limits}
+Ulanowicz RE, Holt RD and Barfield M (2014) Limits on ecosystem trophic
+  complexity: insights from ecological network analysis.
+\newblock \emph{Ecology letters} 17(2): 127--136.
+
+\bibitem[{Weiss et~al.(2021)Weiss, Franks, Brent, Ellis, Silk and
+  Croft}]{weiss2021common}
+Weiss MN, Franks DW, Brent LJ, Ellis S, Silk MJ and Croft DP (2021) Common
+  datastream permutations of animal social network data are not appropriate for
+  hypothesis testing using regression models.
+\newblock \emph{Methods in Ecology and Evolution} 12(2): 255--265.
+
+\bibitem[{Whitehead(2008)}]{whitehead2008analyzing}
+Whitehead H (2008) Analyzing animal societies.
+\newblock In: \emph{Analyzing Animal Societies}. University of Chicago Press.
+
+\bibitem[{Whitehead(1999)}]{Whitehead1999}
+Whitehead HAL (1999) Testing association patterns of social animals.
+\newblock \emph{Animal Behaviour} 57: F26--F29.
+\newblock \doi{10.1006/anbe.1999.1099}.
 
 \end{thebibliography}
