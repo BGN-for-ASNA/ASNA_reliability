@@ -68,14 +68,14 @@ simulations <- function(
     }
 
     # Variation --------------
-    range_sr_sigma = seq(from = 0.5, to =3, by = 0.2)
-    range_sr_rho = seq(from = 0.4, to = 0.9, by = 0.1)
+    range_sr_sigma = seq(from = 0.5, to = 3, by = 0.2)
+    range_sr_rho = seq(from = -0.9, to = 0.9, by = 0.1)
 
-    range_dr_sigma = seq(from = 0.5, to =3, by = 0.2)
-    range_dr_rho = seq(from = 0.4, to = 0.9, by = 0.1)
+    range_dr_sigma = seq(from = 0.5, to = 3, by = 0.2)
+    range_dr_rho = seq(from = -0.9, to = 0.9, by = 0.1)
 
-    range_exposure_sigma  = seq(from = 0.5, to =3, by = 0.2)
-    range_exposure_baseline = seq(from = 10, to = 40, by = 10)
+    range_exposure_sigma  = seq(from = 0.5, to = 3, by = 0.2)
+    range_exposure_baseline = seq(from = 10, to = 100, by = 20)
 
     picked_sr_sigma = sample(range_sr_sigma, 2)
     picked_sr_rho = sample(range_sr_rho, 1)

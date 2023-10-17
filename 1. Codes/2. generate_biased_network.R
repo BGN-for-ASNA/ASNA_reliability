@@ -12,8 +12,8 @@ library(sjPlot)
 #' @param N.obs.pheno the base number of observation per individuals (will be define for males)
 #' @param N.alters.per.obs the number of alters per observation (will be define for males)
 #' @param interactions.biases the percent of interaction misses within females observations
-sim <- function(N=30, Obs.mean.bias = 0, obs.sd.bias = 1, diff.soc.pheno = 50, N.obs.pheno = 10, N.alters.per.obs = 5,
-                interactions.biases = -50, interactions.biases.sd = 0, females.interactions.biases = "F", print = T){
+sim <- function(N=30, Obs.mean.bias = 0, obs.sd.bias = 0, diff.soc.pheno = 50, N.obs.pheno = 10, N.alters.per.obs = 5,
+                interactions.biases = 0, interactions.biases.sd = 0, females.interactions.biases = "F", print = T){
   ids = 1 : N
   sex = sample(c("F", "M"), N, replace = T, prob = c(0.5,0.5))
 
@@ -164,19 +164,73 @@ test.sim(test)
 summary(lm(data= test.sim(test), formula = strength~sex))
 
 
+
+test = sim(N = 30, Obs.mean.bias = 0,obs.sd.bias = 0, diff.soc.pheno = 0, N.obs.pheno= 50, N.alters.per.obs = 10, interactions.biases.sd = 0)
+test.sim(test)
+summary(lm(data= test.sim(test), formula = strength~sex))# No significant effect
+
+
+
 ###########################
 #### data correction ######
 ###########################
-SIM <- function(N=30, Obs.mean.bias = 0, obs.sd.bias = 0, diff.soc.pheno = 0, N.obs.pheno = 0, N.alters.per.obs = 5,
-                interactions.biases = 0, interactions.biases.sd = 0, females.interactions.biases = "F", print = F){
+SIM <- function(N=30, Obs.mean.bias = 0, obs.sd.bias = 0, diff.soc.pheno = 0, N.obs.pheno = 10, N.alters.per.obs = 2,
+                interactions.biases = 0, interactions.biases.sd = 0, females.interactions.biases = "F", print = F, strand = F){
   Result = sim(N=N, Obs.mean.bias = Obs.mean.bias, obs.sd.bias = obs.sd.bias, diff.soc.pheno = diff.soc.pheno,
                N.obs.pheno = N.obs.pheno, N.alters.per.obs = N.alters.per.obs,   interactions.biases = interactions.biases,
                interactions.biases.sd = interactions.biases.sd, females.interactions.biases = females.interactions.biases, print = print)
+
 
   # Uncorrected data ----------------------------------------
   m = df.to.mat(Result[[1]], actor = "ego", receiver = "alters", num.ids = T)
   data = Result[[2]]
   p0 = ggplot(data, aes(x = sex, y = sampling.effort, group = sex, color = sex))+geom_boxplot()+geom_point()
+
+  # Set up data for methods comparison---------------------------------------------------------------------------------
+  V = 1
+  G = 3
+  clique = sample(1:3, N , replace=TRUE)
+  B = matrix(-6, nrow=G, ncol=G)
+  block = data.frame(Clique=factor(clique))
+
+  exposure_nets = list(Exposure = ANTs:::time.heterogeneity(data$sampling.effort))
+  nets = list(Grooming =df.to.mat(Result[[1]], actor = "ego", receiver = "alters", num.ids = T, tobs = data$sampling.effort))
+  indiv =  data.frame(Hairy = data$sex)
+
+
+  # STRAND model --------------------------------------------------------
+  if(strand){
+    model_dat = make_strand_data(outcome = nets,
+                                 individual_covariates = indiv,
+                                 block_covariates = block,
+                                 outcome_mode = "binomial",
+                                 exposure = exposure_nets)
+
+    fit =  fit_block_plus_social_relations_model(data=model_dat,
+                                                 block_regression = ~ Clique,
+                                                 focal_regression = ~ Hairy,
+                                                 target_regression = ~ Hairy,
+                                                 dyad_regression = ~  1,
+                                                 mode="mcmc",
+                                                 stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
+                                                                             iter_warmup = 1000, iter_sampling = 1000,
+                                                                             max_treedepth = NULL, adapt_delta = .98))
+
+
+
+    res = summarize_strand_results(fit)
+
+    # "Bayesian P value"
+    strand_est = P_se(res$sample$srm_model_samples$focal_coeffs[,1])
+
+    result = as.data.frame(t(data.frame(as.numeric(unlist(c(unlist(res$summary[2,2:4]), grid_subsample[a,], strand_est))))))
+    rownames(result) = NULL
+    result$approach = 'strand'
+    result$sim = a
+
+    colnames(result) = c('hair','5 %','95 %', 'N_id', 'diff.soc.pheno', 'Obs.mean.bias', 'p-value', 'approach', 'sim')
+    RESULTS = rbind(RESULTS, result)
+  }
 
   # Correction by frequencies ----------------------------------------
   m = df.to.mat(Result[[1]], actor = "ego", receiver = "alters", num.ids = T, tobs = data$sampling.effort)
@@ -192,7 +246,7 @@ SIM <- function(N=30, Obs.mean.bias = 0, obs.sd.bias = 0, diff.soc.pheno = 0, N.
 
   fb = matrix(0, ncol = nrow(data), nrow = nrow(data))
   for (a in 1:nrow(data)) {
-    fb[a,] = data$sampling.effort
+    fb[,a] = data$sampling.effort
   }
 
   ya = abs(fa - m)
@@ -220,9 +274,9 @@ SIM <- function(N=30, Obs.mean.bias = 0, obs.sd.bias = 0, diff.soc.pheno = 0, N.
 
   return(data)
 }
-d = SIM(N = 30, Obs.mean.bias = 0,obs.sd.bias = 0, diff.soc.pheno = 0, N.obs.pheno= 50, N.alters.per.obs = 10, interactions.biases.sd = 0)
+d = SIM(N = 30, Obs.mean.bias = 0, obs.sd.bias = 0, diff.soc.pheno = 0, N.obs.pheno= 10, N.alters.per.obs = 3, interactions.biases.sd = 0, strand = F)
 summary(lm(strength.cor.fr~sex, data = d))
-
+summary(lm(strength.cor.sri~sex, data = d))
 ###########################
 #### Simulated scenarios ##
 ###########################
