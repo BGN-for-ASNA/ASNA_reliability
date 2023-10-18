@@ -92,11 +92,11 @@ simulations <- function(
 
     ## Block data -----------------
     NG = sample(c(1,3,7), 1) # Random number of groups
-
-    mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Random mean of
+    clique = sample(1:G, N_id, replace = TRUE)
+    mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
     m = matrix(rnorm(length(m), mean.within.GR, sd = 1), NG, NG)
 
-    mean.between.GR = sample(c(seq(from = -9, to = 0, by = 1)), 1)
+    mean.between.GR = sample(c(seq(from = -9, to = 0, by = 1)), 1) # Reduce randomly the probability of  ties between groups.
     diag(m) = diag(m) + rnorm(NG, mean.between.GR, sd = 1)
 
 
