@@ -45,14 +45,14 @@ simulations <- function(
   r <- foreach(i = 1:nrow(grid_subsample)) %dopar% {
     library(ANTs)
     library(STRAND)
-    source("3. Data simulation.R")
+    source("./1. Codes/3. Data simulation.R")
     RESULTS = NULL
     get_res = function(x) {
       y = c(coef(x)[2],confint(x, level = 0.9)[2,])
       return(y)
     }
 
-    #' "Bayesian P value".------------
+    #"Bayesian P value".---------------
     P_se = function(x){
       M_x = mean(x)
 
@@ -104,7 +104,7 @@ simulations <- function(
     Clique = rep(1, N_id)
     Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 
-    ## Simulated data -----------------
+    # Simulated data -----------------
     A = simulate_sbm_plus_srm_network_with_measurement_bias(
       N_id = N_id,
       B=list(B=B),
@@ -123,6 +123,14 @@ simulations <- function(
       exposure_baseline = picked_exposure_baseline,
       int_bias = T
     )
+
+    # Zero-inflated Poisson model ----------------------
+    #y = as.
+    #library(rethinking)
+    #m <- map(
+    #  alist(
+    #  )
+    #)
 
     # STRAND--------------------------------
     indiv =  data.frame(Hairy = Hairy)
@@ -182,7 +190,8 @@ simulations <- function(
       result$exposure_sigma  = picked_exposure_sigma
       result$exposure_baseline = picked_exposure_baseline
 
-      colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+      colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value',
+                           'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
       RESULTS = rbind(RESULTS, result)
     }
 
@@ -195,7 +204,8 @@ simulations <- function(
     test1.1 = lm(strength ~ hair, data = df)
 
     ants_est = summary(test1.1)$coefficients[2,4]
-    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est)))))
+    ants_se = summary(test1.1)$coefficients[2,2]
+    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
     rownames(result) = NULL
     result$approach = 'Rates unweighted'
     result$sim = i
@@ -206,14 +216,17 @@ simulations <- function(
     result$exposure_sigma  = picked_exposure_sigma
     result$exposure_baseline = picked_exposure_baseline
 
-    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value',
+    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
                          'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
     RESULTS = rbind(RESULTS, result)
 
 
     #  Rates of interactions weighted--------------------------------
     test1.1 = lm(strength  ~ hair, data = df, weights = A$true_exposure)
-    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est)))))
+    ants_est = summary(test1.1)$coefficients[2,4]
+    ants_se = summary(test1.1)$coefficients[2,2]
+
+    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
     rownames(result) = NULL
     result$approach = 'Rates weighted'
     result$sim = i
@@ -224,23 +237,18 @@ simulations <- function(
     result$exposure_sigma  = picked_exposure_sigma
     result$exposure_baseline = picked_exposure_baseline
 
-    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
+                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
     RESULTS = rbind(RESULTS, result)
 
     #  SRI of interactions unweighted--------------------------------
     m = A$network
-    fa = matrix(0, ncol = nrow(m), nrow = nrow(m))
+    fa = fb =matrix(0, ncol = nrow(m), nrow = nrow(m))
     for (a in 1:nrow(fa)) {
       fa[a,] = A$true_exposure
-    }
-
-    fb = matrix(0, ncol = nrow(m), nrow = nrow(m))
-    for (a in 1:nrow(m)) {
       fb[,a] = A$true_exposure
     }
-
     ya = abs(fa - m)
-
     yb = abs(fb - m)
 
     sri <- ((m) /(m + ya + yb ))
@@ -252,7 +260,9 @@ simulations <- function(
 
     test1.1 = lm(strength ~ hair, data = df, weights = A$true_exposure)
     ants_est = summary(test1.1)$coefficients[2,4]
-    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est)))))
+    ants_se = summary(test1.1)$coefficients[2,2]
+
+    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
     rownames(result) = NULL
     result$approach = 'SRI unweigthed'
     result$sim = i
@@ -263,13 +273,16 @@ simulations <- function(
     result$exposure_sigma  = picked_exposure_sigma
     result$exposure_baseline = picked_exposure_baseline
 
-    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
+                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
     RESULTS = rbind(RESULTS, result)
 
     #  SRI of interactions weighted--------------------------------
     test1.1 = lm(strength ~ hair, data = df, weights = A$true_exposure)
     ants_est = summary(test1.1)$coefficients[2,4]
-    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est)))))
+    ants_se = summary(test1.1)$coefficients[2,2]
+
+    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
     rownames(result) = NULL
     result$approach = 'SRI weighted'
     result$sim = i
@@ -280,7 +293,8 @@ simulations <- function(
     result$exposure_sigma  = picked_exposure_sigma
     result$exposure_baseline = picked_exposure_baseline
 
-    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
+                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
     RESULTS = rbind(RESULTS, result)
   }
 
@@ -292,7 +306,11 @@ simulations <- function(
   registerDoSEQ()
   result = do.call('rbind', r)
   result$z = result$`scale(hair)`/(result$`95 %` - result$`5 %`)
-  result$z = ifelse(result$approach !=  "strand", result$`scale(hair)`/(result$`95 %` - result$`5 %`), result$`scale(hair)`)
+  #result$z = ifelse(result$approach !=  "strand", result$`scale(hair)`/(result$`95 %` - result$`5 %`), result$`scale(hair)`)# Should we not compute z score om Bayesian model?
+  result$MOE = result$z * result$se
+  result$ci5 = result$z - abs(result$MOE)
+  result$ci95 = result$z + abs(result$MOE)
+
   result$resid = result$tie_effect - result$z
 
   result$approach = ifelse(result$approach == "strand", '1.Bayesian', result$approach)
@@ -306,18 +324,32 @@ simulations <- function(
 # Plot ----------
 plots <- function(result){
   require(ggplot2)
-  p1 = ggplot(result, aes(x= z,  y= tie_effect, color = sim, group = sim, label = z))+
-    #geom_linerange(aes(xmin=result[,2], xmax=result[,3])) +
+  #p1 = ggplot(result, aes(x= z,  y= tie_effect, color = sim, group = sim, label = z))+
+  #  #geom_linerange(aes(xmin=result[,2], xmax=result[,3])) +
+  #  geom_point(aes(color = sim, size = 1), show.legend = FALSE, alpha = 0.5) +
+  #  facet_grid( . ~ approach, space="free") +
+  #  theme(legend.position = 'none')+
+  #  xlim(min(result$z), max(result$z)) +
+  #  ylim(min(result$z), max(result$z)) +
+  #  geom_abline()+
+  #  ylab("True efect size") +
+  #  xlab("Estimated effect size") +
+  #  theme(axis.text = element_text(size = 14))  +
+  #  theme(axis.title = element_text(size = 14))
+
+  p1 = ggplot(result, aes(x= z,  y= tie_effect))+
     geom_point(aes(color = sim, size = 1), show.legend = FALSE, alpha = 0.5) +
+    geom_linerange(aes(xmin=ci5, xmax=ci95)) +
     facet_grid( . ~ approach, space="free") +
     theme(legend.position = 'none')+
-    xlim(min(result$z), max(result$z)) +
-    ylim(min(result$z), max(result$z)) +
+    xlim(min(result$ci5), max(result$ci95)) +
+    ylim(min(result$ci5), max(result$ci95)) +
     geom_abline()+
     ylab("True efect size") +
     xlab("Estimated effect size") +
     theme(axis.text = element_text(size = 14))  +
     theme(axis.title = element_text(size = 14))
+
 
 
   p2 = ggplot(result, aes(x = resid, y = tie_effect, color = approach))+
@@ -341,9 +373,9 @@ plots <- function(result){
 
 
 library(ggpubr)
-result = simulations(Reps = 1, strand = F, ncores = 1)
+result = simulations(Reps = 10, strand = F, ncores = 1)
 tmp = result[result$approach %in% c('1.Bayesian', '2.Rates', '3.SRI'),]
-p = plots(tmp)
+p = plots(result)
 ggarrange(p[[1]], p[[3]], ncol = 1, nrow = 2)
 
 # Analysis ----------
