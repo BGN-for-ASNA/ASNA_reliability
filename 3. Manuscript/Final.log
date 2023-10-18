@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10) (preloaded format=pdflatex 2023.10.16)  18 OCT 2023 09:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10) (preloaded format=pdflatex 2023.10.16)  18 OCT 2023 09:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1149,7 +1149,12 @@ Package pdftex.def Info: Figures/ScatterFrameB.pdf  used on input line 355.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[5 <./Figures/ScatterFrameA.pdf> <./Figures/ScatterFrameB.pdf>] (Final.bbl
+[5 <./Figures/ScatterFrameA.pdf> <./Figures/ScatterFrameB.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 424--427
+
+ []
+
+(Final.bbl
 LaTeX Font Info:    Trying to load font information for OT1+txtt on input line 58.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\ot1txtt.fd
 File: ot1txtt.fd 2000/12/15 v3.1
@@ -1191,7 +1196,7 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  118i,20n,120p,2307b,622s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtcxss.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxi.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxmi.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxr.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txex.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txsy.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txtt.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Final.pdf (7 pages, 378069 bytes).
+Output written on Final.pdf (7 pages, 378067 bytes).
 PDF statistics:
  425 PDF objects out of 1000 (max. 8388607)
  87 named destinations out of 1000 (max. 500000)
