@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10) (preloaded format=pdflatex 2023.10.16)  17 OCT 2023 15:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10) (preloaded format=pdflatex 2023.10.16)  18 OCT 2023 09:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1168,10 +1168,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 53--59
 [][]$\OT1/txtt/m/n/9 https : / / link . springer . com / article / 10 . 1007 /
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6]) [7
+[6]) [7
 
 ] (Final.aux)
  ***********
@@ -1186,17 +1183,17 @@ Package rerunfilecheck Info: File `Final.out' has not changed.
 (rerunfilecheck)             Checksum: 6673CC2D5523D3F2F577FE709363F934;2844.
  ) 
 Here is how much of TeX's memory you used:
- 38602 strings out of 475247
- 862484 string characters out of 5767579
+ 38604 strings out of 475247
+ 862486 string characters out of 5767579
  1966785 words of memory out of 5000000
- 59327 multiletter control sequences out of 15000+600000
+ 59330 multiletter control sequences out of 15000+600000
  627510 words of font info for 184 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 118i,20n,120p,2307b,631s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 118i,20n,120p,2307b,622s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtcxss.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxi.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxmi.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxr.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txex.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txsy.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txtt.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Final.pdf (7 pages, 377544 bytes).
+Output written on Final.pdf (7 pages, 378069 bytes).
 PDF statistics:
- 426 PDF objects out of 1000 (max. 8388607)
- 88 named destinations out of 1000 (max. 500000)
+ 425 PDF objects out of 1000 (max. 8388607)
+ 87 named destinations out of 1000 (max. 500000)
  166 words of extra memory for PDF output out of 10000 (max. 10000000)
 

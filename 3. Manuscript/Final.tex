@@ -425,16 +425,32 @@ Where $P(X_{ij})$ is the probability of getting exactly $x$ successes, $n$ is th
 \end{ceqn}
 Where $\beta_{c}$ is a parametrizable predictors' effect, $C_{i}$ is a parametrizable individual characteristic. Thus, by specifying $\beta_{c}$, we can accurately define a particular tie probability $P(X_{ij})$ based on individuals' characteristics $C_{i}$ of a given dyad ($i$, $j$).\\
 $n$ is define as fellow: 
+
 \begin{ceqn}
-  \begin{align}\label{n}
-    n_{i} \sim Binomial(\mu_{Si}, \sigma_{Si})\\
-    \mu_{Si} \sim Poisson(\lambda)\\ 
-    invertLogit(\sigma_{i}) = \beta_{obs}C_{i} + \sigma_{Si}\\
-    \sigma_{Si} \sim Normal(0, \sigma_{S})\\    
+  \begin{align}\label{Bms}
+    n_{i} \sim Binomial(\mu_{Si}, \sigma_{Si})
+  \end{align}
+\end{ceqn}
+
+\begin{ceqn}
+  \begin{align}\label{Pl}
+    \mu_{Si} \sim Poisson(\lambda)
+  \end{align}
+\end{ceqn}
+\begin{ceqn}
+  \begin{align}\label{Sbc}
+        invertLogit(\sigma_{i}) = \beta_{obs}C_{i} + \sigma_{Si}
+  \end{align}
+\end{ceqn}
+\begin{ceqn}
+  \begin{align}\label{Ns}
+    \sigma_{Si} \sim Normal(0, \sigma_{S})
   \end{align}
 \end{ceqn}
 
 Where $n_{i}$ is the number of observations for individual $i$, $\mu_{Si}$ is the mean population number of observations and $\sigma_{Si}$ the given variance for individual $i$. $\beta_{obs}$ is a given parametrizable observation predictors' effect and $C_{i}$ is individual $i$ characteristic. $\sigma_{Si}$ is individual $i$ variance draw from a gaussian distribution. Thus, by specifying $\beta_{obs}$, we can accurately define a particular observation bias based on individuals' characteristics.
+
+Thus, using this simulation, we have the following parameters: individual characteristic $\beta_{c}$, the true estimate, the amount of observation bias $\beta_{obs}$, and the amount of interaction bias $\psi$. This allows us to generate different scenarios by varying these simulation parameters independently and test the reliability of different methods across those scenarios. First, we tested the reliability of the association index, interaction index, Bayesian generative network, pre-network permutation, network permutation, and double permutation in a scenario without any bias.  Second, we tested the reliability of these methods in a scenario with only sampling bias. Third, we tested the reliability of these methods in a scenario with interaction bias.
 
 \section{Results}
 \subsection{Compare STRAND to other methods on Binomial data, no bias}

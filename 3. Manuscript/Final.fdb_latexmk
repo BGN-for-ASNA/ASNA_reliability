@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex Final"] 1697549800 "Final.aux" "Final.bbl" "Final" 1697550544 0
+["bibtex Final"] 1697614355 "Final.aux" "Final.bbl" "Final" 1697614359 0
   "./Final.bib" 1697549824 1367930 0db07d367743bfc35ba9e42cc19fa7c8 ""
   "./SageH.bst" 1697524389 32389 01d0c4e084498df630f0d3adc8d9e106 ""
-  "Final.aux" 1697550543 19391 295981172ee534cd31113f1583b67332 "pdflatex"
+  "Final.aux" 1697614358 19823 a403674a0ef94344a132a66eb5d7ffc1 "pdflatex"
   (generated)
   "Final.bbl"
   "Final.blg"
   (rewritten before read)
-["pdflatex"] 1697550540 "c:/Users/sebastian_sosa/OneDrive/Travail/Max Planck/Projects/ASNA_reliability/3. Manuscript/Final.tex" "Final.pdf" "Final" 1697550544 0
+["pdflatex"] 1697614355 "c:/Users/sebastian_sosa/OneDrive/Travail/Max Planck/Projects/ASNA_reliability/3. Manuscript/Final.tex" "Final.pdf" "Final" 1697614359 0
   "C:/Program Files/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/latex-fonts/lasy10.tfm" 1136765053 520 82a3d37183f34b6eb363a161dfc002c2 ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/latex-fonts/lasy5.tfm" 1136765053 520 d082ac03a1087bc1ec2a06e24a9f68c0 ""
@@ -282,11 +282,11 @@
   "Figures/Example.pdf" 1697524389 42188 21961f70234c69a8316db2eb38965e53 ""
   "Figures/ScatterFrameA.pdf" 1697524389 71806 5c9fbaf6eff269c92458ff0590f6228b ""
   "Figures/ScatterFrameB.pdf" 1697524389 83581 8ab2a573d0efa905cb85ecbabc25d40c ""
-  "Final.aux" 1697550543 19391 295981172ee534cd31113f1583b67332 "pdflatex"
-  "Final.bbl" 1697549800 8352 2aeaf60a62067a8ee78be99e6a6d7ce5 "bibtex Final"
-  "Final.out" 1697550543 2844 6673cc2d5523d3f2f577fe709363f934 "pdflatex"
-  "Final.tex" 1697550540 39535 7ade8a57ea196c9b14dd105dce0ca2fe ""
-  "c:/Users/sebastian_sosa/OneDrive/Travail/Max Planck/Projects/ASNA_reliability/3. Manuscript/Final.tex" 1697550540 39535 7ade8a57ea196c9b14dd105dce0ca2fe ""
+  "Final.aux" 1697614358 19823 a403674a0ef94344a132a66eb5d7ffc1 "pdflatex"
+  "Final.bbl" 1697614355 8352 2aeaf60a62067a8ee78be99e6a6d7ce5 "bibtex Final"
+  "Final.out" 1697614358 2844 6673cc2d5523d3f2f577fe709363f934 "pdflatex"
+  "Final.tex" 1697614351 40506 0c9c1fd974e6bee75592899e576f0f35 ""
+  "c:/Users/sebastian_sosa/OneDrive/Travail/Max Planck/Projects/ASNA_reliability/3. Manuscript/Final.tex" 1697614351 40506 0c9c1fd974e6bee75592899e576f0f35 ""
   "fancybox.sty" 1697524389 28227 5ae6156674330dc345adb79b6e5d8966 ""
   "sagej.cls" 1697524389 15811 7a4862a3d526be57e07eafba8a2e76ce ""
   (generated)
