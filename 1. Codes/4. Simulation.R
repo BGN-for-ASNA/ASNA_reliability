@@ -91,13 +91,14 @@ simulations <- function(
     N_id = grid_subsample$N_id[i]
 
     ## Block data -----------------
-    if(is.null(B)){
-      clique = sample(1:G, N_id, replace=TRUE)
-      B = matrix(-9, nrow=G, ncol=G)
-      diag(B) = diagB
-      B[1,3] = -8.9
-      B[3,2] = -7.9
-    }
+    NG = sample(c(1,3,7), 1) # Random number of groups
+
+    mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Random mean of
+    m = matrix(rnorm(length(m), mean.within.GR, sd = 1), NG, NG)
+
+    mean.between.GR = sample(c(seq(from = -9, to = 0, by = 1)), 1)
+    diag(m) = diag(m) + rnorm(NG, mean.between.GR, sd = 1)
+
 
     block = data.frame(Clique=factor(clique))
 
@@ -121,24 +122,26 @@ simulations <- function(
       exposure_effects = c(-1, grid_subsample$hairy_detect_effect[i]),
       exposure_sigma = picked_exposure_sigma,
       exposure_baseline = picked_exposure_baseline,
-      int_bias = T
+      int_bias = T,
+      return.network = FALSE,
     )
 
     # Zero-inflated Poisson model ----------------------
-    y = interactions$interaction
+    y = A$interaction
+    exposure = A$exposure
     library(rethinking)
     m <- map(
       alist(
         y ~ dzipois( p , lambda ),
-        logit(p) <- ap,
-        log(lambda) <- al,
+        logit(p) <- ap, #Probability of true zero
+        log(lambda) <- al + log(exposure+1) , #  logarithm of the exposure to address observation bias
         ap ~ dnorm(0,1),
         al ~ dnorm(0,10)
-      ) ,data=list(y=y))
+      ) ,data=list(y=y, exposure = exposure))
 
-    precis(m)
-    logistic(-7.88) # probability false zero
-    exp(-0.68) # rate interaction
+    r = precis(m)
+    logistic(r$mean[1]) # probability false zero
+    exp(r$mean[2]) # rate interaction
 
     # STRAND--------------------------------
     indiv =  data.frame(Hairy = Hairy)
@@ -314,7 +317,6 @@ simulations <- function(
   registerDoSEQ()
   result = do.call('rbind', r)
   result$z = result$`scale(hair)`/(result$`95 %` - result$`5 %`)
-  #result$z = ifelse(result$approach !=  "strand", result$`scale(hair)`/(result$`95 %` - result$`5 %`), result$`scale(hair)`)# Should we not compute z score om Bayesian model?
   result$MOE = result$z * result$se
   result$ci5 = result$z - abs(result$MOE)
   result$ci95 = result$z + abs(result$MOE)
