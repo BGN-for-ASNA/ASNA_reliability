@@ -125,12 +125,20 @@ simulations <- function(
     )
 
     # Zero-inflated Poisson model ----------------------
-    #y = as.
-    #library(rethinking)
-    #m <- map(
-    #  alist(
-    #  )
-    #)
+    y = interactions$interaction
+    library(rethinking)
+    m <- map(
+      alist(
+        y ~ dzipois( p , lambda ),
+        logit(p) <- ap,
+        log(lambda) <- al,
+        ap ~ dnorm(0,1),
+        al ~ dnorm(0,10)
+      ) ,data=list(y=y))
+
+    precis(m)
+    logistic(-7.88) # probability false zero
+    exp(-0.68) # rate interaction
 
     # STRAND--------------------------------
     indiv =  data.frame(Hairy = Hairy)

@@ -54,7 +54,8 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
                                                                int_bias = FALSE,
                                                                int_mu = c(0,0.5),
                                                                int_sigma = c(0.3, 0.6),
-                                                               int_rho = 0.2){
+                                                               int_rho = 0.2,
+                                                               get.network = TRUE){
   require(STRAND)
   ###############################
   ####### Run some checks #######
@@ -186,6 +187,23 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
   ###############################
   #######  Model outcomes #######
   ###############################
+  # Testing simulation of observation-------------------
+  if(!get.network){
+    interactions = NULL
+    for(a in 1:N_id){# For each individual
+      for(b in 1:true_exposure[a]){ # For each of its observations.
+        for(c in 1:N_id){ # Define interactions among all individuals based on their likelihood of being observed.
+          if(a == c){next}
+          cat("Individual ", a, "; observation: ", b, "; aleter: ", c, '\r')
+          r = rbinom(1 , size = 1, prob = p[a,c])
+          interactions = rbind(interactions, data.frame('focal' = a, '#focal' = b, 'alter' = c, 'interaction' = r))
+        }
+      }
+    }
+  }
+
+
+  # Network------------------------------------------------
   # !! Create an interaction matrix according to the ties probability matrix and observation bias.
   for ( i in 1:(N_id-1) ){
     for ( j in (i+1):N_id){
