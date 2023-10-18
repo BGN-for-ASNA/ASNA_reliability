@@ -67,7 +67,10 @@ simulations <- function(
       return(P_x/N_x)
     }
 
-    # Variation --------------
+    # Make data--------------------------------
+    N_id = grid_subsample$N_id[i]
+
+    ## Variation in sr ad dr --------------
     range_sr_sigma = seq(from = 0.5, to = 3, by = 0.2)
     range_sr_rho = seq(from = -0.9, to = 0.9, by = 0.1)
 
@@ -86,22 +89,17 @@ simulations <- function(
     picked_exposure_sigma  = sample(range_exposure_sigma, 1)
     picked_exposure_baseline  = sample(range_exposure_baseline, 1)
 
-
-    # Make data--------------------------------
-    N_id = grid_subsample$N_id[i]
-
     ## Block data -----------------
     NG = sample(c(1,3,7), 1) # Random number of groups
     clique = sample(1:G, N_id, replace = TRUE)
+
     mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
-    m = matrix(rnorm(length(m), mean.within.GR, sd = 1), NG, NG)
+    B = matrix(rnorm(NG*NG, mean.within.GR, sd = 1), NG, NG)
 
     mean.between.GR = sample(c(seq(from = -9, to = 0, by = 1)), 1) # Reduce randomly the probability of  ties between groups.
-    diag(m) = diag(m) + rnorm(NG, mean.between.GR, sd = 1)
-
+    diag(B) = diag(B) + rnorm(NG, mean.between.GR, sd = 1)
 
     block = data.frame(Clique=factor(clique))
-
     Clique = rep(1, N_id)
     Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 
@@ -123,25 +121,24 @@ simulations <- function(
       exposure_sigma = picked_exposure_sigma,
       exposure_baseline = picked_exposure_baseline,
       int_bias = T,
-      return.network = FALSE,
+      return.network = TRUE,
     )
 
     # Zero-inflated Poisson model ----------------------
-    y = A$interaction
-    exposure = A$exposure
-    library(rethinking)
-    m <- map(
-      alist(
-        y ~ dzipois( p , lambda ),
-        logit(p) <- ap, #Probability of true zero
-        log(lambda) <- al + log(exposure+1) , #  logarithm of the exposure to address observation bias
-        ap ~ dnorm(0,1),
-        al ~ dnorm(0,10)
-      ) ,data=list(y=y, exposure = exposure))
-
-    r = precis(m)
-    logistic(r$mean[1]) # probability false zero
-    exp(r$mean[2]) # rate interaction
+    #y = A$interaction
+    #exposure = A$exposure
+    #library(rethinking)
+    #m <- map(
+    #  alist(
+    #    y ~ dzipois( p , lambda ),
+    #    logit(p) <- ap, #Probability of true zero
+    #    log(lambda) <- al + log(exposure+1) , #  logarithm of the exposure to address observation bias
+    #    ap ~ dnorm(0,1),
+    #    al ~ dnorm(0,10)
+    #  ) ,data=list(y=y, exposure = exposure))
+    #r = precis(m)
+    #logistic(r$mean[1]) # probability false zero
+    #exp(r$mean[2]) # rate interaction
 
     # STRAND--------------------------------
     indiv =  data.frame(Hairy = Hairy)
@@ -189,6 +186,7 @@ simulations <- function(
 
       # "Bayesian P value"
       strand_est = P_se(res$sample$srm_model_samples$focal_coeffs[,1])
+      strand_se = P_se(res$sample$srm_model_samples$focal_coeffs[,1])
 
       result = as.data.frame(t(data.frame(as.numeric(unlist(c(unlist(res$summary[2,2:4]), grid_subsample[i,], strand_est))))))
       rownames(result) = NULL
@@ -200,9 +198,13 @@ simulations <- function(
       result$dr_rho = picked_dr_rho
       result$exposure_sigma  = picked_exposure_sigma
       result$exposure_baseline = picked_exposure_baseline
+      result$NG = NG
+      result$mean.between.GR = mean.between.GR
+      result$mean.within.GR = mean.within.GR
 
-      colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value',
-                           'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+      colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
+                           'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
+                           'NG', 'mean.between.GR', 'mean.within.GR')
       RESULTS = rbind(RESULTS, result)
     }
 
@@ -226,9 +228,14 @@ simulations <- function(
     result$dr_rho = picked_dr_rho
     result$exposure_sigma  = picked_exposure_sigma
     result$exposure_baseline = picked_exposure_baseline
+    result$NG = NG
+    result$mean.between.GR = mean.between.GR
+    result$mean.within.GR = mean.within.GR
 
     colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
+                         'NG', 'mean.between.GR', 'mean.within.GR')
+
     RESULTS = rbind(RESULTS, result)
 
 
@@ -247,9 +254,13 @@ simulations <- function(
     result$dr_rho = picked_dr_rho
     result$exposure_sigma  = picked_exposure_sigma
     result$exposure_baseline = picked_exposure_baseline
+    result$NG = NG
+    result$mean.between.GR = mean.between.GR
+    result$mean.within.GR = mean.within.GR
 
     colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
+                         'NG', 'mean.between.GR', 'mean.within.GR')
     RESULTS = rbind(RESULTS, result)
 
     #  SRI of interactions unweighted--------------------------------
@@ -283,9 +294,13 @@ simulations <- function(
     result$dr_rho = picked_dr_rho
     result$exposure_sigma  = picked_exposure_sigma
     result$exposure_baseline = picked_exposure_baseline
+    result$NG = NG
+    result$mean.between.GR = mean.between.GR
+    result$mean.within.GR = mean.within.GR
 
     colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
+                         'NG', 'mean.between.GR', 'mean.within.GR')
     RESULTS = rbind(RESULTS, result)
 
     #  SRI of interactions weighted--------------------------------
@@ -303,9 +318,14 @@ simulations <- function(
     result$dr_rho = picked_dr_rho
     result$exposure_sigma  = picked_exposure_sigma
     result$exposure_baseline = picked_exposure_baseline
+    result$NG = NG
+    result$mean.between.GR = mean.between.GR
+    result$mean.within.GR = mean.within.GR
 
     colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline')
+                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
+                         'NG', 'mean.between.GR', 'mean.within.GR')
+
     RESULTS = rbind(RESULTS, result)
   }
 
@@ -381,9 +401,8 @@ plots <- function(result){
   return(list(p1, p2, p3))
 }
 
-
 library(ggpubr)
-result = simulations(Reps = 10, strand = F, ncores = 1)
+result = simulations(Reps = 1, strand = F, ncores = 1)
 tmp = result[result$approach %in% c('1.Bayesian', '2.Rates', '3.SRI'),]
 p = plots(result)
 ggarrange(p[[1]], p[[3]], ncol = 1, nrow = 2)
