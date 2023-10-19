@@ -96,7 +96,7 @@ simulations <- function(
     mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
     B = matrix(rnorm(NG*NG, mean.within.GR, sd = 1), NG, NG)
 
-    mean.between.GR = sample(c(seq(from = -9, to = 0, by = 1)), 1) # Reduce randomly the probability of  ties between groups.
+    mean.between.GR = sample(c(seq(from = 0, to = 9, by = 1)), 1) # Reduce randomly the probability of  ties between groups.
     diag(B) = diag(B) + rnorm(NG, mean.between.GR, sd = 1)
 
     block = data.frame(Clique=factor(clique))
