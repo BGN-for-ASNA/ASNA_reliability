@@ -96,7 +96,7 @@ simulations <- function(
     mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
     B = matrix(rnorm(NG*NG, mean.within.GR, sd = 1), NG, NG)
 
-    mean.between.GR = sample(c(seq(from = 0, to = 9, by = 1)), 1) # Reduce randomly the probability of  ties between groups.
+    mean.between.GR = sample(c(seq(from = 0, to = 9, by = 1)), 1) # Increase randomly the probability of  ties within groups.
     diag(B) = diag(B) + rnorm(NG, mean.between.GR, sd = 1)
 
     block = data.frame(Clique=factor(clique))
@@ -188,7 +188,7 @@ simulations <- function(
       strand_est = P_se(res$sample$srm_model_samples$focal_coeffs[,1])
       strand_se = P_se(res$sample$srm_model_samples$focal_coeffs[,1])
 
-      result = as.data.frame(t(data.frame(as.numeric(unlist(c(unlist(res$summary[2,2:4]), grid_subsample[i,], strand_est))))))
+      result = as.data.frame(t(data.frame(as.numeric(unlist(c(unlist(res$summary[2,2:4]), grid_subsample[i,], strand_est, strand_se))))))
       rownames(result) = NULL
       result$approach = 'strand'
       result$sim = i
@@ -353,58 +353,62 @@ simulations <- function(
 
 # Plot ----------
 plots <- function(result){
-  require(ggplot2)
-  #p1 = ggplot(result, aes(x= z,  y= tie_effect, color = sim, group = sim, label = z))+
-  #  #geom_linerange(aes(xmin=result[,2], xmax=result[,3])) +
-  #  geom_point(aes(color = sim, size = 1), show.legend = FALSE, alpha = 0.5) +
-  #  facet_grid( . ~ approach, space="free") +
-  #  theme(legend.position = 'none')+
-  #  xlim(min(result$z), max(result$z)) +
-  #  ylim(min(result$z), max(result$z)) +
-  #  geom_abline()+
-  #  ylab("True efect size") +
-  #  xlab("Estimated effect size") +
-  #  theme(axis.text = element_text(size = 14))  +
-  #  theme(axis.title = element_text(size = 14))
-
-  p1 = ggplot(result, aes(x= z,  y= tie_effect))+
-    geom_point(aes(color = sim, size = 1), show.legend = FALSE, alpha = 0.5) +
-    geom_linerange(aes(xmin=ci5, xmax=ci95)) +
+  p1 = ggplot(result, aes(x= z,  y= tie_effect, color = sim, group = sim, label = z))+
+    #geom_linerange(aes(xmin=result[,2], xmax=result[,3])) +
+    geom_point(aes(color = sim, size = NG), show.legend = FALSE, alpha = 0.5) +
     facet_grid( . ~ approach, space="free") +
     theme(legend.position = 'none')+
-    xlim(min(result$ci5), max(result$ci95)) +
-    ylim(min(result$ci5), max(result$ci95)) +
+    xlim(min(result$z), max(result$z)) +
+    ylim(min(result$z), max(result$z)) +
     geom_abline()+
     ylab("True efect size") +
     xlab("Estimated effect size") +
     theme(axis.text = element_text(size = 14))  +
     theme(axis.title = element_text(size = 14))
 
+  #p1 = ggplot(result, aes(x= z,  y= tie_effect))+
+  #  geom_point(aes(color = sim, size = 1), show.legend = FALSE, alpha = 0.5) +
+  #  geom_linerange(aes(xmin=ci5, xmax=ci95)) +
+  #  facet_grid( . ~ approach, space="free") +
+  #  theme(legend.position = 'none')+
+  #  xlim(min(result$ci5), max(result$ci95)) +
+  #  ylim(min(result$ci5), max(result$ci95)) +
+  #  geom_abline()+
+  #  ylab("True efect size") +
+  #  xlab("Estimated effect size") +
+  #  theme(axis.text = element_text(size = 14))  +
+  #  theme(axis.title = element_text(size = 14))
+
 
 
   p2 = ggplot(result, aes(x = resid, y = tie_effect, color = approach))+
-    geom_point(aes(size = N_id),  alpha = 0.5, show.legend = FALSE)+
+    geom_point(aes(size = NG),  alpha = 0.5, show.legend = FALSE)+
     geom_vline(xintercept = 0, linetype = "dashed")+
     xlab("Difference between true effect size and estimated effect size")+
     ylab("True effect size")+
     theme(axis.text = element_text(size = 14))+
     theme(axis.title = element_text(size = 14))+
-    theme(legend.position = 'none')
+    theme(legend.position = 'none')+
+    facet_grid( . ~ detect_effect, space="free")
 
   p3 = ggplot(result, aes(x= approach, y = resid, color = approach, group = approach))+
     geom_violin()+
     stat_summary(fun= function(i){r = quantile(i)[2:4]},  shape=23, size=10, geom = 'point', color = 'black')+
-    geom_jitter(aes(size = 1), alpha = 0.5, show.legend = FALSE, position=position_jitter(0.2)) +
+    geom_jitter(aes(size = NG), alpha = 0.5, show.legend = FALSE, position=position_jitter(0.2)) +
     theme(axis.text = element_text(size = 14))+
     theme(axis.title = element_text(size = 14))+
     theme(legend.position = 'none')
-  return(list(p1, p2, p3))
+
+  p4 = ggplot(result, aes(x = tie_effect, y = `p-value`, color = approach, group = approach))+
+    geom_point(aes(size = NG), alpha = 0.5, show.legend = FALSE, position=position_jitter(0.2))+
+    geom_hline(yintercept=0.05, linetype="dashed", color = "red", size=1)
+  return(list(p1, p2, p3, p4))
 }
 
 library(ggpubr)
 result = simulations(Reps = 1, strand = F, ncores = 1)
 tmp = result[result$approach %in% c('1.Bayesian', '2.Rates', '3.SRI'),]
-p = plots(result)
+p = plots(tmp)
 ggarrange(p[[1]], p[[3]], ncol = 1, nrow = 2)
 
 # Analysis ----------
@@ -412,5 +416,4 @@ library(lmerTest)
 library(emmeans)
 m = lmer(formula = resid ~ approach + (1|tie_effect), data = tmp)
 summary(m)
-
 emmeans(m, list(pairwise ~ approach), adjust = "tukey")

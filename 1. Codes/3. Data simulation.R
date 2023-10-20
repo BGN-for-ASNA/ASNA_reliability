@@ -33,7 +33,7 @@
 #' @return
 
 
-simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
+simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
                                                                B = NULL,
                                                                V = 3,
                                                                groups=NULL,
@@ -52,10 +52,8 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
                                                                exposure_sigma = 1.9,
                                                                exposure_baseline = 50,
                                                                int_bias = FALSE,
-                                                               int_mu = c(0,0.5),
-                                                               int_sigma = c(0.3, 0.6),
-                                                               int_rho = 0.2,
-                                                               get.network = TRUE){
+                                                               int_p = c(0.9,0.5),
+                                                               return.network = TRUE){
   require(STRAND)
   ###############################
   ####### Run some checks #######
@@ -127,29 +125,11 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
     }
   }
 
-  # Observations of interactions vary based on individuals' characteristics.
-  if(int_bias){
-    intB = matrix(NA, nrow=N_id, ncol=2)
-    for( i in 1:N_id){
-      intB[i,]= rmvnorm2(1, Mu= int_mu, sigma= int_sigma, Rho=Rho_int)
-
-      if(!is.null(individual_predictors)){
-        intB[i,1] = intB[i,1] + sum(individual_effects[1,]*individual_predictors[i,])
-        intB[i,2] = intB[i,2] + sum(individual_effects[2,]*individual_predictors[i,])
-      }
-    }
-  }
-
   # !! Sum dyad and interaction probabilities and create ties probabilities matrix.
   for ( i in 1:(N_id-1) ){
     for ( j in (i+1):N_id){
-      if(int_bias){
-        p[i,j] = inv_logit( sr[i,1] + sr[j,2] + dr[i,j] + intB[i,1] + intB[j,2])
-        p[j,i] = inv_logit( sr[j,1] + sr[i,2] + dr[j,i] + intB[j,1] + intB[i,2])
-      }else{
-        p[i,j] = inv_logit( sr[i,1] + sr[j,2] + dr[i,j])
-        p[j,i] = inv_logit( sr[j,1] + sr[i,2] + dr[j,i])
-      }
+      p[i,j] = inv_logit( sr[i,1] + sr[j,2] + dr[i,j])
+      p[j,i] = inv_logit( sr[j,1] + sr[i,2] + dr[j,i])
     }
   }
 
@@ -188,20 +168,40 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 99,
   #######  Model outcomes #######
   ###############################
   # Testing simulation of observation-------------------
-  if(!get.network){
+  if(!return.network){
     interactions = NULL
-    for(a in 1:N_id){# For each individual
-      for(b in 1:true_exposure[a]){ # For each of its observations.
-        for(c in 1:N_id){ # Define interactions among all individuals based on their likelihood of being observed.
+
+    for(a in 1:N_id){# For a given individual
+      # For each observation of an individual
+      for(b in 1:true_exposure[a]){
+        # Evaluate the probability to observe the all alters
+        for(c in 1:N_id){
           if(a == c){next}
           cat("Individual ", a, "; observation: ", b, "; aleter: ", c, '\r')
-          r = rbinom(1 , size = 1, prob = p[a,c])
-          interactions = rbind(interactions, data.frame('focal' = a, '#focal' = b, 'alter' = c, 'interaction' = r))
+
+          if(!is.null(individual_predictors)){
+            p.ego =  int_p[1]*individual_predictors[a]
+            p.alter = int_p[2]*individual_predictors[c]
+          }else{
+            p.ego =  int_p[1]
+            p.alter = int_p[2]
+          }
+
+          #Probability of censor data on ego
+          prob.focal.unobserved = rbinom(1, 1, prob = p.ego)
+
+          #Probability of censor data on alter
+          prob.alter.unobserved = rbinom(1, 1, prob = p.alter)
+
+          r = rbinom(1 , size = 1, prob = p[a,c]*prob.focal.unobserved*prob.alter.unobserved)
+
+          interactions = rbind(interactions, data.frame('focal' = a, '#focal' = b, 'alter' = c, 'interaction' = r,
+                                                        'exposure' = true_exposure[a], 'sr_p' = p[a,c], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
         }
       }
     }
+    return(interactions)
   }
-
 
   # Network------------------------------------------------
   # !! Create an interaction matrix according to the ties probability matrix and observation bias.
