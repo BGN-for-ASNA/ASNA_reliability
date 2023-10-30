@@ -21,7 +21,7 @@ simulations <- function(
     exposure_baseline = 40,
     strand = T, # use STRAN model
     ncores = 1, # number of cores
-    run_blocks_model = T
+    run_blocks_model = TRUE
 ){
   require(parallel)
   require(foreach)
@@ -47,12 +47,8 @@ simulations <- function(
     library(STRAND)
     source("./1. Codes/3. Data simulation.R")
     RESULTS = NULL
-    get_res = function(x) {
-      y = c(coef(x)[2],confint(x, level = 0.9)[2,])
-      return(y)
-    }
 
-    #"Bayesian P value".---------------
+    # "Bayesian P value".---------------
     P_se = function(x){
       M_x = mean(x)
 
@@ -65,6 +61,59 @@ simulations <- function(
       }
 
       return(P_x/N_x)
+    }
+
+    # Build table-------------
+    get_res = function(x) {
+      y = c(coef(x)[2],confint(x, level = 0.9)[2,])
+      return(y)
+    }
+    get.result <- function(test1.1, strand = TRUE, name){
+      if(strand){
+        # "Bayesian P value"
+        strand_est = P_se(test1.1$sample$srm_model_samples$focal_coeffs[,1])
+        strand_se = P_se(test1.1$sample$srm_model_samples$focal_coeffs[,1])
+
+        result = as.data.frame(t(data.frame(as.numeric(unlist(c(unlist(test1.1$summary[2,2:4]), grid_subsample[i,], strand_est, strand_se))))))
+        rownames(result) = NULL
+        result$approach = 'strand'
+        result$sim = i
+        result$sr_sigma = paste(picked_sr_sigma[1], picked_sr_sigma[2], sep = "/")
+        result$sr_rho  = picked_sr_rho
+        result$dr_sigma = picked_dr_sigma
+        result$dr_rho = picked_dr_rho
+        result$exposure_sigma  = picked_exposure_sigma
+        result$exposure_baseline = picked_exposure_baseline
+        result$NG = NG
+        result$mean.between.GR = mean.between.GR
+        result$mean.within.GR = mean.within.GR
+
+        colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
+                             'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
+                             'NG', 'mean.between.GR', 'mean.within.GR')
+        return(result)
+      }else{
+        ants_est = summary(test1.1)$coefficients[2,4]
+        ants_se = summary(test1.1)$coefficients[2,2]
+        result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
+        rownames(result) = NULL
+        result$approach = name
+        result$sim = i
+        result$sr_sigma = paste(picked_sr_sigma[1], picked_sr_sigma[2], sep = "/")
+        result$sr_rho  = picked_sr_rho
+        result$dr_sigma = picked_dr_sigma
+        result$dr_rho = picked_dr_rho
+        result$exposure_sigma  = picked_exposure_sigma
+        result$exposure_baseline = picked_exposure_baseline
+        result$NG = NG
+        result$mean.between.GR = mean.between.GR
+        result$mean.within.GR = mean.within.GR
+
+        colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
+                             'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
+                             'NG', 'mean.between.GR', 'mean.within.GR')
+        return(result)
+      }
     }
 
     # Make data--------------------------------
@@ -123,7 +172,7 @@ simulations <- function(
       int_bias = T,
       return.network = TRUE,
     )
-
+    indiv =  data.frame(Hairy = Hairy)
     # Zero-inflated Poisson model ----------------------
     #y = A$interaction
     #exposure = A$exposure
@@ -141,7 +190,6 @@ simulations <- function(
     #exp(r$mean[2]) # rate interaction
 
     # STRAND--------------------------------
-    indiv =  data.frame(Hairy = Hairy)
     if(strand){
       nets = list(Grooming = A$network)
       exposure_nets = list(Exposure = A$true_samps)
@@ -178,94 +226,29 @@ simulations <- function(
         )
 
       }
-
-
-
-
       res = summarize_strand_results(fit)
-
-      # "Bayesian P value"
-      strand_est = P_se(res$sample$srm_model_samples$focal_coeffs[,1])
-      strand_se = P_se(res$sample$srm_model_samples$focal_coeffs[,1])
-
-      result = as.data.frame(t(data.frame(as.numeric(unlist(c(unlist(res$summary[2,2:4]), grid_subsample[i,], strand_est, strand_se))))))
-      rownames(result) = NULL
-      result$approach = 'strand'
-      result$sim = i
-      result$sr_sigma = paste(picked_sr_sigma[1], picked_sr_sigma[2], sep = "/")
-      result$sr_rho  = picked_sr_rho
-      result$dr_sigma = picked_dr_sigma
-      result$dr_rho = picked_dr_rho
-      result$exposure_sigma  = picked_exposure_sigma
-      result$exposure_baseline = picked_exposure_baseline
-      result$NG = NG
-      result$mean.between.GR = mean.between.GR
-      result$mean.within.GR = mean.within.GR
-
-      colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                           'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
-                           'NG', 'mean.between.GR', 'mean.within.GR')
+      result = get.result(res, strand = TRUE)
       RESULTS = rbind(RESULTS, result)
     }
 
-    #  Rates of interactions unweighted--------------------------------
+    # Rates of interactions unweighted--------------------------------
     tie_strength = A$network/(1+A$true_samps)
     colnames(tie_strength) = rownames(tie_strength) = 1:ncol(tie_strength)
     df = ANTs:::df.create(tie_strength)
     df$strength = met.strength(tie_strength)
     df$hair = indiv$Hairy
     test1.1 = lm(strength ~ hair, data = df)
-
-    ants_est = summary(test1.1)$coefficients[2,4]
-    ants_se = summary(test1.1)$coefficients[2,2]
-    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
-    rownames(result) = NULL
-    result$approach = 'Rates unweighted'
-    result$sim = i
-    result$sr_sigma = paste(picked_sr_sigma[1], picked_sr_sigma[2], sep = "/")
-    result$sr_rho  = picked_sr_rho
-    result$dr_sigma = picked_dr_sigma
-    result$dr_rho = picked_dr_rho
-    result$exposure_sigma  = picked_exposure_sigma
-    result$exposure_baseline = picked_exposure_baseline
-    result$NG = NG
-    result$mean.between.GR = mean.between.GR
-    result$mean.within.GR = mean.within.GR
-
-    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
-                         'NG', 'mean.between.GR', 'mean.within.GR')
-
+    result = get.result(test1.1, strand = FALSE, name = '2.Rates')
     RESULTS = rbind(RESULTS, result)
 
-
-    #  Rates of interactions weighted--------------------------------
+    # Rates of interactions weighted--------------------------------
     test1.1 = lm(strength  ~ hair, data = df, weights = A$true_exposure)
-    ants_est = summary(test1.1)$coefficients[2,4]
-    ants_se = summary(test1.1)$coefficients[2,2]
-
-    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
-    rownames(result) = NULL
-    result$approach = 'Rates weighted'
-    result$sim = i
-    result$sr_sigma = paste(picked_sr_sigma[1], picked_sr_sigma[2], sep = "/")
-    result$sr_rho  = picked_sr_rho
-    result$dr_sigma = picked_dr_sigma
-    result$dr_rho = picked_dr_rho
-    result$exposure_sigma  = picked_exposure_sigma
-    result$exposure_baseline = picked_exposure_baseline
-    result$NG = NG
-    result$mean.between.GR = mean.between.GR
-    result$mean.within.GR = mean.within.GR
-
-    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
-                         'NG', 'mean.between.GR', 'mean.within.GR')
+    result = get.result(test1.1, strand = FALSE, name = '2.Rates weigthed')
     RESULTS = rbind(RESULTS, result)
 
-    #  SRI of interactions unweighted--------------------------------
+    # SRI of interactions unweighted--------------------------------
     m = A$network
-    fa = fb =matrix(0, ncol = nrow(m), nrow = nrow(m))
+    fa = fb = matrix(0, ncol = nrow(m), nrow = nrow(m))
     for (a in 1:nrow(fa)) {
       fa[a,] = A$true_exposure
       fb[,a] = A$true_exposure
@@ -279,53 +262,13 @@ simulations <- function(
     df = ANTs:::df.create(sri)
     df$strength = met.strength(sri)
     df$hair = indiv$Hairy
-
     test1.1 = lm(strength ~ hair, data = df, weights = A$true_exposure)
-    ants_est = summary(test1.1)$coefficients[2,4]
-    ants_se = summary(test1.1)$coefficients[2,2]
-
-    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
-    rownames(result) = NULL
-    result$approach = 'SRI unweigthed'
-    result$sim = i
-    result$sr_sigma = paste(picked_sr_sigma[1], picked_sr_sigma[2], sep = "/")
-    result$sr_rho  = picked_sr_rho
-    result$dr_sigma = picked_dr_sigma
-    result$dr_rho = picked_dr_rho
-    result$exposure_sigma  = picked_exposure_sigma
-    result$exposure_baseline = picked_exposure_baseline
-    result$NG = NG
-    result$mean.between.GR = mean.between.GR
-    result$mean.within.GR = mean.within.GR
-
-    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
-                         'NG', 'mean.between.GR', 'mean.within.GR')
+    result = get.result(test1.1, strand = FALSE, name = '3.SRI')
     RESULTS = rbind(RESULTS, result)
 
-    #  SRI of interactions weighted--------------------------------
+    # SRI of interactions weighted--------------------------------
     test1.1 = lm(strength ~ hair, data = df, weights = A$true_exposure)
-    ants_est = summary(test1.1)$coefficients[2,4]
-    ants_se = summary(test1.1)$coefficients[2,2]
-
-    result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
-    rownames(result) = NULL
-    result$approach = 'SRI weighted'
-    result$sim = i
-    result$sr_sigma = paste(picked_sr_sigma[1], picked_sr_sigma[2], sep = "/")
-    result$sr_rho  = picked_sr_rho
-    result$dr_sigma = picked_dr_sigma
-    result$dr_rho = picked_dr_rho
-    result$exposure_sigma  = picked_exposure_sigma
-    result$exposure_baseline = picked_exposure_baseline
-    result$NG = NG
-    result$mean.between.GR = mean.between.GR
-    result$mean.within.GR = mean.within.GR
-
-    colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
-                         'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
-                         'NG', 'mean.between.GR', 'mean.within.GR')
-
+    result = get.result(test1.1, strand = FALSE, name = '3.SRI weigthed')
     RESULTS = rbind(RESULTS, result)
   }
 
@@ -340,31 +283,23 @@ simulations <- function(
   result$MOE = result$z * result$se
   result$ci5 = result$z - abs(result$MOE)
   result$ci95 = result$z + abs(result$MOE)
-
   result$resid = result$tie_effect - result$z
 
-  result$approach = ifelse(result$approach == "strand", '1.Bayesian', result$approach)
-  result$approach = ifelse(result$approach == "Rates unweighted", '2.Rates', result$approach)
-  result$approach = ifelse(result$approach == "SRI unweigthed", '3.SRI', result$approach)
 
   return(result)
 }
 
-
 # Plot ----------
 plots <- function(result){
-  p1 = ggplot(result, aes(x= z,  y= tie_effect, color = sim, group = sim, label = z))+
+  p1 = ggplot(result, aes(x = tie_effect,  y = z, color = sim, group = sim, label = z))+
     #geom_linerange(aes(xmin=result[,2], xmax=result[,3])) +
-    geom_point(aes(color = sim, size = NG), show.legend = FALSE, alpha = 0.5) +
+    geom_point(aes(color = sim, size = sr_rho), show.legend = FALSE, alpha = 0.5) +
+    geom_hline(yintercept = 0, linetype = "dashed")+
     facet_grid( . ~ approach, space="free") +
     theme(legend.position = 'none')+
-    xlim(min(result$z), max(result$z)) +
-    ylim(min(result$z), max(result$z)) +
-    geom_abline()+
-    ylab("True efect size") +
-    xlab("Estimated effect size") +
-    theme(axis.text = element_text(size = 14))  +
-    theme(axis.title = element_text(size = 14))
+    ylab("Estimated effect size (z-score)") +
+    xlab("True efect size") +
+    theme(axis.text = element_text(size = 14))
 
   #p1 = ggplot(result, aes(x= z,  y= tie_effect))+
   #  geom_point(aes(color = sim, size = 1), show.legend = FALSE, alpha = 0.5) +
@@ -380,40 +315,49 @@ plots <- function(result){
   #  theme(axis.title = element_text(size = 14))
 
 
+ p2 = ggplot(result, aes(x = tie_effect, y = z, color = approach))+
+   geom_point(aes(size = sr_rho),  show.legend = FALSE, alpha = 0.5)+
+   geom_hline(yintercept = 0, linetype = "dashed")+
+   xlab("True efect size")+
+   ylab("Estimated effect size (z-score)")+
+   theme(axis.text = element_text(size = 14))
+   #theme(legend.position = 'none')+
+   #facet_grid( . ~ detect_effect, space="free")
 
-  p2 = ggplot(result, aes(x = resid, y = tie_effect, color = approach))+
-    geom_point(aes(size = NG),  alpha = 0.5, show.legend = FALSE)+
-    geom_vline(xintercept = 0, linetype = "dashed")+
-    xlab("Difference between true effect size and estimated effect size")+
-    ylab("True effect size")+
-    theme(axis.text = element_text(size = 14))+
-    theme(axis.title = element_text(size = 14))+
-    theme(legend.position = 'none')+
-    facet_grid( . ~ detect_effect, space="free")
+ #p3 = ggplot(result, aes(x= approach, y = resid, color = approach, group = approach))+
+ #  geom_violin()+
+ #  stat_summary(fun= function(i){r = quantile(i)[2:4]},  shape=23, size=10, geom = 'point', color = 'black')+
+ #  geom_jitter(aes(size = sr_rho), alpha = 0.5, show.legend = FALSE, position=position_jitter(0.2)) +
+ #  theme(axis.text = element_text(size = 14))+
+ #  theme(axis.title = element_text(size = 14))+
+ #  theme(legend.position = 'none')
 
-  p3 = ggplot(result, aes(x= approach, y = resid, color = approach, group = approach))+
-    geom_violin()+
-    stat_summary(fun= function(i){r = quantile(i)[2:4]},  shape=23, size=10, geom = 'point', color = 'black')+
-    geom_jitter(aes(size = NG), alpha = 0.5, show.legend = FALSE, position=position_jitter(0.2)) +
-    theme(axis.text = element_text(size = 14))+
-    theme(axis.title = element_text(size = 14))+
-    theme(legend.position = 'none')
-
-  p4 = ggplot(result, aes(x = tie_effect, y = `p-value`, color = approach, group = approach))+
-    geom_point(aes(size = NG), alpha = 0.5, show.legend = FALSE, position=position_jitter(0.2))+
-    geom_hline(yintercept=0.05, linetype="dashed", color = "red", size=1)
-  return(list(p1, p2, p3, p4))
+ p4 = ggplot(result, aes(x = tie_effect, y = `p-value`, group = approach))+
+   geom_point(aes(size = sr_rho,  color = approach), alpha = 0.5, show.legend = TRUE, position=position_jitter(0.2))+
+   geom_hline(yintercept=0.05, linetype="dashed", color = "red", size=1)+
+   xlab("True efect size")+
+   geom_vline(xintercept = 0.5, linetype = "dashed")+
+   geom_vline(xintercept = -0.5, linetype = "dashed")
+  return(list(p1, p2, p4))
 }
 
 library(ggpubr)
-result = simulations(Reps = 1, strand = F, ncores = 1)
-tmp = result[result$approach %in% c('1.Bayesian', '2.Rates', '3.SRI'),]
-p = plots(tmp)
-ggarrange(p[[1]], p[[3]], ncol = 1, nrow = 2)
+result = simulations(Reps = 1, strand = F, ncores = 4)
+p = plots(result)
+ggarrange(p[[2]], p[[3]], ncol = 2, nrow = 1, common.legend = TRUE)
 
-# Analysis ----------
-library(lmerTest)
-library(emmeans)
-m = lmer(formula = resid ~ approach + (1|tie_effect), data = tmp)
-summary(m)
-emmeans(m, list(pairwise ~ approach), adjust = "tukey")
+# Rates of false negatives -------------
+t1 = sum(result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$`p-value` >= 0.05)/nrow(result[result$tie_effect > 0.5 | result$tie_effect < -0.5,])
+t2 = tapply(result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$`p-value`, result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$approach, function(x){sum(x >= 0.05)/length(x)})
+
+# Rates of false positives -------------
+t3 = sum(result[result$tie_effect <= 0.5 & result$tie_effect >= -0.5,]$`p-value` <= 0.05)/nrow(result[result$tie_effect <= 0.5 & result$tie_effect >= -0.5,])
+t4 = tapply(result[result$tie_effect <= 0.5 &  result$tie_effect  >= -0.5,]$`p-value`, result[result$tie_effect<= 0.5 &  result$tie_effect  >= -0.5,]$approach, function(x){sum(x <= 0.05)/length(x)})
+
+
+summary = data.frame("Approaches" = c('all', names(t2), "all", names(t4)), "Error type" = c(rep('False negatives', 6), rep('False positives', 6)) ,"Percent" = c(t1, t2, t3, t4))
+summary$Percent = summary$Percent * 100
+summary
+
+write.csv(summary, "2. Results/ Rates of Type I and Type II errors.csv", row.names = FALSE)
+
