@@ -97,6 +97,7 @@ Script ["4.simulation.R"](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/
 | Rates weighted |  False  negatives | 0  |
 | SRI weighted |  False  negatives | 	9.090  |
 
+It appears that "Rates weighted" is a better compromise between Error type I and II.
 ### 3.2 Bias in interaction
 
 # 4.To-Do
