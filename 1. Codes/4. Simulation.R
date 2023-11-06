@@ -378,7 +378,7 @@ plots <- function(result){
 }
 
 # Simulation ----------
-result = simulations(Reps = 1, ncores = 1, strand = T, simulate.interactions = T, int_p = c(InF,InF)) # Simulate interactions with the probability of observing an interaction of 1.
+result = simulations(Reps = 1, ncores = 1, strand = T, simulate.interactions = T, int_p = c(Inf,Inf)) # Simulate interactions with the probability of observing an interaction of 1.
 p = plots(result)
 library(ggpubr)
 ggarrange(p[[1]], p[[2]], ncol = 2, nrow = 1, common.legend = TRUE)
