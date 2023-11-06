@@ -51,7 +51,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
                                                                exposure_effects = NULL,
                                                                exposure_sigma = 1.9,
                                                                exposure_baseline = 50,
-                                                               int_p = c(0.9,0.5),
+                                                               int_p = c(Inf,Inf),
                                                                simulate.interactions = TRUE){
   require(STRAND)
   require(ANTs)
@@ -200,9 +200,10 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
         }
       }
     }
-
+    net = df.to.mat(interactions, actor = 'ego', receiver = 'alter', weighted ='interaction')
+    net = net[colnames(net)[order(as.integer(colnames(net)))],colnames(net)[order(as.integer(colnames(net)))]]
     return(list(interactions = interactions,
-                network= df.to.mat(interactions, actor = 'ego', receiver = 'alter', weighted ='interaction'),
+                network= net,
                 tie_strength=p,
                 group_ids=groups,
                 individual_predictors=individual_predictors,

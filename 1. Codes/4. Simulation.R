@@ -225,13 +225,6 @@ simulations <- function(
       priors=priors
     )
 
-    df = ANTs:::df.create(tie_strength)
-    df$strength = met.strength(tie_strength)
-    df$hair = indiv$Hairy
-    test1.1 = lm(strength ~ hair, data = df)
-    result = get.result(test1.1, strand = FALSE, name = '2.Rates')
-    RESULTS = rbind(RESULTS, result)
-    df$hair = indiv$Hairy
     cv_samples <- extract_metric(fit_edge, "node_strength", num_draws = 1)
     df = data.frame('id' = names(fit_edge$node_to_idx), 'strength' = cv_samples[1,])
     df = df[order(as.numeric(df$id)),]
@@ -251,8 +244,6 @@ simulations <- function(
                                    outcome_mode = "binomial",
                                    exposure = exposure_nets
       )
-
-      # !!  I replaced fit_block_plus_social_relations_model by fit_social_relations_model
 
       fit =  fit_block_plus_social_relations_model(data=model_dat,
                                                    block_regression = ~ Clique,
@@ -387,7 +378,7 @@ plots <- function(result){
 }
 
 # Simulation ----------
-result = simulations(Reps = 200, ncores = 100, strand = T, simulate.interactions = T, int_p = c(1,1)) # Simulate interactions with the probability of observing an interaction of 1.
+result = simulations(Reps = 1, ncores = 1, strand = T, simulate.interactions = T, int_p = c(InF,InF)) # Simulate interactions with the probability of observing an interaction of 1.
 p = plots(result)
 library(ggpubr)
 ggarrange(p[[1]], p[[2]], ncol = 2, nrow = 1, common.legend = TRUE)
