@@ -5,7 +5,7 @@
 simulations <- function(
     Reps = 100,
     N_id =  seq(30, 100, by = 20),
-    hairy_tie_effect = seq(-4, 4, by = 1),
+    hairy_tie_effect = seq(-2, 2, by = 0.5),
     hairy_detect_effect = seq(-4, 4, by = 1),
     blocks = TRUE,
     B = NULL,
@@ -21,7 +21,8 @@ simulations <- function(
     exposure_baseline = 40,
     strand = T, # use STRAN model
     ncores = 1, # number of cores
-    run_blocks_model = TRUE
+    simulate.interactions = TRUE,
+    int_p = c(1,1) # Prob of miss interactions
 ){
   require(parallel)
   require(foreach)
@@ -166,29 +167,78 @@ simulations <- function(
       dr_sigma = picked_dr_sigma,
       dr_rho = picked_dr_rho,
       exposure_predictors = cbind(rep(1,N_id),Hairy),
-      exposure_effects = c(-1, grid_subsample$hairy_detect_effect[i]),
+      exposure_effects = c(-1, grid_subsample$detect_effect[i]),
       exposure_sigma = picked_exposure_sigma,
       exposure_baseline = picked_exposure_baseline,
-      int_bias = T,
-      return.network = TRUE,
+      int_p = int_p,
+      simulate.interactions = simulate.interactions,
     )
+
     indiv =  data.frame(Hairy = Hairy)
-    # Zero-inflated Poisson model ----------------------
-    #y = A$interaction
-    #exposure = A$exposure
+    ## Zero-inflated Poisson model ----------------------
+    #y = A$interaction$interaction
+    #exposure = A$interaction$exposure
+    ## Due to some individuals not being observed we will
+    #x = unique(A$interactions$ego)
+    #id = as.numeric(as.character(
+    #    factor(A$interactions$ego, levels = unique(A$interactions$ego), labels = seq_along(unique(A$interactions$ego)))
+    #  ))
+    #unique(id)
+
     #library(rethinking)
-    #m <- map(
+    #m <- ulam (
     #  alist(
     #    y ~ dzipois( p , lambda ),
-    #    logit(p) <- ap, #Probability of true zero
-    #    log(lambda) <- al + log(exposure+1) , #  logarithm of the exposure to address observation bias
+    #    logit(p) <- ap + a_id[id], #Probability of true zero
+    #    log(lambda) <- al + a_id[id] + log(exposure+1) , #  logarithm of the exposure to address observation bias
+
     #    ap ~ dnorm(0,1),
-    #    al ~ dnorm(0,10)
-    #  ) ,data=list(y=y, exposure = exposure))
-    #r = precis(m)
+    #    al ~ dnorm(0,10),
+
+    #    a_id[id] ~ dnorm(0, sigma_id ),
+    #    sigma_id ~ dcauchy(0,1)
+    #  ) , data=list(y=y, exposure = exposure, id = id))
+
+    #r = precis(m, depth=2)
     #logistic(r$mean[1]) # probability false zero
     #exp(r$mean[2]) # rate interaction
 
+    #link.m <- link( m , data=list(y=y, exposure = exposure, id = id) )
+    #pred.p <- apply( link.m , 2 , mean )
+    #pred.p.PI <- apply( link.m , 2 , PI )
+
+    #vcov(m) # variance-covariance
+    #post <- extract.samples( m , n = N_id )
+    #head(post)
+    ### Generating implied observations -------------------
+
+    # BISON------------------------
+    library(bisonR)
+    head(A$interactions)
+    A$interactions$ego = as.factor(A$interactions$ego)
+    A$interactions$alter = as.factor(A$interactions$alter)
+    priors <- get_default_priors("binary")
+    fit_edge <- bison_model(
+      (interaction | exposure) ~ dyad(ego, alter),
+      data=A$interaction,
+      model_type="binary",
+      priors=priors
+    )
+
+    df = ANTs:::df.create(tie_strength)
+    df$strength = met.strength(tie_strength)
+    df$hair = indiv$Hairy
+    test1.1 = lm(strength ~ hair, data = df)
+    result = get.result(test1.1, strand = FALSE, name = '2.Rates')
+    RESULTS = rbind(RESULTS, result)
+    df$hair = indiv$Hairy
+    cv_samples <- extract_metric(fit_edge, "node_strength", num_draws = 1)
+    df = data.frame('id' = names(fit_edge$node_to_idx), 'strength' = cv_samples[1,])
+    df = df[order(as.numeric(df$id)),]
+    df$hair = indiv$Hairy
+    test1.1 = lm(strength ~ hair, data = df)
+    result = get.result(test1.1, strand = FALSE, name = 'BISON')
+    RESULTS = rbind(RESULTS, result)
     # STRAND--------------------------------
     if(strand){
       nets = list(Grooming = A$network)
@@ -203,29 +253,18 @@ simulations <- function(
       )
 
       # !!  I replaced fit_block_plus_social_relations_model by fit_social_relations_model
-      if(run_blocks_model){
-        fit =  fit_block_plus_social_relations_model(data=model_dat,
-                                                     block_regression = ~ Clique,
-                                                     focal_regression = ~ Hairy,
-                                                     target_regression = ~ Hairy,
-                                                     dyad_regression = ~  1,
-                                                     mode="mcmc",
-                                                     stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
-                                                                                 iter_warmup = 1000, iter_sampling = 1000,
-                                                                                 max_treedepth = NULL, adapt_delta = .98)
-        )
-      }else{
-        fit =  fit_social_relations_model(data=model_dat,
-                                          focal_regression = ~ Hairy,
-                                          target_regression = ~ Hairy,
-                                          dyad_regression = ~  1,
-                                          mode="mcmc",
-                                          stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
-                                                                      iter_warmup = 1000, iter_sampling = 1000,
-                                                                      max_treedepth = NULL, adapt_delta = .98)
-        )
 
-      }
+      fit =  fit_block_plus_social_relations_model(data=model_dat,
+                                                   block_regression = ~ Clique,
+                                                   focal_regression = ~ Hairy,
+                                                   target_regression = ~ Hairy,
+                                                   dyad_regression = ~  1,
+                                                   mode="mcmc",
+                                                   stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
+                                                                               iter_warmup = 1000, iter_sampling = 1000,
+                                                                               max_treedepth = NULL, adapt_delta = .98)
+      )
+
       res = summarize_strand_results(fit)
       result = get.result(res, strand = TRUE)
       RESULTS = rbind(RESULTS, result)
@@ -241,9 +280,27 @@ simulations <- function(
     result = get.result(test1.1, strand = FALSE, name = '2.Rates')
     RESULTS = rbind(RESULTS, result)
 
+    # Node label permutations
+    perm = perm.net.nl(df, labels = 'hair', nperm = 10000, progress = FALSE)
+    ptest = stat.lm(perm, formula = strength ~ hair, progress = FALSE)
+    ptest = ant(ptest)$coefficients$p.two.sides[2]
+    result$approach = paste(result$approach, 'permuted', sep = " ")
+    result$`p-value` = ptest
+    RESULTS = rbind(RESULTS, result)
+
     # Rates of interactions weighted--------------------------------
     test1.1 = lm(strength  ~ hair, data = df, weights = A$true_exposure)
     result = get.result(test1.1, strand = FALSE, name = '2.Rates weigthed')
+    RESULTS = rbind(RESULTS, result)
+
+    # Node label permutations
+    ptest = unlist(lapply(perm, function(x, exposure){
+      m = lm(data = x, formula = strength ~ hair, weights = exposure)
+      summary(m)$coefficients[2,1]
+    }, exposure = A$true_exposure))
+    ptest = ANTs:::stat.p(ptest)[3]
+    result$approach = paste(result$approach, 'permuted', sep = " ")
+    result$`p-value` = ptest
     RESULTS = rbind(RESULTS, result)
 
     # SRI of interactions unweighted--------------------------------
@@ -266,9 +323,27 @@ simulations <- function(
     result = get.result(test1.1, strand = FALSE, name = '3.SRI')
     RESULTS = rbind(RESULTS, result)
 
+    # Node label permutations
+    perm = perm.net.nl(df, labels = 'hair', nperm = 10000, progress = FALSE)
+    ptest = stat.lm(perm, formula = strength ~ hair, progress = FALSE)
+    ptest = ant(ptest)$coefficients$p.two.sides[2]
+    result$approach = paste(result$approach, 'permuted', sep = " ")
+    result$`p-value` = ptest
+    RESULTS = rbind(RESULTS, result)
+
     # SRI of interactions weighted--------------------------------
     test1.1 = lm(strength ~ hair, data = df, weights = A$true_exposure)
     result = get.result(test1.1, strand = FALSE, name = '3.SRI weigthed')
+    RESULTS = rbind(RESULTS, result)
+
+    # Node label permutations
+    ptest = unlist(lapply(perm, function(x, exposure){
+      m = lm(data = x, formula = strength ~ hair, weights = exposure)
+      summary(m)$coefficients[2,1]
+    }, exposure = A$true_exposure))
+    ptest = ANTs:::stat.p(ptest)[3]
+    result$approach = paste(result$approach, 'permuted', sep = " ")
+    result$`p-value` = ptest
     RESULTS = rbind(RESULTS, result)
   }
 
@@ -284,16 +359,16 @@ simulations <- function(
   result$ci5 = result$z - abs(result$MOE)
   result$ci95 = result$z + abs(result$MOE)
   result$resid = result$tie_effect - result$z
-
-
   return(result)
 }
 
 # Plot ----------
 plots <- function(result){
-  p1 = ggplot(result, aes(x = tie_effect,  y = z, color = sim, group = sim, label = z))+
+  require(ggplot2)
+  # Removing permuted approaches, as the effect sizes are identical.
+  p1 = ggplot(result[!result$approach %in% c("2.Rates permuted", "3.SRI permuted"),], aes(x = tie_effect,  y = z, group = sim, label = z))+
     #geom_linerange(aes(xmin=result[,2], xmax=result[,3])) +
-    geom_point(aes(color = sim, size = sr_rho), show.legend = FALSE, alpha = 0.5) +
+    geom_point(aes(color = sr_rho, size = detect_effect), show.legend = TRUE, alpha = 0.5) +
     geom_hline(yintercept = 0, linetype = "dashed")+
     facet_grid( . ~ approach, space="free") +
     theme(legend.position = 'none')+
@@ -301,63 +376,44 @@ plots <- function(result){
     xlab("True efect size") +
     theme(axis.text = element_text(size = 14))
 
-  #p1 = ggplot(result, aes(x= z,  y= tie_effect))+
-  #  geom_point(aes(color = sim, size = 1), show.legend = FALSE, alpha = 0.5) +
-  #  geom_linerange(aes(xmin=ci5, xmax=ci95)) +
-  #  facet_grid( . ~ approach, space="free") +
-  #  theme(legend.position = 'none')+
-  #  xlim(min(result$ci5), max(result$ci95)) +
-  #  ylim(min(result$ci5), max(result$ci95)) +
-  #  geom_abline()+
-  #  ylab("True efect size") +
-  #  xlab("Estimated effect size") +
-  #  theme(axis.text = element_text(size = 14))  +
-  #  theme(axis.title = element_text(size = 14))
-
-
- p2 = ggplot(result, aes(x = tie_effect, y = z, color = approach))+
-   geom_point(aes(size = sr_rho),  show.legend = FALSE, alpha = 0.5)+
-   geom_hline(yintercept = 0, linetype = "dashed")+
-   xlab("True efect size")+
-   ylab("Estimated effect size (z-score)")+
-   theme(axis.text = element_text(size = 14))
-   #theme(legend.position = 'none')+
-   #facet_grid( . ~ detect_effect, space="free")
-
- #p3 = ggplot(result, aes(x= approach, y = resid, color = approach, group = approach))+
- #  geom_violin()+
- #  stat_summary(fun= function(i){r = quantile(i)[2:4]},  shape=23, size=10, geom = 'point', color = 'black')+
- #  geom_jitter(aes(size = sr_rho), alpha = 0.5, show.legend = FALSE, position=position_jitter(0.2)) +
- #  theme(axis.text = element_text(size = 14))+
- #  theme(axis.title = element_text(size = 14))+
- #  theme(legend.position = 'none')
-
  p4 = ggplot(result, aes(x = tie_effect, y = `p-value`, group = approach))+
-   geom_point(aes(size = sr_rho,  color = approach), alpha = 0.5, show.legend = TRUE, position=position_jitter(0.2))+
+   geom_point(aes(size = detect_effect,  color = sr_rho), alpha = 0.5, show.legend = TRUE, position=position_jitter(0.2))+
    geom_hline(yintercept=0.05, linetype="dashed", color = "red", size=1)+
    xlab("True efect size")+
    geom_vline(xintercept = 0.5, linetype = "dashed")+
-   geom_vline(xintercept = -0.5, linetype = "dashed")
-  return(list(p1, p2, p4))
+   geom_vline(xintercept = -0.5, linetype = "dashed")+
+   facet_grid( . ~ approach, space="free")
+  return(list(p1, p4))
 }
 
-library(ggpubr)
-result = simulations(Reps = 1, strand = F, ncores = 4)
+# Simulation ----------
+result = simulations(Reps = 200, ncores = 100, strand = T, simulate.interactions = T, int_p = c(1,1)) # Simulate interactions with the probability of observing an interaction of 1.
 p = plots(result)
-ggarrange(p[[2]], p[[3]], ncol = 2, nrow = 1, common.legend = TRUE)
+library(ggpubr)
+ggarrange(p[[1]], p[[2]], ncol = 2, nrow = 1, common.legend = TRUE)
 
 # Rates of false negatives -------------
-t1 = sum(result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$`p-value` >= 0.05)/nrow(result[result$tie_effect > 0.5 | result$tie_effect < -0.5,])
-t2 = tapply(result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$`p-value`, result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$approach, function(x){sum(x >= 0.05)/length(x)})
+t1 = tapply(result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$`p-value`, result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$approach, function(x){sum(x >= 0.05)/length(x)})
 
 # Rates of false positives -------------
-t3 = sum(result[result$tie_effect <= 0.5 & result$tie_effect >= -0.5,]$`p-value` <= 0.05)/nrow(result[result$tie_effect <= 0.5 & result$tie_effect >= -0.5,])
-t4 = tapply(result[result$tie_effect <= 0.5 &  result$tie_effect  >= -0.5,]$`p-value`, result[result$tie_effect<= 0.5 &  result$tie_effect  >= -0.5,]$approach, function(x){sum(x <= 0.05)/length(x)})
+t2 = tapply(result[result$tie_effect <= 0.5 &  result$tie_effect  >= -0.5,]$`p-value`, result[result$tie_effect<= 0.5 &  result$tie_effect  >= -0.5,]$approach, function(x){sum(x <= 0.05)/length(x)})
 
-
-summary = data.frame("Approaches" = c('all', names(t2), "all", names(t4)), "Error type" = c(rep('False negatives', 6), rep('False positives', 6)) ,"Percent" = c(t1, t2, t3, t4))
+summary = data.frame("Approaches" = c(names(t1),  names(t2)), "Error type" = c(rep('False negatives', 7), rep('False positives', 7)) ,"Percent" = c(t1, t2))
 summary$Percent = summary$Percent * 100
 summary
 
-write.csv(summary, "2. Results/ Rates of Type I and Type II errors.csv", row.names = FALSE)
+write.csv(result, "SIM -2 to 2.csv", row.names = FALSE)
+write.csv(summary, "SIM -2 to 2 rates of type I and type II errors.csv", row.names = FALSE)
+save.image("SIM -2 to 2.RData")
+
+ggplot(result[result$tie_effect>= -0.5 & result$tie_effect <= 0.5,], aes(x = tie_effect,  y = z,group = sim, label = z))+
+  geom_point(aes(shape = approach, size = N_id, color = exposure_sigma ),  show.legend = TRUE, alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed")+
+  facet_grid( . ~ detect_effect, space="free") +
+  theme(legend.position = 'none')+
+  ylab("Estimated effect size (z-score)") +
+  xlab("True efect size") +
+  theme(axis.text = element_text(size = 9))
+
+
 

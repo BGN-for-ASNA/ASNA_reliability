@@ -51,10 +51,10 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
                                                                exposure_effects = NULL,
                                                                exposure_sigma = 1.9,
                                                                exposure_baseline = 50,
-                                                               int_bias = FALSE,
                                                                int_p = c(0.9,0.5),
-                                                               return.network = TRUE){
+                                                               simulate.interactions = TRUE){
   require(STRAND)
+  require(ANTs)
   ###############################
   ####### Run some checks #######
   ###############################
@@ -84,7 +84,6 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   Rho_sr = Rho_dr = Rho_int = diag(c(1,1))
   Rho_sr[1,2] = Rho_sr[2,1] = sr_rho
   Rho_dr[1,2] = Rho_dr[2,1] = dr_rho
-  Rho_int[1,2] = Rho_int[2,1] = int_rho
 
   # Varying effects on individuals
   # !! ## Determine for each dyad its baseline interaction frequencies (rmvnorm2) +
@@ -145,7 +144,6 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   diag(true_samps) = 0
   diag(ideal_samps) = 0
 
-
   # !!  For each individual, determine:
    for( i in 1:N_id){
     ideal_exposure[i] = rpois(1, lambda=exposure_baseline) # !! Observation baseline.
@@ -164,20 +162,21 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
       }
     }
 
-  ###############################
-  #######  Model outcomes #######
-  ###############################
+  ###################################
+  #######  Model interactions bias###
+  ###################################
   # Testing simulation of observation-------------------
-  if(!return.network){
+  if(simulate.interactions){
     interactions = NULL
 
     for(a in 1:N_id){# For a given individual
       # For each observation of an individual
+      if(true_exposure[a] == 0){next}
       for(b in 1:true_exposure[a]){
         # Evaluate the probability to observe the all alters
         for(c in 1:N_id){
           if(a == c){next}
-          cat("Individual ", a, "; observation: ", b, "; aleter: ", c, '\r')
+          cat("Individual ", a, '/', N_id, "; observation: ", b, "; alter: ", c, '\r')
 
           if(!is.null(individual_predictors)){
             p.ego =  int_p[1]*individual_predictors[a]
@@ -187,22 +186,38 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
             p.alter = int_p[2]
           }
 
+
           #Probability of censor data on ego
-          prob.focal.unobserved = rbinom(1, 1, prob = p.ego)
+          prob.focal.unobserved = rbinom(1, 1, prob = inv_logit(p.ego))
 
           #Probability of censor data on alter
-          prob.alter.unobserved = rbinom(1, 1, prob = p.alter)
+          prob.alter.unobserved = rbinom(1, 1, prob = inv_logit(p.alter))
 
           r = rbinom(1 , size = 1, prob = p[a,c]*prob.focal.unobserved*prob.alter.unobserved)
 
-          interactions = rbind(interactions, data.frame('focal' = a, '#focal' = b, 'alter' = c, 'interaction' = r,
+          interactions = rbind(interactions, data.frame('ego' = a, 'focal' = b, 'alter' = c, 'interaction' = r,
                                                         'exposure' = true_exposure[a], 'sr_p' = p[a,c], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
         }
       }
     }
-    return(interactions)
-  }
 
+    return(list(interactions = interactions,
+                network= df.to.mat(interactions, actor = 'ego', receiver = 'alter', weighted ='interaction'),
+                tie_strength=p,
+                group_ids=groups,
+                individual_predictors=individual_predictors,
+                dyadic_predictors=dyadic_predictors,
+                exposure_predictors=exposure_predictors,
+                sr=sr,
+                dr=dr,
+                true_samps=true_samps,
+                ideal_samps=ideal_samps,
+                ideal_exposure=ideal_exposure,
+                true_exposure=true_exposure))
+  }
+  ###############################
+  #######  Model outcomes #######
+  ###############################
   # Network------------------------------------------------
   # !! Create an interaction matrix according to the ties probability matrix and observation bias.
   for ( i in 1:(N_id-1) ){
@@ -219,15 +234,17 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   }
 
   return(list(network=y_true,
-            tie_strength=p,
-            group_ids=groups,
-            individual_predictors=individual_predictors,
-            dyadic_predictors=dyadic_predictors,
-            exposure_predictors=exposure_predictors,
-            sr=sr,
-            dr=dr,
-            true_samps=true_samps,
-            ideal_samps=ideal_samps,
-            ideal_exposure=ideal_exposure,
-            true_exposure=true_exposure))
+              tie_strength=p,
+              group_ids=groups,
+              individual_predictors=individual_predictors,
+              dyadic_predictors=dyadic_predictors,
+              exposure_predictors=exposure_predictors,
+              sr=sr,
+              dr=dr,
+              true_samps=true_samps,
+              ideal_samps=ideal_samps,
+              ideal_exposure=ideal_exposure,
+              true_exposure=true_exposure))
+
 }
+

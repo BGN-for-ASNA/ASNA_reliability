@@ -1,0 +1,17 @@
+"Approaches","Error.type","Percent"
+"all","False negatives",2.04081632653061
+"2.Rates","False negatives",2.1978021978022
+"2.Rates permuted","False negatives",2.1978021978022
+"2.Rates weigthed","False negatives",1.0989010989011
+"3.SRI","False negatives",1.0989010989011
+"3.SRI permuted","False negatives",4.3956043956044
+"3.SRI weigthed","False negatives",1.0989010989011
+"strand","False negatives",2.1978021978022
+"all","False positives",64.35124508519
+"2.Rates","False positives",68.8073394495413
+"2.Rates permuted","False positives",68.8073394495413
+"2.Rates weigthed","False positives",61.4678899082569
+"3.SRI","False positives",56.8807339449541
+"3.SRI permuted","False positives",66.0550458715596
+"3.SRI weigthed","False positives",56.8807339449541
+"strand","False positives",71.5596330275229
