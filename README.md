@@ -67,7 +67,7 @@ If none of this information is available, researchers can conduct a sensitivity 
 
 ## 3. Results
 ### 3.1 Bias in observation
-Script ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/1.%20Codes/4.%20Simulation.R) provide 4 types of plots:
+Script ["4.simulation.R"](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/1.%20Codes/4.%20Simulation.R) provide 4 types of plots:
 1.  A scatter plot showing the difference between the estimated effect size and the true effect size for each approach. The diagonal line represents a perfect match.
    ![alt text](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/2.%20Results/p1.png)
 3.  A scatter plot showing the difference between the true effect size and the estimated effect size. A vertical line at zero represents a perfect match.
@@ -77,6 +77,27 @@ Script ["4.simulation.R](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/m
 6. Scatter plot showing the relationship between p-values and the true effect size for each approach.
    ![alt text](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/2.%20Results/p4.png)
 
+Currently, we are choosing this particular plot type.
+  ![alt text](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/2.%20Results/final%20plot.png)
+
+Script ["4.simulation.R"](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/1.%20Codes/4.%20Simulation.R) also compute the type I and type II error rates for each approaches. The output CSV file is located [here](https://github.com/BGN-for-ASNA/ASNA_reliability/blob/main/2.%20Results/%20Rates%20of%20Type%20I%20and%20Type%20II%20errors.csv)
+
+| Approaches | Error type | Percent |
+| --- | --- | --- |
+| all |  False  negatives | 0.674  |
+| Bayesian |  False  negatives | 0  |
+| Rates |  False  negatives | 0  |
+| SRI |  False  negatives | 1.123  |
+| Rates weighted |  False  negatives | 1.123  |
+| SRI weighted |  False  negatives | 1.123  |
+| all |  False  positives | 	9.090  |
+| Bayesian |  False  positives | 	9.090  |
+| Rates |  False  positives | 18.181  |
+| SRI |  False  positives | 	9.090  |
+| Rates weighted |  False  positives | 0  |
+| SRI weighted |  False  positives | 	9.090  |
+
+It appears that "Rates weighted" is a better compromise between Error type I and II.
 ### 3.2 Bias in interaction
 
 # 4.To-Do
