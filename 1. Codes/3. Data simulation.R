@@ -132,8 +132,8 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
     }
   }
 
-  ###############################
-  #######  Model measurements ###
+  ##################################
+  #######  Model observation bias###
   ###############################
   ideal_samps = matrix(NA, nrow=N_id, ncol=N_id) #!! Sample without bias.
   true_samps = matrix(NA, nrow=N_id, ncol=N_id) #!! Sample with bias.
@@ -165,41 +165,66 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   ###################################
   #######  Model interactions bias###
   ###################################
-  # Testing simulation of observation-------------------
   if(simulate.interactions){
     interactions = NULL
+    # OLD CODE
+    #for(a in 1:N_id){# For a given individual
+    #  # For each observation of an individual
+    #  if(true_exposure[a] == 0){next}
+    #  for(b in 1:true_exposure[a]){
+    #    # Evaluate the probability to observe the all alters
+    #    for(c in 1:N_id){
+    #      if(a == c){next}
+    #      cat("Individual ", a, '/', N_id, "; observation: ", b, "; alter: ", c, '\r')
+
+    #      if(!is.null(individual_predictors)){
+    #        p.ego =  int_p[1]*individual_predictors[a]
+    #        p.alter = int_p[2]*individual_predictors[c]
+    #      }else{
+    #        p.ego =  int_p[1]
+    #        p.alter = int_p[2]
+    #      }
+
+    #      #Probability of censor data on ego
+    #      prob.focal.unobserved = rbinom(1, 1, prob = inv_logit(p.ego))
+
+    #      #Probability of censor data on alter
+    #      prob.alter.unobserved = rbinom(1, 1, prob = inv_logit(p.alter))
+
+    #      r = rbinom(1 , size = 1, prob = p[a,c]*prob.focal.unobserved*prob.alter.unobserved)
+
+    #      interactions = rbind(interactions, data.frame('ego' = a, 'focal' = b, 'alter' = c, 'interaction' = r,
+    #                                                    'exposure' = true_exposure[a], 'sr_p' = p[a,c], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
+    #    }
+    #  }
+    #}
 
     for(a in 1:N_id){# For a given individual
-      # For each observation of an individual
       if(true_exposure[a] == 0){next}
-      for(b in 1:true_exposure[a]){
-        # Evaluate the probability to observe the all alters
-        for(c in 1:N_id){
-          if(a == c){next}
-          cat("Individual ", a, '/', N_id, "; observation: ", b, "; alter: ", c, '\r')
-
-          if(!is.null(individual_predictors)){
-            p.ego =  int_p[1]*individual_predictors[a]
-            p.alter = int_p[2]*individual_predictors[c]
-          }else{
-            p.ego =  int_p[1]
-            p.alter = int_p[2]
-          }
-
-
-          #Probability of censor data on ego
-          prob.focal.unobserved = rbinom(1, 1, prob = inv_logit(p.ego))
-
-          #Probability of censor data on alter
-          prob.alter.unobserved = rbinom(1, 1, prob = inv_logit(p.alter))
-
-          r = rbinom(1 , size = 1, prob = p[a,c]*prob.focal.unobserved*prob.alter.unobserved)
-
-          interactions = rbind(interactions, data.frame('ego' = a, 'focal' = b, 'alter' = c, 'interaction' = r,
-                                                        'exposure' = true_exposure[a], 'sr_p' = p[a,c], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
+      for(b in 1:N_id){
+        if(a == b){next}
+        cat("Individual ", a, '/', N_id, '\r')
+        if(!is.null(individual_predictors)){
+          p.ego =  int_p[1]*individual_predictors[a]
+          p.alter = int_p[2]*individual_predictors[b]
+        }else{
+          p.ego =  int_p[1]
+          p.alter = int_p[2]
         }
+
+        #Probability of censor data on ego
+        prob.focal.unobserved = rbinom(true_exposure[a], 1, prob = inv_logit(p.ego))
+
+        #Probability of censor data on alter
+        prob.alter.unobserved = rbinom(true_exposure[a], 1, prob = inv_logit(p.alter))
+
+        r = rbinom(true_exposure[a] , size = 1, prob = p[a,b]*prob.focal.unobserved*prob.alter.unobserved)
+        interactions = rbind(interactions, data.frame('ego' = a, 'focal' = 1:true_exposure[a], 'alter' = b, 'interaction' = r,
+                                                      'exposure' = true_exposure[a], 'sr_p' = p[a,c], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
       }
     }
+
+
     net = df.to.mat(interactions, actor = 'ego', receiver = 'alter', weighted ='interaction')
     net = net[colnames(net)[order(as.integer(colnames(net)))],colnames(net)[order(as.integer(colnames(net)))]]
     return(list(interactions = interactions,
@@ -219,8 +244,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   ###############################
   #######  Model outcomes #######
   ###############################
-  # Network------------------------------------------------
-  # !! Create an interaction matrix according to the ties probability matrix and observation bias.
+  # Create an interaction matrix according to the ties probability matrix and observation bias.
   for ( i in 1:(N_id-1) ){
     for ( j in (i+1):N_id){
       y_true[i,j] = rbinom( 1 , size=true_samps[i,j], prob = p[i,j] )

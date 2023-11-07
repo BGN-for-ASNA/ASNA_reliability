@@ -214,7 +214,6 @@ simulations <- function(
 
     # BISON------------------------
     library(bisonR)
-    head(A$interactions)
     A$interactions$ego = as.factor(A$interactions$ego)
     A$interactions$alter = as.factor(A$interactions$alter)
     priors <- get_default_priors("binary")
@@ -274,7 +273,7 @@ simulations <- function(
     # Node label permutations
     perm = perm.net.nl(df, labels = 'hair', nperm = 10000, progress = FALSE)
     ptest = stat.lm(perm, formula = strength ~ hair, progress = FALSE)
-    ptest = ant(ptest)$coefficients$p.two.sides[2]
+    ptest = ANTs:::stat.p(c(ptest$Original.model$coefficients[2,1], ptest$permutations$hair))[3]
     result$approach = paste(result$approach, 'permuted', sep = " ")
     result$`p-value` = ptest
     RESULTS = rbind(RESULTS, result)
@@ -317,7 +316,7 @@ simulations <- function(
     # Node label permutations
     perm = perm.net.nl(df, labels = 'hair', nperm = 10000, progress = FALSE)
     ptest = stat.lm(perm, formula = strength ~ hair, progress = FALSE)
-    ptest = ant(ptest)$coefficients$p.two.sides[2]
+    ptest = ANTs:::stat.p(c(ptest$Original.model$coefficients[2,1], ptest$permutations$hair))[3]
     result$approach = paste(result$approach, 'permuted', sep = " ")
     result$`p-value` = ptest
     RESULTS = rbind(RESULTS, result)
