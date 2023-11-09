@@ -167,44 +167,14 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   ###################################
   if(simulate.interactions){
     interactions = NULL
-    # OLD CODE
-    #for(a in 1:N_id){# For a given individual
-    #  # For each observation of an individual
-    #  if(true_exposure[a] == 0){next}
-    #  for(b in 1:true_exposure[a]){
-    #    # Evaluate the probability to observe the all alters
-    #    for(c in 1:N_id){
-    #      if(a == c){next}
-    #      cat("Individual ", a, '/', N_id, "; observation: ", b, "; alter: ", c, '\r')
-
-    #      if(!is.null(individual_predictors)){
-    #        p.ego =  int_p[1]*individual_predictors[a]
-    #        p.alter = int_p[2]*individual_predictors[c]
-    #      }else{
-    #        p.ego =  int_p[1]
-    #        p.alter = int_p[2]
-    #      }
-
-    #      #Probability of censor data on ego
-    #      prob.focal.unobserved = rbinom(1, 1, prob = inv_logit(p.ego))
-
-    #      #Probability of censor data on alter
-    #      prob.alter.unobserved = rbinom(1, 1, prob = inv_logit(p.alter))
-
-    #      r = rbinom(1 , size = 1, prob = p[a,c]*prob.focal.unobserved*prob.alter.unobserved)
-
-    #      interactions = rbind(interactions, data.frame('ego' = a, 'focal' = b, 'alter' = c, 'interaction' = r,
-    #                                                    'exposure' = true_exposure[a], 'sr_p' = p[a,c], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
-    #    }
-    #  }
-    #}
-
     for(a in 1:N_id){# For a given individual
       if(true_exposure[a] == 0){next}
       for(b in 1:N_id){
         if(a == b){next}
         cat("Individual ", a, '/', N_id, '\r')
-        if(!is.null(individual_predictors)){
+        if(!is.null(individual_predictors) &
+           !is.infinite(int_p[1]) &
+           !is.infinite(int_p[2])){
           p.ego =  int_p[1]*individual_predictors[a]
           p.alter = int_p[2]*individual_predictors[b]
         }else{
@@ -220,7 +190,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
 
         r = rbinom(true_exposure[a] , size = 1, prob = p[a,b]*prob.focal.unobserved*prob.alter.unobserved)
         interactions = rbind(interactions, data.frame('ego' = a, 'focal' = 1:true_exposure[a], 'alter' = b, 'interaction' = r,
-                                                      'exposure' = true_exposure[a], 'sr_p' = p[a,c], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
+                                                      'exposure' = true_exposure[a], 'sr_p' = p[a,b], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
       }
     }
 
