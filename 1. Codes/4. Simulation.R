@@ -4,7 +4,7 @@
 ###############################
 simulations <- function(
     Reps = 100,
-    N_id =  seq(30, 100, by = 20),
+    N_id =  seq(30, 50, by = 20),
     hairy_tie_effect = seq(-2, 2, by = 0.5),
     hairy_detect_effect = seq(-4, 4, by = 1),
     blocks = TRUE,
@@ -22,7 +22,8 @@ simulations <- function(
     strand = T, # use STRAN model
     ncores = 1, # number of cores
     simulate.interactions = TRUE,
-    int_p = c(1,1) # Prob of miss interactions
+    int_intercept =c(5,5), # Prob of miss interactions
+    int_slope = c(10,5)
 ){
   require(parallel)
   require(foreach)
@@ -170,8 +171,9 @@ simulations <- function(
       exposure_effects = c(-1, grid_subsample$detect_effect[i]),
       exposure_sigma = picked_exposure_sigma,
       exposure_baseline = picked_exposure_baseline,
-      int_p = int_p,
       simulate.interactions = simulate.interactions,
+      int_intercept = int_intercept, # Prob of miss interactions
+      int_slope =int_slope
     )
 
     indiv =  data.frame(Hairy = Hairy)
@@ -211,26 +213,28 @@ simulations <- function(
     #post <- extract.samples( m , n = N_id )
     #head(post)
     ### Generating implied observations -------------------
-
     # BISON------------------------
-    library(bisonR)
-    A$interactions$ego = as.factor(A$interactions$ego)
-    A$interactions$alter = as.factor(A$interactions$alter)
-    priors <- get_default_priors("binary")
-    fit_edge <- bison_model(
-      (interaction | exposure) ~ dyad(ego, alter),
-      data=A$interaction,
-      model_type="binary",
-      priors=priors
-    )
+    if(simulate.interactions){
+      library(bisonR)
+      A$interactions$ego = as.factor(A$interactions$ego)
+      A$interactions$alter = as.factor(A$interactions$alter)
+      priors <- get_default_priors("binary")
+      fit_edge <- bison_model(
+        (interaction | exposure) ~ dyad(ego, alter),
+        data=A$interaction,
+        model_type="binary",
+        priors=priors
+      )
 
-    cv_samples <- extract_metric(fit_edge, "node_strength", num_draws = 1)
-    df = data.frame('id' = names(fit_edge$node_to_idx), 'strength' = cv_samples[1,])
-    df = df[order(as.numeric(df$id)),]
-    df$hair = indiv$Hairy
-    test1.1 = lm(strength ~ hair, data = df)
-    result = get.result(test1.1, strand = FALSE, name = 'BISON')
-    RESULTS = rbind(RESULTS, result)
+      cv_samples <- extract_metric(fit_edge, "node_strength", num_draws = 1)
+      df = data.frame('id' = names(fit_edge$node_to_idx), 'strength' = cv_samples[1,])
+      df = df[order(as.numeric(df$id)),]
+      df$hair = indiv$Hairy
+      test1.1 = lm(strength ~ hair, data = df)
+      result = get.result(test1.1, strand = FALSE, name = 'BISON')
+      RESULTS = rbind(RESULTS, result)
+    }
+
     # STRAND--------------------------------
     if(strand){
       nets = list(Grooming = A$network)

@@ -51,7 +51,8 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
                                                                exposure_effects = NULL,
                                                                exposure_sigma = 1.9,
                                                                exposure_baseline = 50,
-                                                               int_p = c(Inf,Inf),
+                                                               int_intercept = c(5,5),
+                                                               int_slope = c(5,5), #Change this to affect characteristics effect on detectability
                                                                simulate.interactions = TRUE){
   require(STRAND)
   require(ANTs)
@@ -173,10 +174,10 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
         if(a == b){next}
         cat("Individual ", a, '/', N_id, '\r')
         if(!is.null(individual_predictors) &
-           !is.infinite(int_p[1]) &
-           !is.infinite(int_p[2])){
-          p.ego =  int_p[1]*individual_predictors[a]
-          p.alter = int_p[2]*individual_predictors[b]
+           !is.infinite(int_intercept[1]) &
+           !is.infinite(int_intercept[2])){
+          p.ego =  int_intercept[1] + int_slope[1]*individual_predictors[a]
+          p.alter = int_intercept[2] + int_slope[2]*individual_predictors[b]
         }else{
           p.ego =  int_p[1]
           p.alter = int_p[2]
