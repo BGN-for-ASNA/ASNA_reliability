@@ -187,6 +187,8 @@ test.strand <- function(att = NULL,
   tmp = monitor(extract(tmp, permuted = FALSE, inc_warmup = TRUE))
 
   # Get probability matrix
+
+  est_net <- round(apply(r$samples$predicted_network_sample,2:3,mean ))
   m = matrix(0, ncol = N_id, nrow = N_id)
   for(a in 1:N_id){
     x = r$samples$predicted_network_sample[,,a]
@@ -194,18 +196,61 @@ test.strand <- function(att = NULL,
   }
   m = m/data$true_samps
 
-  return(list('strand' = r, 'diag' =tmp, 'matrix' = m))
+  return(list('strand'= fit, 'summary' = r, 'diag' =tmp, 'matrix' = m))
 }
 
-N_id = 10
-Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
-range = seq(from = 0.1, to = 1, by = 0.2)
-t.s = list()
-for(a in range){
-  t.s[[length(t.s)+1]] = test.strand(att = NULL, N_id = N_id,
-                                     sr_rho = 0, sr_mu = c(a,0), sr_sigma = c(0,0),
-                                     simulate.interactions = FALSE)
+
+#######################################################'
+## DR_rho_test = seq(0.01, 0.8, length.out=PP)
+#######################################################'
+PP = 10
+DR_rho_test = seq(0.01, 0.8, length.out=PP)
+G_list = NULL
+
+for(i in 1:PP){
+  set.seed(1)
+  ####### FPR test pars
+  N_id_dr_rho = 10
+  sr_mu_dr_rho = c(0,0)
+  sr_sigma_dr_rho = c(2.1, 0.7)
+  sr_rho_dr_rho = 0.5
+  dr_mu_dr_rho = c(0,0)
+  dr_sigma_dr_rho = 1.4
+  dr_rho_dr_rho = DR_rho_test[i]
+  predictor_1_dr_rho = rbern(N_id_dr_rho, 0)
+  sr_effects_1_dr_rho = c(-0.3, 1.3)
+
+  G_list[[a]] = test.strand(att = NULL,
+                  N_id = N_id_dr_rho,
+                  B = NULL,
+                  V = 1,
+                  groups=NULL,
+
+                  sr_mu = sr_mu_dr_rho,
+                  sr_sigma = sr_sigma_dr_rho,
+                  sr_rho = sr_rho_dr_rho,
+
+                  dr_mu = dr_mu_dr_rho,
+                  dr_sigma = dr_sigma_dr_rho,
+                  dr_rho = dr_rho_dr_rho,
+
+                  individual_predictors = data.frame(Status=predictor_1_dr_rho) ,
+                  dyadic_predictors = NULL,
+                  individual_effects = matrix(sr_effects_1_dr_rho,nrow=2,ncol=1),
+                  dyadic_effects = NULL,
+                  exposure_predictors = NULL,
+                  exposure_effects = NULL,
+                  exposure_sigma = 0,
+                  exposure_baseline = 50,
+                  int_intercept = c(0,0),
+                  int_slope = c(0,0),
+                  simulate.interactions = FALSE)
+
+
 }
+
+
+
 for(a in 1:length(t.s)){
   cat(range[a], '---------------------------------------','\n')
   print(t.s[[a]]$strand$summary)
