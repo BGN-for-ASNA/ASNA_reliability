@@ -20,7 +20,7 @@ test.function <- function(att = NULL,
                           exposure_baseline = 50,
                           int_intercept = c(0,0),
                           int_slope = c(0,0),
-                          simulate.interactions = TRUE,
+                          simulate.interactions = FALSE,
                           test = TRUE){
   require(ggplot2)
   require(ggpubr)
@@ -144,34 +144,47 @@ test.strand <- function(att = NULL,
                                                              int_intercept = int_intercept,
                                                              int_slope = int_slope,
                                                              simulate.interactions = simulate.interactions)
-  if(is.null(att)){Hairy = matrix(1, nrow=N_id, ncol=1)} # If no attributes are declared, generate identical values for everyone.
-  model_dat = make_strand_data(outcome = list(Grooming = data$network),
-                               individual_covariates = data.frame(Hairy = Hairy),
-                               block_covariates = NULL,
-                               outcome_mode = "binomial",
-                               exposure = list(data$true_samps)
-  )
-  fit_latent_network_model
-  fit =  fit_social_relations_model(data=model_dat,
-                                    focal_regression = ~ Hairy,
-                                    target_regression = ~ Hairy,
-                                    dyad_regression = ~  1,
-                                    mode="mcmc",
-                                    stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
-                                                                iter_warmup = 1000, iter_sampling = 1000,
-                                                                max_treedepth = NULL, adapt_delta = .98),
-                                    return_predicted_network = TRUE)
+  if(is.null(att)){
+    model_dat = make_strand_data(outcome = list(Grooming = data$network),
+                                 individual_covariates = NULL,
+                                 block_covariates = NULL,
+                                 outcome_mode = "binomial",
+                                 exposure = list(data$true_samps)
+    )
+
+    fit =  fit_social_relations_model(data=model_dat,
+                                      focal_regression = ~ 1,
+                                      target_regression = ~ 1,
+                                      dyad_regression = ~  1,
+                                      mode="mcmc",
+                                      stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
+                                                                  iter_warmup = 1000, iter_sampling = 1000,
+                                                                  max_treedepth = NULL, adapt_delta = .98),
+                                      return_predicted_network = TRUE)
+  }else{
+    model_dat = make_strand_data(outcome = list(Grooming = data$network),
+                                 individual_covariates = data.frame(Hairy = Hairy),
+                                 block_covariates = NULL,
+                                 outcome_mode = "binomial",
+                                 exposure = list(data$true_samps)
+    )
+
+    fit =  fit_social_relations_model(data=model_dat,
+                                      focal_regression = ~ Hairy,
+                                      target_regression = ~ Hairy,
+                                      dyad_regression = ~  1,
+                                      mode="mcmc",
+                                      stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
+                                                                  iter_warmup = 1000, iter_sampling = 1000,
+                                                                  max_treedepth = NULL, adapt_delta = .98),
+                                      return_predicted_network = TRUE)
+  }
+
   r = summarize_strand_results(fit)
 
   # Get rhat and n_eff
   tmp = rstan::read_stan_csv(fit$fit$output_files())
-  tmp
-  rhat = tmp@.MISC$summary$rhat[,1]
-  rhat
-  n_eff = tmp@.MISC$summary$ess[,1]
-  n_eff
-  r$summary$rhat = mean(rhat, na.rm= TRUE)
-  r$summary$n_eff =  mean(n_eff, na.rm= TRUE)
+  tmp = monitor(extract(tmp, permuted = FALSE, inc_warmup = TRUE))
 
   # Get probability matrix
   m = matrix(0, ncol = N_id, nrow = N_id)
@@ -181,7 +194,7 @@ test.strand <- function(att = NULL,
   }
   m = m/data$true_samps
 
-  return(list('strand' = r, 'summary' = r$summary, 'matrix' = m))
+  return(list('strand' = r, 'diag' =tmp, 'matrix' = m))
 }
 
 N_id = 10
