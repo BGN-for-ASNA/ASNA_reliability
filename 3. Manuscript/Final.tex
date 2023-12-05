@@ -369,12 +369,12 @@ allowing estimation of social-network parameters that are robust to censoring, o
 Using the previously explained simulation model, we generated six types of scenarios. Scenario 1, we simulated data where individuals' characteristics have no effect on their social ties and without sampling or censoring biases. This will allow to assess rates of false positives for each approach tested. Scenario 2, we simukated data where individuals' characteristics have an effect on their social ties and without sampling or censoring biases. This will allow to assess rates of false negatives for each approach tested. 
 In Scenario 3, we simulated data where individuals' characteristics have no effect on their social ties, introducing sampling bias but without censoring biases. This helps assess rates of false positives for each approach tested in the presence of sampling biases. In Scenario 4, data simulation includes individuals' characteristics affecting social ties with sampling biases and no censoring biases, allowing us to assess rates of false negatives for each approach tested under sampling biases conditions. In scenario 5, we simulated data where individuals' characteristics have no effect on their social ties, introducing censoring biases without sampling biases. This helps assess rates of false positives for each approach tested in the presence of censoring biases. In scenario 6, data simulation includes individuals' characteristics affecting social ties without sampling biases and with censoring biases, allowing us to assess rates of false negatives for each approach tested under censoring biases conditions. 
 
-For each scenario, we generated 100 simulations with random variations in the simulation parameters related to the effect size of individuals' characteristics on social ties, sampling biases, and censoring bias. Details on the range of parameter variations are presented in Table 1.
+For each scenario, we generated 100 simulations with random variations in the simulation parameters related to the effect size of individuals' characteristics on social ties, sampling biases, and censoring bias. Details on the range of parameter variations are presented in Table 1.
 
 \subsubsection{Tested approaches:}
 For each simulation, we assessed 5 approaches. Initially, we tested the association index without permutations, along with network and double permutations. Next, we examined the interaction index with the same permutation variations. Additionally, Bayesian generative networks modeling interaction observations (e.g., Bison) and link weight probabilities (e.g., STRAND) have been tested. Finally, we introduced a new method using weigthed regression model for association and interaction indices. 
 \newline
-Indeed, apply association (Eq. \ref{SRI}) or interaction (Eq. \ref{II}) indices to a point-estimates $\dot\phi_{[i,j]}$ models can violate homoscedasticity linear regression assumptions, especially in small samples. This occurs because Eq. \ref{SRI} and Eq. \ref{II} divide out sample size, and provide samples based on sparse evidence disproportionate weight in downstream analysis Fig. \ref{figWhoa}.a. Unlike Bayesian approaches that automatically adjust the influence of each point in proportion to the sample size of observations Fig \ref{figWhoa}.b, regression models assume homoscedasticity. Homoscedasticity implies equal error distribution between data points, leading to similar values in the diagonal covariance matrix  (Eq. \ref{covM1}).
+Indeed, apply association (Eq. \ref{SRI}) or interaction (Eq. \ref{II}) indices to a point-estimates $\dot\phi_{[i,j]}$ models can violate homoscedasticity linear regression assumptions, especially in small samples. This occurs because Eq. \ref{SRI} and Eq. \ref{II} divide out sample size, and provide samples based on sparse evidence disproportionate weight in downstream analysis Fig. \ref{figWhoa}.a. Unlike Bayesian approaches that automatically adjust the influence of each point in proportion to the sample size of observations Fig \ref{figWhoa}.b, regression models assume homoscedasticity. Homoscedasticity implies equal error distribution between data points, leading to similar values in the diagonal covariance matrix  (Eq. \ref{covM1})
 
 \begin{ceqn}
   \begin{align}\label{covM1}
@@ -388,9 +388,9 @@ Indeed, apply association (Eq. \ref{SRI}) or interaction (Eq. \ref{II}) indices 
       \end{bmatrix}
   \end{align}
   \end{ceqn}
-  Where $C$ is the covariance matrix, Diagonal elements $\sigma^2$ represent the variance of each observation error and they are all the same because the errors are identically distributed.
+  Where $C$ is the covariance matrix, Diagonal elements $\sigma^2$ represent the variance of each observation error and they are all the same because errors are identically distributed.
 
-We propose using weighted linear regression that incorporates the sampling effort of each data point into the covariance matrix of errors, providing advantages when handling heteroscedastic data  (Eq. \ref{covM2}). 
+We propose using weighted linear regression that incorporates the sampling effort of each data point into the covariance matrix of errors, providing advantageswhen handling heteroscedastic data  (Eq. \ref{covM2}).
 
 \begin{ceqn}
   \begin{align}\label{covM2}
@@ -406,7 +406,7 @@ We propose using weighted linear regression that incorporates the sampling effor
   \end{ceqn}
   Where $C$ is the covariance matrix and where diagonal elements $\sigma_{1}^2$ to $\sigma_{m}^2$ are not identical and each observation has its own variance, unlike in Eq.\ref{covM2}.
 
-  For each approach in every simulation, we calculated the estimated effect size along with the permuted p-value. This was done to assess the accuracy of approach estimations and the correctness of hypothesis testing conclusions, respectively.
+For each approach in every simulation, we calculated the estimated effect size along with the permuted p-value. This was done to assess the accuracy ofapproach estimations and the correctness of hypothesis testing conclusions, respectively.
 
 \begin{figure}[h]
 \caption{Example data on tie strength generated under a model where a covariate $Z$ has a strong positive effect on tie probability, $\phi_{[i,j]}$, but a negative effect on sampling effort, $E_{[i,j]}$. We plot the true dyadic tie strength on the x axis, and the simple ratio index on the y axis.  In frame (a), we see that many points lie along the diagonal (as expected), but there are also strips of points along the horizontal lines at $y=0.0$, $y=0.5$, and $y=1.0$, where the inferred tie strength is not all that reflective of true tie strength. These points correspond to estimates from small samples. Simply plugging in SRI estimates into a downstream regression leads to poor inference, because samples based on few data-points obscure the underlying predictors of tie strength.}\label{figWhoa}\centering
