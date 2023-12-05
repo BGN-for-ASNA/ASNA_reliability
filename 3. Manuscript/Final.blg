@@ -7,46 +7,47 @@ Reallocating 'name_of_file' (item size: 1) to 6 items.
 Database file #1: Final.bib
 Warning--empty journal in Milgram1967
 Warning--empty journal in redhead2021reliable
+Warning--empty year in Ross2023JAE; set to ????
 Warning--empty pages in whitehead2008analyzing
-You've used 31 entries,
+You've used 30 entries,
             2921 wiz_defined-function locations,
-            802 strings with 10640 characters,
-and the built_in function-call counts, 29457 in all, are:
-= -- 3066
-> -- 720
-< -- 18
-+ -- 286
+            799 strings with 10640 characters,
+and the built_in function-call counts, 29129 in all, are:
+= -- 3036
+> -- 718
+< -- 16
++ -- 285
 - -- 247
-* -- 2159
-:= -- 3752
-add.period$ -- 67
-call.type$ -- 31
-change.case$ -- 239
-chr.to.int$ -- 32
+* -- 2146
+:= -- 3695
+add.period$ -- 68
+call.type$ -- 30
+change.case$ -- 234
+chr.to.int$ -- 31
 cite$ -- 34
-duplicate$ -- 2888
-empty$ -- 2258
-format.name$ -- 343
-if$ -- 5980
+duplicate$ -- 2865
+empty$ -- 2224
+format.name$ -- 340
+if$ -- 5913
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 280
-newline$ -- 137
-num.names$ -- 124
-pop$ -- 1376
+missing$ -- 276
+newline$ -- 136
+num.names$ -- 120
+pop$ -- 1369
 preamble$ -- 1
-purify$ -- 206
+purify$ -- 202
 quote$ -- 0
-skip$ -- 470
+skip$ -- 456
 stack$ -- 0
-substring$ -- 3189
-swap$ -- 680
+substring$ -- 3162
+swap$ -- 669
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 276
-warning$ -- 3
-while$ -- 213
+type$ -- 267
+warning$ -- 4
+while$ -- 208
 width$ -- 0
-write$ -- 379
-(There were 3 warnings)
+write$ -- 374
+(There were 4 warnings)

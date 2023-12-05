@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex Final"] 1697635359 "Final.aux" "Final.bbl" "Final" 1697635360 0
-  "./Final.bib" 1697635358 1367930 0db07d367743bfc35ba9e42cc19fa7c8 ""
+["bibtex Final"] 1701691592 "Final.aux" "Final.bbl" "Final" 1701691602 0
+  "./Final.bib" 1699864097 1369494 bf90ebccc5661593820cbfb918a0fc3d ""
   "./SageH.bst" 1697524389 32389 01d0c4e084498df630f0d3adc8d9e106 ""
-  "Final.aux" 1697615202 19836 23c19eb53b46bddfaa7a1fc40dab4bf2 "pdflatex"
+  "Final.aux" 1701691598 20162 2a88ecc70e6380057ba809d377347a5a "pdflatex"
   (generated)
   "Final.bbl"
   "Final.blg"
   (rewritten before read)
-["pdflatex"] 1697615199 "c:/Users/sebastian_sosa/OneDrive/Travail/Max Planck/Projects/ASNA_reliability/3. Manuscript/Final.tex" "Final.pdf" "Final" 1697635360 0
+["pdflatex"] 1701691594 "c:/Users/sebastian_sosa/OneDrive/Travail/Max Planck/Projects/ASNA_reliability/3. Manuscript/Final.tex" "Final.pdf" "Final" 1701691602 0
   "C:/Program Files/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/latex-fonts/lasy10.tfm" 1136765053 520 82a3d37183f34b6eb363a161dfc002c2 ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/latex-fonts/lasy5.tfm" 1136765053 520 d082ac03a1087bc1ec2a06e24a9f68c0 ""
@@ -148,6 +148,7 @@
   "C:/Program Files/MiKTeX/tex/latex/graphics/graphics.sty" 1665067579 18387 8f900a490197ebaf93c02ae9476d4b09 ""
   "C:/Program Files/MiKTeX/tex/latex/graphics/graphicx.sty" 1665067579 8010 a8d949cbdbc5c983593827c9eec252e1 ""
   "C:/Program Files/MiKTeX/tex/latex/graphics/keyval.sty" 1665067579 2671 7e67d78d9b88c845599a85b2d41f2e39 ""
+  "C:/Program Files/MiKTeX/tex/latex/graphics/lscape.sty" 1665067579 1822 5e4f855a9ecb640f34881e4b457fa9aa ""
   "C:/Program Files/MiKTeX/tex/latex/graphics/mathcolor.ltx" 1665067579 3171 1cf0d440b5464e2f034398ce4ef36f75 ""
   "C:/Program Files/MiKTeX/tex/latex/graphics/rotating.sty" 1665067579 7060 497c495d7b832441a479571bbce898ae ""
   "C:/Program Files/MiKTeX/tex/latex/graphics/trig.sty" 1665067579 4023 293ea1c16429fc0c4cf605f4da1791a9 ""
@@ -183,8 +184,8 @@
   "C:/Program Files/MiKTeX/tex/latex/tools/multicol.sty" 1686255640 32515 51caec75eda9c8890135f12f1a4eddc3 ""
   "C:/Program Files/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Program Files/MiKTeX/tex/latex/xcolor/xcolor.sty" 1656236890 56148 51a9a8571c07b9921892ae11063ae853 ""
-  "C:/Users/sebastian_sosa/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1697541597 84158 d77284a6843bde1e4b9764f09fb2e89e ""
-  "C:/Users/sebastian_sosa/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1697459208 24132162 aebde7c03af91611f6637c0fb86e9127 ""
+  "C:/Users/sebastian_sosa/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1700052038 84158 d77284a6843bde1e4b9764f09fb2e89e ""
+  "C:/Users/sebastian_sosa/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1699864094 24132162 0b1ec1b94ce9e6cde934b743198e12ce ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/tfm/public/txfonts/rtcxss.tfm" 977342760 1140 5badb4e9785e69b90ebdfe4c5f9017aa ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/tfm/public/txfonts/rtxbss.tfm" 977342760 952 8af6d4411025237a8a19c5fe76c48519 ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/tfm/public/txfonts/rtxi.tfm" 977342760 1048 a97cff5f6b833b712079817ce7a40d4c ""
@@ -261,6 +262,8 @@
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/multirow/multirow.sty" 1615976118 6149 2398eec4faa1ee24ff761581e580ecf1 ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/natbib/natbib.sty" 1292249081 46712 1c8843383c0bd05870c45fa0ebea6cc2 ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/ncctools/nccmath.sty" 1565017809 15059 b9ec0dfe305551751c94c3d416a3bea2 ""
+  "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/pdflscape/pdflscape-nometadata.sty" 1668505912 6572 ea530fbbe537629fd97736d33babc07d ""
+  "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/pdflscape/pdflscape.sty" 1668505912 2224 1230ab76aa62221ccbd90bca8c8c015e ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/psnfss/helvet.sty" 1585926771 1558 de0ad166b701b820e03588a29bb30798 ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/psnfss/times.sty" 1585926771 888 8e0e5c8cca7b18e0400f97f5a2b90a99 ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/refcount/refcount.sty" 1576433952 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
@@ -279,14 +282,15 @@
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/txfonts/utxsya.fd" 977342760 310 cee07e4964749ccbc77d84fc49726a79 ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/txfonts/utxsyb.fd" 977342760 310 8c5467c8932c259af51b0f116c9734bd ""
   "C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/tex/latex/txfonts/utxsyc.fd" 977342760 310 4b5d6fe830337242ef847b3bff48ba21 ""
+  "Figures/Appendix2/Figure3.png" 1700043213 754925 6300c1770b851dacef6776099038fe14 ""
   "Figures/Example.pdf" 1697524389 42188 21961f70234c69a8316db2eb38965e53 ""
   "Figures/ScatterFrameA.pdf" 1697524389 71806 5c9fbaf6eff269c92458ff0590f6228b ""
   "Figures/ScatterFrameB.pdf" 1697524389 83581 8ab2a573d0efa905cb85ecbabc25d40c ""
-  "Final.aux" 1697615202 19836 23c19eb53b46bddfaa7a1fc40dab4bf2 "pdflatex"
-  "Final.bbl" 1697635360 8352 2aeaf60a62067a8ee78be99e6a6d7ce5 "bibtex Final"
-  "Final.out" 1697615202 2844 6673cc2d5523d3f2f577fe709363f934 "pdflatex"
-  "Final.tex" 1697632878 40498 f0c364c17ab9d9ca57497d62f0c7ff74 ""
-  "c:/Users/sebastian_sosa/OneDrive/Travail/Max Planck/Projects/ASNA_reliability/3. Manuscript/Final.tex" 1697632878 40498 f0c364c17ab9d9ca57497d62f0c7ff74 ""
+  "Final.aux" 1701691598 20162 2a88ecc70e6380057ba809d377347a5a "pdflatex"
+  "Final.bbl" 1701691593 8429 66832f3ce48785d09b6a571adabd9170 "bibtex Final"
+  "Final.out" 1701691598 2627 287ba2e4c09793568da1c01c1848c581 "pdflatex"
+  "Final.tex" 1701691580 41845 39ae65b3b82afd13115767d7906624a4 ""
+  "c:/Users/sebastian_sosa/OneDrive/Travail/Max Planck/Projects/ASNA_reliability/3. Manuscript/Final.tex" 1701691580 41845 39ae65b3b82afd13115767d7906624a4 ""
   "fancybox.sty" 1697524389 28227 5ae6156674330dc345adb79b6e5d8966 ""
   "sagej.cls" 1697524389 15811 7a4862a3d526be57e07eafba8a2e76ce ""
   (generated)

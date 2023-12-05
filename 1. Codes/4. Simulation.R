@@ -3,27 +3,36 @@
 ###############################
 ###############################
 simulations <- function(
+    # Individuals parameters
     Reps = 100,
     N_id =  seq(30, 50, by = 20),
     hairy_tie_effect = seq(-2, 2, by = 0.5),
     hairy_detect_effect = seq(-4, 4, by = 1),
+    # Block parameters
     blocks = TRUE,
     B = NULL,
     V = 1,
     G = 3,
     diagB = -6.5,
     groups=NULL,
+    # Sender-receiver parameters
     sr_sigma = c(1.4, 0.8),
     sr_rho = 0.5,
+    # Dyadic parameters
     dr_sigma = 1.2,
     dr_rho = 0.8,
+    # Observation bias parameters
     exposure_sigma = 2.9,
     exposure_baseline = 40,
-    strand = T, # use STRAN model
-    ncores = 1, # number of cores
+    # Interactions bias parameters
     simulate.interactions = TRUE,
-    int_intercept =c(5,5), # Prob of miss interactions
-    int_slope = c(10,5)
+    int_intercept =c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
+    int_slope = c(-Inf,-Inf), # No effect of individuals attributes on missing interaction
+    # Simulation parameters
+    BISON = TRUE,
+    STRAND = TRUE, # use STRAN model
+    ncores = 1, # number of cores
+    blockModel = TRUE
 ){
   require(parallel)
   require(foreach)
@@ -32,7 +41,12 @@ simulations <- function(
   #######  Create grid of simulations ####
   ########################################
   grid = expand.grid(N_id, hairy_tie_effect, hairy_detect_effect)
-  grid_subsample = grid[sample(1:nrow(grid), Reps, replace = FALSE),]
+  if(nrow(grid) <= Reps){
+    grid_subsample = grid
+    ncores = nrow(grid)
+  }else{
+    grid_subsample = grid[sample(1:nrow(grid), Reps, replace = FALSE),]
+  }
   colnames(grid_subsample) = c("N_id", "tie_effect", "detect_effect")
 
   #############################
@@ -41,6 +55,7 @@ simulations <- function(
   cl <- ncores
   cl <-makeCluster(cl, type="PSOCK")
   registerDoParallel(cores=cl)
+  on.exit(parallel::stopCluster(cl))
   #############################
   #######  Testing methods ####
   #############################
@@ -74,7 +89,8 @@ simulations <- function(
       if(strand){
         # "Bayesian P value"
         strand_est = P_se(test1.1$sample$srm_model_samples$focal_coeffs[,1])
-        strand_se = P_se(test1.1$sample$srm_model_samples$focal_coeffs[,1])
+        a = test1.1$sample$srm_model_samples$focal_coeffs[,1]
+        strand_se = sqrt(sum((a-mean(a))^2/(length(a)-1)))/sqrt(length(a))
 
         result = as.data.frame(t(data.frame(as.numeric(unlist(c(unlist(test1.1$summary[2,2:4]), grid_subsample[i,], strand_est, strand_se))))))
         rownames(result) = NULL
@@ -86,18 +102,18 @@ simulations <- function(
         result$dr_rho = picked_dr_rho
         result$exposure_sigma  = picked_exposure_sigma
         result$exposure_baseline = picked_exposure_baseline
-        result$NG = NG
-        result$mean.between.GR = mean.between.GR
-        result$mean.within.GR = mean.within.GR
+        result$NG = ifelse(is.null(NG), NA, NG)
+        result$mean.between.GR = ifelse(is.null(mean.between.GR), NA, mean.between.GR)
+        result$mean.within.GR = ifelse(is.null(mean.within.GR), NA, mean.within.GR)
 
         colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
                              'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
                              'NG', 'mean.between.GR', 'mean.within.GR')
         return(result)
       }else{
-        ants_est = summary(test1.1)$coefficients[2,4]
+        ants_p = summary(test1.1)$coefficients[2,4]
         ants_se = summary(test1.1)$coefficients[2,2]
-        result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_est, ants_se)))))
+        result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_p, ants_se)))))
         rownames(result) = NULL
         result$approach = name
         result$sim = i
@@ -107,9 +123,9 @@ simulations <- function(
         result$dr_rho = picked_dr_rho
         result$exposure_sigma  = picked_exposure_sigma
         result$exposure_baseline = picked_exposure_baseline
-        result$NG = NG
-        result$mean.between.GR = mean.between.GR
-        result$mean.within.GR = mean.within.GR
+        result$NG = ifelse(is.null(NG), NA, NG)
+        result$mean.between.GR = ifelse(is.null(mean.between.GR), NA, mean.between.GR)
+        result$mean.within.GR = ifelse(is.null(mean.within.GR), NA, mean.within.GR)
 
         colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
                              'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
@@ -141,17 +157,23 @@ simulations <- function(
     picked_exposure_baseline  = sample(range_exposure_baseline, 1)
 
     ## Block data -----------------
-    NG = sample(c(1,3,7), 1) # Random number of groups
-    clique = sample(1:G, N_id, replace = TRUE)
+    if(blockModel){
+      NG = sample(c(1,3,7), 1) # Random number of groups
+      clique = sample(1:NG, N_id, replace = TRUE)
 
-    mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
-    B = matrix(rnorm(NG*NG, mean.within.GR, sd = 1), NG, NG)
+      mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
+      B = matrix(rnorm(NG*NG, mean.within.GR, sd = 1), NG, NG)
 
-    mean.between.GR = sample(c(seq(from = 0, to = 9, by = 1)), 1) # Increase randomly the probability of  ties within groups.
-    diag(B) = diag(B) + rnorm(NG, mean.between.GR, sd = 1)
+      mean.between.GR = sample(c(seq(from = 0, to = 9, by = 1)), 1) # Increase randomly the probability of  ties within groups.
+      diag(B) = diag(B) + rnorm(NG, mean.between.GR, sd = 1)
 
-    block = data.frame(Clique=factor(clique))
-    Clique = rep(1, N_id)
+      block = data.frame(Clique=factor(clique))
+
+    }else{
+      NG = 1
+      B = mean.within.GR = mean.between.GR = block = NULL
+    }
+
     Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 
     # Simulated data -----------------
@@ -159,7 +181,7 @@ simulations <- function(
       N_id = N_id,
       B=list(B=B),
       V=V,
-      groups=groups,
+      groups=block,
       individual_predictors=Hairy,
       individual_effects=matrix(c(grid_subsample$tie_effect[i], grid_subsample$tie_effect[i]),ncol=1, nrow=2),
 
@@ -212,9 +234,17 @@ simulations <- function(
     #vcov(m) # variance-covariance
     #post <- extract.samples( m , n = N_id )
     #head(post)
-    ### Generating implied observations -------------------
+    ## Effect size without bias --------------
+    tie_strength = A$network/(1+A$ideal_exposure)
+    colnames(tie_strength) = rownames(tie_strength) = 1:ncol(tie_strength)
+    df = ANTs:::df.create(tie_strength)
+    df$strength = met.strength(tie_strength)
+    df$hair = indiv$Hairy
+    test1.1 = lm(strength ~ hair, data = df, weights = A$ideal_exposure)
+    result = get.result(test1.1, strand = FALSE, name = 'ideal_exposure')
+
     # BISON------------------------
-    if(simulate.interactions){
+    if(simulate.interactions & BISON){
       library(bisonR)
       A$interactions$ego = as.factor(A$interactions$ego)
       A$interactions$alter = as.factor(A$interactions$alter)
@@ -236,7 +266,7 @@ simulations <- function(
     }
 
     # STRAND--------------------------------
-    if(strand){
+    if(STRAND){
       nets = list(Grooming = A$network)
       exposure_nets = list(Exposure = A$true_samps)
 
@@ -248,16 +278,26 @@ simulations <- function(
                                    exposure = exposure_nets
       )
 
-      fit =  fit_block_plus_social_relations_model(data=model_dat,
-                                                   block_regression = ~ Clique,
-                                                   focal_regression = ~ Hairy,
-                                                   target_regression = ~ Hairy,
-                                                   dyad_regression = ~  1,
-                                                   mode="mcmc",
-                                                   stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
-                                                                               iter_warmup = 1000, iter_sampling = 1000,
-                                                                               max_treedepth = NULL, adapt_delta = .98)
-      )
+      if(NG == 1){
+        fit =  fit_social_relations_model(data=model_dat,
+                                          focal_regression = ~ Hairy,
+                                          target_regression = ~ Hairy,
+                                          dyad_regression = ~  1,
+                                          mode="mcmc",
+                                          stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
+                                                                      iter_warmup = 1000, iter_sampling = 1000,
+                                                                      max_treedepth = NULL, adapt_delta = .98))
+      }else{
+        fit =  fit_block_plus_social_relations_model(data=model_dat,
+                                                     block_regression = ~ Clique,
+                                                     focal_regression = ~ Hairy,
+                                                     target_regression = ~ Hairy,
+                                                     dyad_regression = ~  1,
+                                                     mode="mcmc",
+                                                     stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
+                                                                                 iter_warmup = 1000, iter_sampling = 1000,
+                                                                                 max_treedepth = NULL, adapt_delta = .98))
+      }
 
       res = summarize_strand_results(fit)
       result = get.result(res, strand = TRUE)
@@ -360,7 +400,7 @@ simulations <- function(
 plots <- function(result){
   require(ggplot2)
   # Removing permuted approaches, as the effect sizes are identical.
-  p1 = ggplot(result[!result$approach %in% c("2.Rates permuted", "3.SRI permuted"),], aes(x = tie_effect,  y = z, group = sim, label = z))+
+  p1 = ggplot(result[!result$approach %in% c("2.Rates permuted", "3.SRI permuted",'3.SRI weigthed permuted', "2.Rates weigthed permuted"),], aes(x = tie_effect,  y = z, group = sim, label = z))+
     #geom_linerange(aes(xmin=result[,2], xmax=result[,3])) +
     geom_point(aes(color = sr_rho, size = detect_effect), show.legend = TRUE, alpha = 0.5) +
     geom_hline(yintercept = 0, linetype = "dashed")+
@@ -381,7 +421,7 @@ plots <- function(result){
 }
 
 # Simulation ----------
-result = simulations(Reps = 1, ncores = 1, strand = T, simulate.interactions = T, int_p = c(Inf,Inf)) # Simulate interactions with the probability of observing an interaction of 1.
+result = simulations(Reps = 4, ncores = 4, simulate.interactions = T, STRAND = T, BISON = FALSE) # Simulate interactions with the probability of observing an interaction of 1.
 p = plots(result)
 library(ggpubr)
 ggarrange(p[[1]], p[[2]], ncol = 2, nrow = 1, common.legend = TRUE)

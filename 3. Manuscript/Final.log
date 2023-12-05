@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10) (preloaded format=pdflatex 2023.10.16)  18 OCT 2023 09:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10) (preloaded format=pdflatex 2023.11.13)  4 DEC 2023 13:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -263,7 +263,15 @@ Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 ) (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/ncctools\nccmath.sty
 Package: nccmath 2006/01/20 v1.3 Additional Math Commands (NCC)
 \NCC@fracrulewidth=\dimen194
-) (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\txfonts.sty
+) (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/pdflscape\pdflscape.sty
+Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
+ (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/pdflscape\pdflscape-nometadata.sty
+Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PDF (HO)
+ (C:\Program Files\MiKTeX\tex/latex/graphics\lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+)) (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\txfonts.sty
 Package: txfonts 2008/01/22 v3.2.1
 LaTeX Font Info:    Redeclaring symbol font `operators' on input line 21.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
@@ -502,7 +510,7 @@ Package caption Info: New subtype `subfigure' on input line 238.
 Package caption Info: New subtype `subtable' on input line 238.
 \c@subtable=\count301
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 33.
+Package hyperref Info: Option `colorlinks' set `true' on input line 34.
  (C:\Program Files\MiKTeX\tex/latex/pgfplots\pgfplotstable.sty (C:\Program Files\MiKTeX\tex/generic/pgfplots\pgfplots.revision.tex)
 Package: pgfplotstable 2021/05/15 v1.18.1 Table typesetting and Pretty-printing (1.18.1)
  (C:\Program Files\MiKTeX\tex/latex/pgfplots\pgfplots.sty (C:\Program Files\MiKTeX\tex/generic/pgfplots\pgfplots.revision.tex)
@@ -918,15 +926,15 @@ Package: lineno 2023/05/20 line numbers on paragraphs v5.3
 \linenoamsmath@ams@eqpen=\count374
 LaTeX Info: Redefining \\ on input line 3180.
 )
-LaTeX Font Info:    Trying to load font information for OT1+txr on input line 128.
+LaTeX Font Info:    Trying to load font information for OT1+txr on input line 129.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\ot1txr.fd
 File: ot1txr.fd 2000/12/15 v3.1
 ) (Final.aux
 
-LaTeX Warning: Label `link' multiply defined.
-
-
 LaTeX Warning: Label `mixy2' multiply defined.
+
+
+LaTeX Warning: Label `maineq2' multiply defined.
 
 
 LaTeX Warning: Label `srmx3b_drs' multiply defined.
@@ -934,46 +942,43 @@ LaTeX Warning: Label `srmx3b_drs' multiply defined.
 
 LaTeX Warning: Label `sub@srmx3b_drs' multiply defined.
 
-
-LaTeX Warning: Label `maineq2' multiply defined.
-
 )
 \openout1 = `Final.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/txmi/m/it on input line 128.
-LaTeX Font Info:    Trying to load font information for OML+txmi on input line 128.
+LaTeX Font Info:    Checking defaults for OML/txmi/m/it on input line 129.
+LaTeX Font Info:    Trying to load font information for OML+txmi on input line 129.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\omltxmi.fd
 File: omltxmi.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for OMS/txsy/m/n on input line 128.
-LaTeX Font Info:    Trying to load font information for OMS+txsy on input line 128.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for OMS/txsy/m/n on input line 129.
+LaTeX Font Info:    Trying to load font information for OMS+txsy on input line 129.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\omstxsy.fd
 File: omstxsy.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for OMX/txex/m/n on input line 128.
-LaTeX Font Info:    Trying to load font information for OMX+txex on input line 128.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for OMX/txex/m/n on input line 129.
+LaTeX Font Info:    Trying to load font information for OMX+txex on input line 129.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\omxtxex.fd
 File: omxtxex.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for U/txexa/m/n on input line 128.
-LaTeX Font Info:    Trying to load font information for U+txexa on input line 128.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for U/txexa/m/n on input line 129.
+LaTeX Font Info:    Trying to load font information for U+txexa on input line 129.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\utxexa.fd
 File: utxexa.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
  (C:\Program Files\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count375
@@ -1028,7 +1033,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 128.
+Package hyperref Info: Link coloring ON on input line 129.
 (Final.out) (Final.out)
 \@outlinefile=\write6
 \openout6 = `Final.out'.
@@ -1036,63 +1041,63 @@ Package hyperref Info: Link coloring ON on input line 128.
 
 
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable tick labels; missing features). Consider writing \pgfplotsset{compat=1.18} into your preamble.
- on input line 128.
+ on input line 129.
 
 \c@lstlisting=\count381
-LaTeX Font Info:    Trying to load font information for OT1+txss on input line 143.
+LaTeX Font Info:    Trying to load font information for OT1+txss on input line 144.
 (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\ot1txss.fd
 File: ot1txss.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 9.49997pt on input line 143.
+(Font)              scaled to size 9.49997pt on input line 144.
 LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 11.39996pt on input line 143.
+(Font)              scaled to size 11.39996pt on input line 144.
 LaTeX Font Info:    Font shape `OT1/txss/b/n' will be
-(Font)              scaled to size 11.39996pt on input line 143.
+(Font)              scaled to size 11.39996pt on input line 144.
 LaTeX Font Info:    Font shape `OT1/txss/b/n' will be
-(Font)              scaled to size 9.49997pt on input line 143.
-LaTeX Font Info:    Trying to load font information for U+lasy on input line 145.
+(Font)              scaled to size 9.49997pt on input line 144.
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 146.
  (C:\Program Files\MiKTeX\tex/latex/base\ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Trying to load font information for U+txsya on input line 145.
+LaTeX Font Info:    Trying to load font information for U+txsya on input line 146.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\utxsya.fd
 File: utxsya.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    Trying to load font information for U+txsyb on input line 145.
+LaTeX Font Info:    Trying to load font information for U+txsyb on input line 146.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\utxsyb.fd
 File: utxsyb.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    Trying to load font information for U+txmia on input line 145.
+LaTeX Font Info:    Trying to load font information for U+txmia on input line 146.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\utxmia.fd
 File: utxmia.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    Trying to load font information for U+txsyc on input line 145.
+LaTeX Font Info:    Trying to load font information for U+txsyc on input line 146.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\utxsyc.fd
 File: utxsyc.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 17.09995pt on input line 150.
+(Font)              scaled to size 17.09995pt on input line 151.
 LaTeX Font Info:    Font shape `OT1/txss/b/n' will be
-(Font)              scaled to size 17.09995pt on input line 150.
+(Font)              scaled to size 17.09995pt on input line 151.
 LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 6.64998pt on input line 150.
-LaTeX Font Info:    Trying to load font information for TS1+txss on input line 150.
+(Font)              scaled to size 6.64998pt on input line 151.
+LaTeX Font Info:    Trying to load font information for TS1+txss on input line 151.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\ts1txss.fd
 File: ts1txss.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    Font shape `TS1/txss/m/n' will be
-(Font)              scaled to size 6.64998pt on input line 150.
+(Font)              scaled to size 6.64998pt on input line 151.
 LaTeX Font Info:    Font shape `OT1/txss/b/n' will be
-(Font)              scaled to size 7.59998pt on input line 150.
+(Font)              scaled to size 7.59998pt on input line 151.
 LaTeX Font Info:    Font shape `OT1/txss/b/n' will be
-(Font)              scaled to size 5.69998pt on input line 150.
+(Font)              scaled to size 5.69998pt on input line 151.
 LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 7.59998pt on input line 150.
+(Font)              scaled to size 7.59998pt on input line 151.
 LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 5.69998pt on input line 150.
+(Font)              scaled to size 5.69998pt on input line 151.
 LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 4.74998pt on input line 150.
+(Font)              scaled to size 4.74998pt on input line 151.
 LaTeX Font Info:    Font shape `OT1/txss/m/it' in size <7> not available
 (Font)              Font shape `OT1/txss/m/sl' tried instead on input line 159.
 LaTeX Font Info:    Font shape `OT1/txss/m/sl' will be
@@ -1117,63 +1122,70 @@ LaTeX Font Info:    Font shape `OT1/txss/m/it' in size <12> not available
 LaTeX Font Info:    Font shape `OT1/txss/m/sl' will be
 (Font)              scaled to size 11.39996pt on input line 180.
 LaTeX Font Info:    Font shape `OT1/txss/m/it' in size <10> not available
-(Font)              Font shape `OT1/txss/m/sl' tried instead on input line 200.
+(Font)              Font shape `OT1/txss/m/sl' tried instead on input line 192.
 LaTeX Font Info:    Font shape `OT1/txss/m/sl' will be
-(Font)              scaled to size 9.49997pt on input line 200.
+(Font)              scaled to size 9.49997pt on input line 192.
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 221--225
-
- []
-
 LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 8.54997pt on input line 304.
+(Font)              scaled to size 8.54997pt on input line 299.
 LaTeX Font Info:    Font shape `OT1/txss/b/n' will be
-(Font)              scaled to size 8.54997pt on input line 304.
-<Figures/Example.pdf, id=193, 483.8075pt x 574.145pt>
+(Font)              scaled to size 8.54997pt on input line 299.
+<Figures/Example.pdf, id=211, 483.8075pt x 574.145pt>
 File: Figures/Example.pdf Graphic file (type pdf)
 <use Figures/Example.pdf>
-Package pdftex.def Info: Figures/Example.pdf  used on input line 306.
+Package pdftex.def Info: Figures/Example.pdf  used on input line 301.
 (pdftex.def)             Requested size: 445.56712pt x 282.46176pt.
-[3] [4 <./Figures/Example.pdf>]
-<Figures/ScatterFrameA.pdf, id=257, 216.81pt x 216.81pt>
+ [3] [4 <./Figures/Example.pdf>]
+Overfull \hbox (17.41103pt too wide) in paragraph at lines 375--378
+\OT1/txr/m/n/10 indices to a point-estimates $[]$ mod-els can vio-late homoscedas-
+ []
+
+[5]
+<Figures/ScatterFrameA.pdf, id=289, 216.81pt x 216.81pt>
 File: Figures/ScatterFrameA.pdf Graphic file (type pdf)
 <use Figures/ScatterFrameA.pdf>
-Package pdftex.def Info: Figures/ScatterFrameA.pdf  used on input line 348.
+Package pdftex.def Info: Figures/ScatterFrameA.pdf  used on input line 417.
 (pdftex.def)             Requested size: 198.02815pt x 198.03845pt.
-<Figures/ScatterFrameB.pdf, id=259, 216.81pt x 216.81pt>
+<Figures/ScatterFrameB.pdf, id=291, 216.81pt x 216.81pt>
 File: Figures/ScatterFrameB.pdf Graphic file (type pdf)
 <use Figures/ScatterFrameB.pdf>
-Package pdftex.def Info: Figures/ScatterFrameB.pdf  used on input line 355.
+Package pdftex.def Info: Figures/ScatterFrameB.pdf  used on input line 424.
 (pdftex.def)             Requested size: 198.02815pt x 198.03845pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[5 <./Figures/ScatterFrameA.pdf> <./Figures/ScatterFrameB.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 424--427
-
- []
-
+<Figures/Appendix2/Figure3.png, id=297, 805.3287pt x 660.7887pt>
+File: Figures/Appendix2/Figure3.png Graphic file (type png)
+<use Figures/Appendix2/Figure3.png>
+Package pdftex.def Info: Figures/Appendix2/Figure3.png  used on input line 436.
+(pdftex.def)             Requested size: 495.07794pt x 406.22635pt.
 (Final.bbl
-LaTeX Font Info:    Trying to load font information for OT1+txtt on input line 58.
+LaTeX Font Info:    Trying to load font information for OT1+txtt on input line 54.
  (C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex/latex/txfonts\ot1txtt.fd
 File: ot1txtt.fd 2000/12/15 v3.1
 )
-Underfull \hbox (badness 10000) in paragraph at lines 53--59
+Underfull \hbox (badness 10000) in paragraph at lines 49--55
 \OT1/txr/m/n/9 Com-mon per-mu-ta-tion meth-ods in ani-mal social
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 53--59
+Underfull \hbox (badness 10000) in paragraph at lines 49--55
 \OT1/txr/m/n/9 10 . 1007 / S00265-[]022-[]03254-[]X / FIGURES / 3$.  URL
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 53--59
+Underfull \hbox (badness 10000) in paragraph at lines 49--55
 [][]$\OT1/txtt/m/n/9 https : / / link . springer . com / article / 10 . 1007 /
  []
 
-[6]) [7
+[6 <./Figures/ScatterFrameA.pdf> <./Figures/ScatterFrameB.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7 <./Figures/Appendix2/Figure3.png>]) [8
 
 ] (Final.aux)
  ***********
@@ -1185,20 +1197,20 @@ L3 programming layer <2023-08-29>
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Final.out' has not changed.
-(rerunfilecheck)             Checksum: 6673CC2D5523D3F2F577FE709363F934;2844.
+(rerunfilecheck)             Checksum: 287BA2E4C09793568DA1C01C1848C581;2627.
  ) 
 Here is how much of TeX's memory you used:
- 38604 strings out of 475247
- 862486 string characters out of 5767579
+ 38683 strings out of 475247
+ 864814 string characters out of 5767579
  1966785 words of memory out of 5000000
- 59330 multiletter control sequences out of 15000+600000
+ 59400 multiletter control sequences out of 15000+600000
  627510 words of font info for 184 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 118i,20n,120p,2307b,622s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 118i,18n,120p,2547b,637s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtcxss.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxi.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxmi.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/rtxr.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txex.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txsy.pfb><C:/Users/sebastian_sosa/AppData/Roaming/MiKTeX/fonts/type1/public/txfonts/txtt.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Final.pdf (7 pages, 378067 bytes).
+Output written on Final.pdf (8 pages, 1184848 bytes).
 PDF statistics:
- 425 PDF objects out of 1000 (max. 8388607)
- 87 named destinations out of 1000 (max. 500000)
- 166 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 455 PDF objects out of 1000 (max. 8388607)
+ 86 named destinations out of 1000 (max. 500000)
+ 217 words of extra memory for PDF output out of 10000 (max. 10000000)
 

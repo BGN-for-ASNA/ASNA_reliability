@@ -1,4 +1,7 @@
-# Testing simulation approach
+#########################################################################################
+#### Functions
+###########################################################
+source("1. Codes/3. Data simulation.R")
 test.function <- function(att = NULL,
                           N_id = 30,
                           B = NULL,
@@ -29,12 +32,15 @@ test.function <- function(att = NULL,
                                                              B = B,
                                                              V = V,
                                                              groups=groups,
+
                                                              sr_mu = sr_mu,
                                                              sr_sigma = sr_sigma,
                                                              sr_rho = sr_rho,
+
                                                              dr_mu = dr_mu,
                                                              dr_sigma = dr_sigma,
                                                              dr_rho = dr_rho,
+
                                                              individual_predictors = individual_predictors,
                                                              dyadic_predictors = dyadic_predictors,
                                                              individual_effects = individual_effects,
@@ -169,7 +175,7 @@ test.strand <- function(att = NULL,
                                  exposure = list(data$true_samps)
     )
 
-    fit =  fit_social_relations_model(data=model_dat,
+    fit = fit_social_relations_model(data=model_dat,
                                       focal_regression = ~ Hairy,
                                       target_regression = ~ Hairy,
                                       dyad_regression = ~  1,
@@ -181,9 +187,9 @@ test.strand <- function(att = NULL,
   }
 
   r = summarize_strand_results(fit)
-
+  require(rstan)
   # Get rhat and n_eff
-  tmp = rstan::read_stan_csv(fit$fit$output_files())
+  tmp = read_stan_csv(fit$fit$output_files())
   tmp = monitor(extract(tmp, permuted = FALSE, inc_warmup = TRUE))
 
   # Get probability matrix
@@ -196,113 +202,570 @@ test.strand <- function(att = NULL,
   }
   m = m/data$true_samps
 
-  return(list('strand'= fit, 'summary' = r, 'diag' =tmp, 'matrix' = m))
+  return(list('arguments'=  as.list( sys.call()), 'data' = data, 'model_dat' = model_dat, 'fit' = fit,
+              'summary' = r, 'diag' = tmp, 'matrix' = m))
 }
 
+#' @param var A list of variation of a single argument
+#' @param list A list of arguments for test.strand
+test.scenarios <- function(name = "",
+                           var = list(dr_rho = seq(0.01, 0.8, length.out=10)),
+                           list = list(att = NULL,
+                                       N_id = 50,
+                                       B = NULL,
+                                       V = 1,
+                                       groups=NULL,
 
-#######################################################'
-## DR_rho_test = seq(0.01, 0.8, length.out=PP)
-#######################################################'
-PP = 10
-DR_rho_test = seq(0.01, 0.8, length.out=PP)
-G_list = NULL
+                                       sr_mu = c(0,0),
+                                       sr_sigma = c(2.1, 0.7),
+                                       sr_rho = 0.5,
 
-for(i in 1:PP){
-  set.seed(1)
-  ####### FPR test pars
-  N_id_dr_rho = 10
-  sr_mu_dr_rho = c(0,0)
-  sr_sigma_dr_rho = c(2.1, 0.7)
-  sr_rho_dr_rho = 0.5
-  dr_mu_dr_rho = c(0,0)
-  dr_sigma_dr_rho = 1.4
-  dr_rho_dr_rho = DR_rho_test[i]
-  predictor_1_dr_rho = rbern(N_id_dr_rho, 0)
-  sr_effects_1_dr_rho = c(-0.3, 1.3)
+                                       dr_mu = c(0,0),
+                                       dr_sigma = 1.4,
 
-  G_list[[a]] = test.strand(att = NULL,
-                  N_id = N_id_dr_rho,
-                  B = NULL,
-                  V = 1,
-                  groups=NULL,
+                                       individual_predictors = NULL,
+                                       dyadic_predictors = NULL,
+                                       individual_effects = NULL,
+                                       dyadic_effects = NULL,
+                                       exposure_predictors = NULL,
+                                       exposure_effects = NULL,
+                                       exposure_sigma = 0,
+                                       exposure_baseline = 50,
+                                       int_intercept = c(0,0),
+                                       int_slope = c(0,0),
+                                       simulate.interactions = FALSE)){
+  if(length(var)>1){stop()}
+  require(parallel)
+  require(foreach)
+  require(doParallel)
+  cl <- length(var[[1]])
+  registerDoParallel(cores=cl)
+  on.exit(registerDoSEQ())
+  result <- foreach(i = 1:length(var[[1]]), .export = ls(globalenv())) %dopar% {
+  #result <- NULL
+  #for(i in 1:length(var[[1]])){
+    set.seed(1)
+    if(names(var) %in% c('sr_mu', 'sr_sigma', 'dr_mu')){
+      tmp = list(c(1.7*var[[1]][i], 1*var[[1]][i]))
+    }else{ tmp = var[[1]][i]}
 
-                  sr_mu = sr_mu_dr_rho,
-                  sr_sigma = sr_sigma_dr_rho,
-                  sr_rho = sr_rho_dr_rho,
+    if(names(var) %in% names(list)){
+      if(is.list(tmp)){
+        list[[which(names(list) %in% names(var))]] = tmp[[1]]
+        L = list
+      }else{
+        list[[which(names(list) %in% names(var))]] = tmp
+        L = list
+      }
 
-                  dr_mu = dr_mu_dr_rho,
-                  dr_sigma = dr_sigma_dr_rho,
-                  dr_rho = dr_rho_dr_rho,
+    }else{
+      L = c(tmp, list)
+      names(L) = c(names(var), names(list))
+    }
+    result[[i]] = do.call('test.strand',L)
+    #return(r)
+  }
 
-                  individual_predictors = data.frame(Status=predictor_1_dr_rho) ,
-                  dyadic_predictors = NULL,
-                  individual_effects = matrix(sr_effects_1_dr_rho,nrow=2,ncol=1),
-                  dyadic_effects = NULL,
-                  exposure_predictors = NULL,
-                  exposure_effects = NULL,
-                  exposure_sigma = 0,
-                  exposure_baseline = 50,
-                  int_intercept = c(0,0),
-                  int_slope = c(0,0),
-                  simulate.interactions = FALSE)
-
-
+  result$tested = var
+  save(result, file = paste('2. Results/Appendices/', names(var), name, '.Rdata',sep = "",  collapse = " "))
+  return(result)
 }
 
-
-
-for(a in 1:length(t.s)){
-  cat(range[a], '---------------------------------------','\n')
-  print(t.s[[a]]$strand$summary)
+plot.function <- function(result){
+  data =  NULL
+  for(a in 1:(length(result)-1)){
+    tmp = result[[a]]
+    
+    t1 = data.frame(Estimated = tmp$diag[1,1],
+                    Simulated = 1,
+                    name = "B")
+    
+    t2 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[1]),
+                    Simulated = tmp$arguments$sr_sigma[1],
+                    name = "sr_sigma1")
+    
+    t3 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[2]),
+                    Simulated = tmp$arguments$sr_sigma[2],
+                    name = "sr_sigma2")
+    
+    t4 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[4]),
+                    Simulated = tmp$arguments$sr_rho,
+                    name = "sr_rho")
+    
+    t5 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[3]),
+                    Simulated = tmp$arguments$dr_sigma,
+                    name = "dr_sigma")
+    
+    t6 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[5]),
+                    Simulated =  tmp$arguments$dr_rho,
+                    name = "dr_rho")
+    
+    t = rbind(t1, t2, t3, t4, t5, t6)
+    t$sim = a
+    
+    
+    data = rbind(data, t)
+  }
+  
+  data$tested = names(result[[length(result)]])
+  
+  library(ggplot2)
+  p = ggplot(data, aes(x = Simulated, y = Estimated, group = name))+
+    geom_boxplot()+geom_point()+facet_grid(~name, scales="free" )+
+    ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))
+  return(p)
 }
 
+#########################################################################################
+#### Testing simulation sr and dyadic effects
+###########################################################
+test.scenarios(var = list(dr_sigma = seq(0.1, 5, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           sr_rho = 0.5,
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75)
+)
 
-t.s2 = list()
-for(a in range){
-  t.s2[[length(t.s2)+1]] = test.strand(att = NULL, N_id = N_id,
-                                       sr_rho = 0, sr_mu = c(0,a), sr_sigma = c(0,0),
-                                       simulate.interactions = FALSE)
-}
-for(a in 1:length(t.s2)){
-  cat(range[a], '---------------------------------------','\n')
-  print(t.s2[[a]]$strand$summary)
-}
+
+test.scenarios(var = list(sr_rho = seq(0.01, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0)
+)
+
+test.scenarios(var = list(dr_rho = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0)
+)
 
 
-t.srho = list()
-for(a in range){
-  t.srho[[length(t.srho)+1]] = test.strand(att = NULL, N_id = N_id,
-                                           sr_rho = a, sr_mu = c(0,0), sr_sigma = c(0,0),
-                                           simulate.interactions = FALSE)
-}
-for(a in 1:length(t.s2)){
-  cat(range[a], '---------------------------------------','\n')
-  print(t.srho[[a]]$strand$summary)
-}
+test.scenarios(var = list(sr_mu = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0)
+)
 
-t.s.sigma = list()
-for(a in range){
-  t.s.sigma[[length(t.s.sigma)+1]] = test.strand(att = NULL, N_id = N_id,
-                                                 sr_rho = 0, sr_mu = c(0,0), sr_sigma = c(a,0),
-                                                 simulate.interactions = FALSE)
-}
-for(a in 1:length(t.s2)){
-  cat(range[a], '---------------------------------------','\n')
-  print(t.s.sigma[[a]]$strand$summary)
-}
 
-t.s.sigma2 = list()
-for(a in range){
-  t.s.sigma2[[length(t.s.sigma2)+1]] = test.strand(att = NULL, N_id = N_id,
-                                                   sr_rho = 0, sr_mu = c(0,0), sr_sigma = c(0,a),
-                                                   simulate.interactions = FALSE)
-}
-for(a in 1:length(t.s2)){
-  cat(range[a], '---------------------------------------','\n')
-  print(t.s.sigma2[[a]]$strand$summary)
-}
+test.scenarios(var = list(sr_sigma = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0)
+)
 
-# -------------------------------------------------------------------------------------------------------
+test.scenarios(var = list(dr_mu = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0)
+)
+
+
+load("2. Results/Appendices/dr_mu.Rdata")
+p.dr_mu = plot.function(result)
+p.dr_mu
+ggsave('2. Results/Appendices/p.dr_mu.png')
+
+load("2. Results/Appendices/dr_rho.Rdata")
+p.dr_rho = plot.function(result)
+p.dr_rho
+ggsave('2. Results/Appendices/p.dr_rho.png')
+
+load("2. Results/Appendices/dr_sigma.Rdata")
+p.dr_sigma = plot.function(result)
+p.dr_sigma
+ggsave('2. Results/Appendices/p.dr_sigma.png')
+
+load("2. Results/Appendices/sr_mu.Rdata")
+p.sr_mu = plot.function(result)
+p.sr_mu
+ggsave('2. Results/Appendices/p.sr_mu.png')
+
+load("2. Results/Appendices/sr_rho.Rdata")
+p.sr_rho = plot.function(result) 
+p.sr_rho
+ggsave('2. Results/Appendices/p.sr_rho.png')
+
+load("2. Results/Appendices/sr_sigma.Rdata")
+p.sr_sigma = plot.function(result)
+p.sr_sigma
+ggsave('2. Results/Appendices/p.sr_sigma.png')
+
+
+#########################################################################################
+#### Testing simulation sr and dyadic effects through interactions simulations
+#########################################################################################
+test.scenarios(var = list(dr_sigma = seq(0.1, 5, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           sr_rho = 0.5,
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           simulate.interactions = TRUE),
+               name = " interactions"
+)
+
+
+test.scenarios(var = list(sr_rho = seq(0.01, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           simulate.interactions = TRUE),
+               name = " interactions"
+)
+
+test.scenarios(var = list(dr_rho = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           simulate.interactions = TRUE),
+               name = " interactions"
+)
+
+
+test.scenarios(var = list(sr_mu = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           simulate.interactions = TRUE),
+               name = " interactions"
+)
+
+
+test.scenarios(var = list(sr_sigma = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           simulate.interactions = TRUE),
+               name = " interactions"
+)
+
+test.scenarios(var = list(dr_mu = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           simulate.interactions = TRUE),
+               name = " interactions"
+)
+
+
+load("2. Results/Appendices/dr_mu interactions.Rdata")
+p.dr_mu_interactions = plot.function(result)
+p.dr_mu_interactions
+ggsave('2. Results/Appendices/p.dr_mu_interactions.png')
+
+load("2. Results/Appendices/dr_rho interactions.Rdata")
+p.dr_rho_interactions = plot.function(result)
+p.dr_rho_interactions
+ggsave('2. Results/Appendices/p.dr_rho_interactions.png')
+
+load("2. Results/Appendices/dr_sigma interactions.Rdata")
+p.dr_sigma_interactions = plot.function(result)
+p.dr_sigma_interactions
+ggsave('2. Results/Appendices/p.dr_sigma_interactions.png')
+
+load("2. Results/Appendices/sr_mu interactions.Rdata")
+p.sr_mu_interactions = plot.function(result)
+p.sr_mu_interactions
+ggsave('2. Results/Appendices/p.sr_mu_interactions.png')
+
+load("2. Results/Appendices/sr_rho interactions.Rdata")
+p.sr_rho_interactions = plot.function(result)
+p.sr_rho_interactions
+ggsave('2. Results/Appendices/p.sr_rho_interactions.png')
+
+load("2. Results/Appendices/sr_sigma interactions.Rdata")
+p.sr_sigma_interactions = plot.function(result)
+p.sr_sigma_interactions
+ggsave('2. Results/Appendices/p.sr_sigma_interactions.png')
+
+
+#########################################################################################
+#### Testing simulation sr and dyadic effects with bias
+#########################################################################################
+Hairy = matrix(rnorm(50, 0, 1), nrow=50, ncol=10)
+test.scenarios(var = list(dr_sigma = seq(0.1, 5, length.out=2)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           sr_rho = 0.5,
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bais effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40),
+               name = " with bias"
+)
+
+
+test.scenarios(var = list(sr_rho = seq(0.01, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bais effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40),
+               name = " with bias"
+)
+
+test.scenarios(var = list(dr_rho = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bais effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40),
+               name = " with bias"
+)
+
+
+test.scenarios(var = list(sr_mu = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bais effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40),
+               name = " with bias"
+)
+
+
+test.scenarios(var = list(sr_sigma = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bais effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40),
+               name = " with bias"
+)
+
+test.scenarios(var = list(dr_mu = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bais effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40),
+               name = " with bias"
+                           
+)
+
+
+# A faire !!!!!!!!!!!!!!!!!!!!!!
+load("2. Results/Appendices/dr_mu with bias.Rdata")
+p.dr_mu_withBias = plot.function(result)
+p.dr_mu_withBias
+ggsave('2. Results/Appendices/p.dr_mu_withBias.png')
+
+load("2. Results/Appendices/dr_rho with bias.Rdata")
+p.dr_rho_withBias = plot.function(result)
+p.dr_rho_withBias
+ggsave('2. Results/Appendices/p.dr_rho_withBias.png')
+
+load("2. Results/Appendices/dr_sigma with bias.Rdata")
+p.dr_sigma_withBias = plot.function(result)
+p.dr_sigma_withBias
+ggsave('2. Results/Appendices/p.dr_sigma_withBias.png')
+
+load("2. Results/Appendices/sr_mu with bias.Rdata")
+p.sr_mu_withBias = plot.function(result)
+p.sr_mu_withBias
+ggsave('2. Results/Appendices/p.sr_mu_withBias.png')
+
+load("2. Results/Appendices/sr_rho with bias.Rdata")
+p.sr_rho_withBias = plot.function(result)
+p.sr_rho_withBias
+ggsave('2. Results/Appendices/p.sr_rho_withBias.png')
+
+load("2. Results/Appendices/sr_sigma with bias.Rdata")
+p.sr_sigma_withBias = plot.function(result)
+p.sr_sigma_withBias
+ggsave('2. Results/Appendices/p.sr_sigma_withBias.png')
+
+#########################################################################################
+#### Testing simulation sr and dyadic effects with bias through interactions simulations
+#########################################################################################
+Hairy = matrix(rnorm(50, 0, 1), nrow=50, ncol=1)
+test.scenarios(var = list(dr_sigma = seq(0.1, 5, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           sr_rho = 0.5,
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bias effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40,
+                           simulate.interactions = TRUE),
+               name = " with bias interactions"
+)
+
+
+test.scenarios(var = list(sr_rho = seq(0.01, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bias effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40,
+                           simulate.interactions = TRUE),
+               name = " with bias interactions"
+)
+
+test.scenarios(var = list(dr_rho = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bias effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40,
+                           simulate.interactions = TRUE),
+               name = " with bias interactions"
+)
+
+
+test.scenarios(var = list(sr_mu = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bias effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40,
+                           simulate.interactions = TRUE),
+               name = " with bias interactions"
+)
+
+
+test.scenarios(var = list(sr_sigma = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bias effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40,
+                           simulate.interactions = TRUE),
+               name = " with bias interactions"
+)
+
+test.scenarios(var = list(dr_mu = seq(0.1, 0.8, length.out=10)),
+               list = list(sr_mu = c(0,0),
+                           sr_sigma  = c(2.1, 0.7),
+                           dr_mu = c(0,0),
+                           dr_rho = 0.75,
+                           dr_sigma = 1.4,
+                           sr_rho = 0,
+                           exposure_predictors = cbind(rep(1,50),Hairy),
+                           exposure_effects = c(-1, -4),# strong negative bias effect
+                           exposure_sigma = 2.9,
+                           exposure_baseline = 40,
+                           simulate.interactions = TRUE),
+               name = " with bias interactions"
+               
+)
+
+load("2. Results/Appendices/dr_muwith bias interactions.Rdata")
+p.dr_mu_interactions_bias = plot.function(result)
+p.dr_mu_interactions_bias
+ggsave('2. Results/Appendices/p.dr_mu_interactions_bias.png')
+
+load("2. Results/Appendices/dr_rhowith bias interactions.Rdata")
+p.dr_rho_interactions_bias = plot.function(result)
+p.dr_rho_interactions_bias
+ggsave('2. Results/Appendices/p.dr_rho_interactions_bias.png')
+
+load("2. Results/Appendices/dr_sigmawith bias interactions.Rdata")
+p.dr_sigma_interactions_bias = plot.function(result)
+p.dr_sigma_interactions_bias
+ggsave('2. Results/Appendices/p.dr_sigma_interactions_bias.png')
+
+load("2. Results/Appendices/sr_muwith bias interactions.Rdata")
+p.sr_mu_interactions_bias = plot.function(result)
+p.sr_mu_interactions_bias
+ggsave('2. Results/Appendices/p.sr_mu_interactions_bias.png')
+
+load("2. Results/Appendices/sr_rhowith bias interactions.Rdata")
+p.sr_rho_interactions_bias = plot.function(result)
+p.sr_rho_interactions_bias
+ggsave('2. Results/Appendices/p.sr_rho_interactions_bias.png')
+
+load("2. Results/Appendices/sr_sigmawith bias interactions.Rdata")
+p.sr_sigma_interactions_bias = plot.function(result)
+p.sr_sigma_interactions_bias
+ggsave('2. Results/Appendices/p.sr_sigma_interactions_bias.png')
+
+
+
+
+##################################################
+#### Testing sociality & bais
+##################################################
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 test3 = test.function(att = Hairy,
                       N_id = N_id,

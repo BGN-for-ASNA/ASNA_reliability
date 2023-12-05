@@ -7,6 +7,7 @@
 \emergencystretch=10pt
 \usepackage{graphicx}
 \usepackage{nccmath}
+\usepackage{pdflscape}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{txfonts}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -127,7 +128,7 @@
 \usepackage{arydshln}
 \begin{document}
 
-\runninghead{Ross, McElreath, and Redhead}
+\runninghead{Sosa, Brook, Pery, Redhead, Ross}
 
 \title{Robust Bayesian modeling of animal networks subject to censoring and sampling biases }
 
@@ -152,10 +153,9 @@ Animal Social Network Analysis (ASNA) has emerged as a crucial approach, leading
 
 Over the past 50 years, graph theory has become a vital tool in studying natural and artificial systems in various fields like anthropology \citep{apicella2012social}, sociology \citep{Milgram1967}, economics \citep{ter2009applying}, ecology \citep{sosa2021animal}. It applies to both small-scale (e.g., proteomics \citep{ravasz2002hierarchical}) and large-scale (e.g., ecosystems \citep{ulanowicz2014limits}) systems. In the realm of animal sociality research, innovative techniques, such as association indices and pre-network permutations\citep{Whitehead1999, Farine2013, Farine2015a}, have expanded upon traditional graph theory. These methods help address specific challenges in this field, like variations in sampling efforts. However, recent studies have highlighted significant reliability concerns associated with hypothesis testing protocols developped in Animal Social Network Analysis (ASNA)\citep{weiss2021common, Puga2021, Hart2022, Farine2022}. 
 
-These issues involve elevated rates of false negatives (meaning failing to reject a false null hypothesis) and false positives (accepting a false null hypothesis). For instance, in a simulation study by \citet{Puga2021}, they considered a scenario with data biases stemming from the data collection process (like oversampling certain individual categories). They identified false positive rates as high as 60.8\% and false positive rates ranging up to 36.6\%. Since very few biological data collected in natural settings are entirely free from biases related to the studied system or limitations in sampling, these findings emphasize a common challenge that urgently needs addressing to ensure the reliability of hypothesis testing in ASNA. Several approaches have been proposed since the issues with rates of false positives and negatives were raised. These new methods can be categorized into two types based on were they control for bias within the steps of the ASNA hypothesis testing protocol. In ASNA, there are typically two hypothesis testing protocol steps: 1) Estimating social interaction patterns among individuals, which are quantified within a social network. 2) Testing statistical hypotheses about these patterns.
+These issues involve elevated rates of false negatives (meaning failing to reject a false null hypothesis) and false positives (accepting a false null hypothesis). For instance, in a simulation study by \citet{Puga2021}, they considered a scenario with data biases stemming from the data collection process (like oversampling certain individual categories). They identified false positive rates as high as 60.8\% and false negatives rates ranging up to 36.6\%. Since very few biological data collected in natural settings are entirely free from biases related to the studied system or limitations in sampling, these findings emphasize a common challenge that urgently needs addressing to ensure the reliability of hypothesis testing in ASNA. Several approaches have been proposed since the issues with rates of false positives and negatives were raised. These new methods can be categorized into two types based on were they control for bias within the steps of the ASNA hypothesis testing protocol. In ASNA, there are typically two hypothesis testing protocol steps: 1) Estimating social interaction patterns among individuals, which are quantified within a social network and 2) Testing statistical hypotheses about these patterns.
 
-To achieve the first step, researchers calculate a measure of the tendency for individuals to associate (in undirected behavior) or interact (in directed behavior). This measure is referred to as a social index and is computed for each pair of individuals (dyad). These values are used to create a social network, where each individual is a node, and the social index values represent the strength of the connection (edge weight) between dyad members. In addition, social indices have also the goal to control for sampling effort (i.e. heterogeneity in sampling between individuals). Currently two main types of social index are used: association indices \citep{hubalek1982coefficients, sailer1984proximity} and interaction index. Association indices have been by behavioral ecologist. Although, many of the existing association indices estimate the proportion of time that a pair of individuals spends together \citep{whitehead2008analyzing}. 
-The higher the index value, the stronger the association within the dyad. The most used association index so far is the simple ratio index (SRI; Eq. \ref{SRI}), designed for data collected in discrete sampling periods (e.g. gambit of the group, scan sampling). The Interaction Index (Eq. \ref{II}) is primarily utilized by primatologists for data collected during continuous sampling periods, such as focal sampling. This index estimates the rate of social interactions per unit of time (e.g. the total time of focus), as opposed to association indices that are proportion-based. A higher index value indicates a stronger rate of interaction within the dyad. Recently, one approach that has been suggested for addressing the social interaction patterns among individuals. \citet{hart2023bison} employs a Bayesian generative network approach to estimate the uncertainty of links related to observations. Also, there hasn't been any testing conducted to assess the reliability of results based on biased data. The lingering question is then whether Bayesian generative networks can outperform sociality indices or not.
+To achieve the first step, researchers calculate a measure of the tendency for individuals to associate (in undirected behavior) or interact (in directed behavior). This measure is referred to as a social index and is computed for each pair of individuals (dyad). These values are used to create a social network, where each individual is a node, and the social index values represent the strength of the connection (edge weight) between dyad members. In addition, social indices have also the goal to control for sampling effort (i.e. heterogeneity in sampling between individuals). Currently two main types of social index are used: association indices \citep{hubalek1982coefficients, sailer1984proximity} and interaction index. Association indices have been used by behavioral ecologist to estimate the proportion of time that a pair of individuals spends together \citep{whitehead2008analyzing}. The higher the index value, the stronger the association within the dyad. The most used association index so far is the simple ratio index (SRI; Eq. \ref{SRI}), designed for data collected in discrete sampling periods (e.g. gambit of the group, scan sampling). The Interaction Index (Eq. \ref{II}) is primarily utilized by primatologists for data collected during continuous sampling periods, such as focal sampling. This index estimates the rate of social interactions per unit of time (e.g. the total time of focus), as opposed to association indices that are proportion-based. A higher index value indicates a stronger rate of interaction within the dyad. Finally, new approaches based on the Bayesian generative network have recently been proposed to estimate interaction patterns among individuals \citep{hart2023bison, Ross2023JAE}. Also, there hasn't been any testing conducted to assess the reliability of results based on biased data. The lingering question is then whether Bayesian generative networks can outperform sociality indices or not.
 
 \begin{ceqn}
 \begin{align}\label{SRI}
@@ -171,9 +171,9 @@ Where $x_ij$ is the number of sampling periods with $i$ and $j$ observed associa
 \end{ceqn}
 Where $x_{ij}$ represents the overall frequencies or total interaction time, $y_i$ and $y_j$ denote the number of observations or the total observation time for individuals $i$ and $j$, respectively.\\
 
-To achieve the second step, which involves testing statistical hypotheses about sociality, researchers often use node-based measures computed on the network of association. These measures are derived from the network and help assess various aspects of an individual's position within the network. However, using node-based measures straightforwardly to test hypotheses about individual associations isn't ideal because each association/interaction is counted twice, once for each individual in the dyad, which violates the assumptions of parametric tests. Therefore, much of the methodological work in ASNA has focused on developing techniques to enable valid hypothesis testing. Since 2000, in ASNA permutations have been the main standard coming in three forms: network permutations, pre-network permutations\citep{Farine2013}. For more detailed information on the principles of permutation approaches, readers can refer to \citep{Farine2013, sosa2021reliable}. Issues related to false positive and negative rates were originally demonstrated in network permutations and pre-network permutations. To address these issues, double permutations (which combine both) have been developed. Permutations have recently faced criticism for assuming exchangeability of residuals \citep{Hart2022}. Moreover, studies that highlighted problems with permutation approaches or propose new methods have been employing the same simulation protocol and as demonstrated in Appendix 1, this simulation has some issues. Firstly, these simulations were designed to generate a specific bias known as the "bias of interaction". This bias pertains to missing associations or interactions while observing individuals. It differs from observation bias, as the heterogeneity of observation among individuals is known by the observer(s) and is used by indices of sociality to control for it. In contrast, bias of interaction is unknown to the observer. However, during simulation, generating bias of interaction inadvertently leads to observation bias. This complicates the separation of the effects of both biases and the estimation of which aspects are controlled by indices and/or permutation approaches. 
+To achieve the second step, which involves testing statistical hypotheses about social interaction patterns among individuals, researchers often use node-based measures computed on the network of association. These measures are derived from the network and help assess various aspects of an individual's position within the network. However, using node-based measures straightforwardly to test hypotheses about individual associations isn't ideal because each association/interaction is counted twice, once for each individual in the dyad, which violates the assumptions of parametric tests. Therefore, much of the methodological work in ASNA has focused on developing techniques to enable valid hypothesis testing. Since 2000, in ASNA permutations have been the main standard coming in two forms: network permutations, pre-network permutations \citep{Farine2013}. For more detailed information on the principles of permutation approaches, readers can refer to \citep{Farine2013, sosa2021reliable}. Issues related to false positive and negative rates were originally demonstrated in network permutations and pre-network permutations. To address these issues, double permutations, which combine both, have been developed and tested on biased data to estimate rates of false positives and false negatives. Double permutations have shown substantial improvement in false positives and false negatives rates compared to other permutation approaches. However, permutations have recently faced criticism for assuming exchangeability of residuals \citep{Hart2022}. Moreover, studies that highlighted problems with permutation approaches or propose new methods have been employing the same simulation protocol and as demonstrated in Appendix 1, this simulation has some issues. Firstly, these simulations were designed to generate "bias of interaction". This bias pertains to missing associations or interactions while observing individuals. It differs from observation bias, as the heterogeneity of observation among individuals is known by the observer(s) and is used by indices of sociality to control for it. In contrast, bias of interaction is unknown to the observer. However, during simulation, generating bias of interaction inadvertently leads to observation bias. This complicates the separation of the effects of both biases and the estimation of which aspects are controlled by indices and/or permutation approaches. 
 
-To tackle these concerns, we developed a new simulation that allows to independently specify sampling bias and interaction bias. Using this simulation, we created various scenarios to assess the reliability of results obtained through different methods: association index, interaction index, Bayesian generative network, pre-network permutation, network permutation, and double permutation. Through this analytical approach, we have multiple goals. Firstly, we aim to assess whether issues related to false positives and false negatives in ASNA methods are associated with observation or interaction biases. Secondly, we want to determine if Bayesian generative networks outperform traditional ASNA methods in terms of providing accurate estimates and/or differences in hypothesis testing. Lastly, this will help us identify analytical protocols that can produce more reliable results for hypothesis testing in ASNA.
+To tackle these concerns, we developed a new simulation that allows to independently specify sampling bias and interaction bias. Using this simulation, we created various scenarios to assess the reliability of results obtained through different methods: association index, interaction index, Bayesian generative network, network permutation, double permutation and two new methods that will be discussed in the methodology section. Through this research, we have multiple goals. Firstly, we aim to assess whether issues related to false positives and false negatives in ASNA methods are associated with observation or interaction biases. We are expecting to observe accurate results for all approches regarding bias of observation but we are also expecting that once interaction bias will be introduce in the simulation all methods will be inacurate as none of them are accounting for such bias type. Our secondary objective is to determine if Bayesian generative networks reliability in terms of providing accurate estimates and/or differences in hypothesis testing. This is particularly important because the reliability of Bayesian generative networks hasn't been addressed yet. Additionally, having good reliability tests for them could enable us to account for interaction bias as they enable consideration of various types of confounding factors, as we will demonstrate through the presentation of one of your approaches. Our final aim is to identify analytical protocols that can yield more reliable results for hypothesis testing in ASNA. Over the years, multiple approaches have been proposed and faced with such a plethora of methods, researchers may encounter difficulties in assessing the strengths and weaknesses of each.
 
 \section{Methods}
 
@@ -191,20 +191,15 @@ $Y_{[i,j]}$ is typically a count of events or duration summed over all scans in 
 $E_{[i,j]}$ is the number of observations in which ties between $i$ and $j$ could have been detected \citep[e.g., the total number of scans or the sum of focals for individuals $i$ and $j$.][]{Farine2015a}. Note that in the generative context, $\phi$ represents a true \emph{biological} phenomenon, whereas the outcome variable, $Y$, and the exposure variable, $E$, may be strongly affected by the sampling protocol, researcher behavior, and features of animals $i$ and $j$ other than sociality (e.g., cryptic coloration might cause the researcher to fail to observe true ties). 
 
 The goal of modeling, is to measure $Y$ and $E$, and then recover $\phi$. This can be complicated, however, if there are structural biases in $Y$ and/or $E$. Here, we will consider two potential causes of bias: (1) sampling bias, where features of $i$ and $j$ influence $E_{[i,j]}$, and (2) detection bias, where features of $i$ and $j$ influence measurement of $Y_{[i,j]}$ given $E_{[i,j]}$ independent of $\phi_{[i,j]}$. 
-% I believe this should go at the end of the introduction (1) sampling bias preclude accurate estimation of network properties using standard tools in animal behavior, but does not preclude accurate estimation of network properties using Bayesian tools like STRAND, and (2) detection bias precludes accurate estimation of network properties using both standard tools in animal behavior and Bayesian methods, unless the model of the data generating process is expanded to account for variability in the detectability of individuals. We then introduce such a model to the STRAND package.
 
 We will now build up a Bayesian model of the data generating process. We will start by describing the sub-model underlying the true weighted network of ties, and then integrate the sub-models underlying the measurement process.
 
 \subsection{Social relations}
 \subsubsection{Model definition}
-We begin the process of building up the model described in Eq. \ref{maineq} by providing a generative model for the \emph{true} latent directed connection strength between individuals $i$ and $j$, $\phi_{[i,j]}$. In order to generate  networks with empirically plausible typologies, it is generally necessary to define a model for $\phi_{[i,j]}$ that includes correlated random effects for the propensity to send and receive ties (nodal random effects), and correlated dyad-level random effects for the propensity of $i$ to send to $j$ and $j$ to send to $i$. Additionally, such models should permit inclusion of covariate effects that influence block/group structure, node-level tie propensity, and dyad-level tie propensity. See Fig. \ref{examplenet} for an example network generated under such a model.
-%I'm wondering if incorporating block and dyadic effects might be beyond the project's scope. The main focus of this project is to assess the impact of biases on hypothesis testing. While I acknowledge that subgroups and dyadic effects are present in almost all species, including humans, this could potentially be a separate project where we explain how to utilize a block model with a network that serves as a proxy for the real network. For instance, the approach could involve:
-%1) Running the bias analysis alone.
-%2) Assessing the formation of subgroups based on potential node characteristics using Gaussian processes.
-%3) Re-running the bias analysis, this time considering group composition (if the goal is to control for subgroups).
-% These steps could be the same for testing hypotheses related to individual characteristics and social network measures.
 
-Following our prior work \citep{redhead2021reliable, ross2022modelling}, we recommend the use of the social relations model \citep{kenny1984social, snijders1999social, back2010social} with an additional set of stochastic blockmodel parameters \citep{holland1983stochastic, karrer2011stochastic, peixoto2019bayesian} to account for group structure when necessary. As such, $\phi_{[i,j]}$ can be modeled as:
+We begin the process of building up the model described in Eq. \ref{maineq} by providing a generative model for the \emph{true} latent directed connection strength between individuals $i$ and $j$, $\phi_{[i,j]}$. In order to generate  networks with empirically plausible typologies, it is generally necessary to define a model for $\phi_{[i,j]}$ that includes correlated random effects for the propensity to send and receive ties (nodal random effects), and correlated dyad-level random effects for the propensity of $i$ to send to $j$ and $j$ to send to $i$. Additionally, such models should permit inclusion of covariate effects that influence block/group structure, node-level tie propensity, and dyad-level tie propensity. See Fig. \ref{examplenet} for an example network generated under such a model.
+
+Following prior work of \citet{redhead2021reliable, ross2022modelling}, we recommend the use of the social relations model \citep{kenny1984social, snijders1999social, back2010social} with an additional set of stochastic blockmodel parameters \citep{holland1983stochastic, karrer2011stochastic, peixoto2019bayesian} to account for group structure when necessary. As such, $\phi_{[i,j]}$ can be modeled as:
 \begin{ceqn}
 \begin{equation}\label{link}
 \text{logit}(\phi_{[i,j]}) = \alpha + \lambda_{[i]} + \pi_{[j]} + \delta_{[i,j]} + \Gamma(i,j,V) + \ldots 
@@ -214,13 +209,13 @@ where $\alpha$ is an intercept term, $\lambda$ is a vector of individual-specifi
 
 For example, if $S$ is an animal-specific measure, like body size, and $Q$ is a dyad-specific measure, like a matrix of relatedness ties, then the ellipsis  may be replaced with:  $\kappa_{[1]}S_{[i]} + \kappa_{[2]}S_{[j]} + \kappa_{[3]}Q_{[i,j]}$, to give the effects of body size on the probability of sending ties to any target and receiving ties from any target, and the effects of kinship on the probability of dyadic ties.
 
-To model block structure, we can consider a list of $V$ categorical variables describing individuals $i$ and $j$. Let $B_{[v,b_1,b_2]}$ be a three-dimensional parameter array, where $v$ run over variables, and $b_1$ and $b_2$ run over the category levels within variables. Finally, let the function  $b(i,v)$ return the block of individual $i$ for variable $v$. Then, we can define $\Gamma(i,j,V)$, such that: 
-\begin{ceqn}
-\begin{equation}\label{link}
-\Gamma(i,j,V) = \left(\sum_{v=1}^{V} B_{[v,b(i,v),b(j,v)]} \right)
-\end{equation}
-\end{ceqn}
-where the probability of a tie from individual $i$ in block $b(i,v)$ to individual $j$ in block $b(j,v)$ for variable $v$ is controlled by the corresponding entry in the array of block parameters, $B_{[v,b(i,v),b(j,v)]}$.\\
+%To model block structure, we can consider a list of $V$ categorical variables describing individuals $i$ and $j$. Let $B_{[v,b_1,b_2]}$ be a three-dimensional parameter array, %where $v$ run over variables, and $b_1$ and $b_2$ run over the category levels within variables. Finally, let the function  $b(i,v)$ return the block of individual $i$ for variable %$v$. Then, we can define $\Gamma(i,j,V)$, such that: 
+%\begin{ceqn}
+%\begin{equation}\label{link}
+%\Gamma(i,j,V) = \left(\sum_{v=1}^{V} B_{[v,b(i,v),b(j,v)]} \right)
+%\end{equation}
+%\end{ceqn}
+%where the probability of a tie from individual $i$ in block $b(i,v)$ to individual $j$ in block $b(j,v)$ for variable $v$ is controlled by the corresponding entry in the array of %block parameters, $B_{[v,b(i,v),b(j,v)]}$.\\
 % For discrete block modeling, we can utilize the assortativity coefficient: https://arxiv.org/pdf/cond-mat/0209450.pdf
 
 \subsubsection{Priors}
@@ -286,18 +281,18 @@ We recommend standardizing predictor variables. We can then use weakly regulariz
 \end{align}
 \end{ceqn}
 
-Lastly, the diagonal elements of $B_{[v]}$, which control the frequency of ties within blocks, will generally have slightly higher prior weight than the off-diagonal elements, though other topologies are possible \citep[see][]{batagelj1997notes}. For example, we might write:
-\begin{ceqn}
-\begin{align}
-	\beta_{k \to k} &\sim \mathrm{Normal}\Big( \text{Logit}\Big(\tfrac{0.1}{\sqrt{N_{[k,v]}}}\Big) , 2.5 \Big)\label{eq1zz1} \\
-	\beta_{k \to \tilde k} &\sim \mathrm{Normal}\Big( \text{Logit}\Big(\tfrac{0.01}{0.5\sqrt{\vphantom{N_{\tilde k}}N_{[k,v]}}+0.5\sqrt{\vphantom{N_{\tilde k}}N_{[\tilde k,v]}}}\Big) , 2.5 \Big)\label{eq1zz2}
-\end{align}
-\end{ceqn}
-
-Here, $k \to k$ indicates a diagonal element and $k \to \tilde k$ indicates an off-diagonal element. 
-The scalar of 0.1 in Eq. \ref{eq1zz1} places higher prior density on the diagonal of $B$ (which controls the probability of within-block ties), than the off-diagonal of $B$ (where the scalar of 0.01 from Eq. \ref{eq1zz2} generates reduced prior between-block tie probability). 
-The scalars of $\sqrt{N_k}$ ensure that prior tie probability scales with sample size at roughly the same rate that we see in empirical data sets \citep{powerready2021}. 
-The standard deviation of 2.5 in both equations causes the overall prior to be quite weak,  and thus allows the data to dominate the posterior. 
+%Lastly, the diagonal elements of $B_{[v]}$, which control the frequency of ties within blocks, will generally have slightly higher prior weight than the off-diagonal elements, %though other topologies are possible \citep[see][]{batagelj1997notes}. For example, we might write:
+%\begin{ceqn}
+%\begin{align}
+%	\beta_{k \to k} &\sim \mathrm{Normal}\Big( \text{Logit}\Big(\tfrac{0.1}{\sqrt{N_{[k,v]}}}\Big) , 2.5 \Big)\label{eq1zz1} \\
+%	\beta_{k \to \tilde k} &\sim \mathrm{Normal}\Big( \text{Logit}\Big(\tfrac{0.01}{0.5\sqrt{\vphantom{N_{\tilde k}}N_{[k,v]}}+0.5\sqrt{\vphantom{N_{\tilde k}}N_{[\tilde k,v]}}}%\Big) , 2.5 \Big)\label{eq1zz2}
+%\end{align}
+%\end{ceqn}
+%
+%Here, $k \to k$ indicates a diagonal element and $k \to \tilde k$ indicates an off-diagonal element. 
+%The scalar of 0.1 in Eq. \ref{eq1zz1} places higher prior density on the diagonal of $B$ (which controls the probability of within-block ties), than the off-diagonal of $B$ (where %the scalar of 0.01 from Eq. \ref{eq1zz2} generates reduced prior between-block tie probability). 
+%The scalars of $\sqrt{N_k}$ ensure that prior tie probability scales with sample size at roughly the same rate that we see in empirical data sets \citep{powerready2021}. 
+%The standard deviation of 2.5 in both equations causes the overall prior to be quite weak,  and thus allows the data to dominate the posterior. 
 %These priors, and all other default priors discussed below, however, can be modified by the user according to their needs by passing in a labeled list of priors when calling the model function.
 
 \begin{figure*}[t]
@@ -334,31 +329,8 @@ as ties between $i$ and $j$ can be detected either when $i$ is subject to observ
 
 From our formalization, it is obvious that variation in sampling effort should have little to no effect on our ability to identify accurate estimates of $\phi_{[i,j]}$ from Eq. \ref{maineq}, as long as we apply statistical methods that propagate uncertainty according to the rules of probability theory. A binomial model of $Y_{[i,j]}$ given $E_{[i,j]}$ provides information about expected value of $\phi_{[i,j]}$ that does not depend on $E_{[i,j]}$; however, the narrowness of the posterior distribution of $\phi_{[i,j]}$ does depend on $E_{[i,j]}$, as we can be more confident in estimates of $\phi_{[i,j]}$ that are based on more observations.
 
-The standard approach in animal behavior of calculating the SRI (Eq. \ref{SRI}) or the II (Eq. \ref{II}) to apply it to a point-estimates $\dot\phi_{[i,j]}$ models does lead to bias, however, especially in small samples. This occurs because Eq. \ref{SRI} and Eq. \ref{II} divides out sample size, and gives samples based on sparse evidence disproportionate weight in downstream analysis. These samples based on sparse data typically have values at specific fractions with small denominator---like 0, 1, $\tfrac{1}{2}$, $\tfrac{1}{3}$, $\tfrac{2}{3}$, $\tfrac{1}{4}$, etc---leading to scatter plots like Fig. \ref{figWhoa}.
-
-\begin{figure}[h]
-\caption{Example data on tie strength generated under a model where a covariate $Z$ has a strong positive effect on tie probability, $\phi_{[i,j]}$, but a negative effect on sampling effort, $E_{[i,j]}$). We plot the true dyadic tie strength on the x axis, and the simple ratio index on the y axis.  In frame (a), we see that many points lie along the diagonal (as expected), but there are also strips of points along the horizontal lines at $y=0.0$, $y=0.5$, and $y=1.0$, where the inferred tie strength is not all that reflective of true tie strength. These points correspond to estimates from small samples. Simply plugging in SRI estimates into a downstream regression leads to poor inference, because samples based on few data-points obscure the underlying predictors of tie strength.
- }
-\label{figWhoa}
-\centering
-
-\begin{subfigure}[b]{0.4\textwidth}
-         \centering
-         \caption{Simple ratio index}
-         \includegraphics[trim={0 0cm 0 0},clip,width=\textwidth]{Figures/ScatterFrameA.pdf}
-         \label{srmx3b_drs}
-     \end{subfigure}
-     
-  \begin{subfigure}[b]{0.4\textwidth}
-         \centering
-         \caption{A Bayesian model would scale the influence of each point in proportion to the sample size of observations, as we show here by scaling the alpha values of each point by $E_{[i,j]}$. The fact that most of the weight of evidence lies along the diagonal is now much more apparent.}
-         \includegraphics[trim={0 0cm 0 0},clip,width=\textwidth]{Figures/ScatterFrameB.pdf}
-         \label{srmx3b_drs}
-     \end{subfigure}
-\end{figure}
-
 \subsection{Interaction bias, or censoring}
-Although we showed that sampling bias does not pose much of a threat to inference, censoring, or ``interaction bias'' is a more severe problem. In this case, a researcher performed $E_{[i,j]}$ scans and detected $\hat Y_{[i,j]}$ ties. However, if he or she is following animal $i$, and animal $j$ has a cryptic phenotype, then it is possible that ties from $i$ to $j$, or $j$ to $i$,  did occur, but the researcher did not detect them. For a single observation, the indicator of a true tie be $Q_{[i,j]} \in\{0,1\}$, the indicator of a detected tie be $\hat Q_{[i,j]}\in\{0,1\}$, and the indicator for individual $i$ being detectable be $D_{[i]}\in\{0,1\}$. Then, we find that:
+Censoring, or ``interaction bias'' is a more severe problem. In this case, a researcher performed $E_{[i,j]}$ scans and detected $\hat Y_{[i,j]}$ ties. However, if he or she is following animal $i$, and animal $j$ has a cryptic phenotype, then it is possible that ties from $i$ to $j$, or $j$ to $i$,  did occur, but the researcher did not detect them. For a single observation, the indicator of a true tie be $Q_{[i,j]} \in\{0,1\}$, the indicator of a detected tie be $\hat Q_{[i,j]}\in\{0,1\}$, and the indicator for individual $i$ being detectable be $D_{[i]}\in\{0,1\}$. Then, we find that:
   \begin{equation}\label{mixy1}
     Pr[\hat Q_{[i,j]}=0] = Pr[(1-Q_{[i,j]})D_{[i]}D_{[j]}] + Pr[1-D_{[i]}D_{[j]}]
   \end{equation}
@@ -392,80 +364,92 @@ The only way to permit accurate inference, is to use an independent source of da
 \end{ceqn}
 allowing estimation of social-network parameters that are robust to censoring, or 'interaction bias'.
 
-\subsection{Testing the models using simulations}
-%I believe this section should be the first part of the methods because the research aims to:1) Address current simulation issues, 2) Introduce a new simulation approach, and 3) Evaluate the reliability of all methods from this fresh start. 
+\subsection{Testing ASNA methods}
+\subsubsection{Scenarios:} 
+Using the previously explained simulation model, we generated six types of scenarios. Scenario 1, we simulated data where individuals' characteristics have no effect on their social ties and without sampling or censoring biases. This will allow to assess rates of false positives for each approach tested. Scenario 2, we simukated data where individuals' characteristics have an effect on their social ties and without sampling or censoring biases. This will allow to assess rates of false negatives for each approach tested. 
+In Scenario 3, we simulated data where individuals' characteristics have no effect on their social ties, introducing sampling bias but without censoring biases. This helps assess rates of false positives for each approach tested in the presence of sampling biases. In Scenario 4, data simulation includes individuals' characteristics affecting social ties with sampling biases and no censoring biases, allowing us to assess rates of false negatives for each approach tested under sampling biases conditions. In scenario 5, we simulated data where individuals' characteristics have no effect on their social ties, introducing censoring biases without sampling biases. This helps assess rates of false positives for each approach tested in the presence of censoring biases. In scenario 6, data simulation includes individuals' characteristics affecting social ties without sampling biases and with censoring biases, allowing us to assess rates of false negatives for each approach tested under censoring biases conditions. 
 
-Simulation concist to generate ties probability $P_{ij}$ for a given population $N$ using the following mass function:
+For each scenario, we generated 100 simulations with random variations in the simulation parameters related to the effect size of individuals' characteristics on social ties, sampling biases, and censoring bias. Details on the range of parameter variations are presented in Table 1.
 
-\begin{ceqn}
-  \begin{align}\label{mass}
-    P(X_{ij}) = 
-    \begin{psmallmatrix}
-      n\\
-      x
-    \end{psmallmatrix}\cdot   p^{x} \cdot (1-p)^{n-x}  
-  \end{align}    
-\end{ceqn}
-Where $P(X_{ij})$ is the probability of getting exactly $x$ successes, $n$ is the number of trials and $\rho$ the probability of success on each trial. We define $\rho$ using the following multivariate normal distribution:
+\subsubsection{Tested approaches:}
+For each simulation, we assessed 5 approaches. Initially, we tested the association index without permutations, along with network and double permutations. Next, we examined the interaction index with the same permutation variations. Additionally, Bayesian generative networks modeling interaction observations (e.g., Bison) and link weight probabilities (e.g., STRAND) have been tested. Finally, we introduced a new method using weigthed regression model for association and interaction indices. 
+\newline
+Indeed, apply association (Eq. \ref{SRI}) or interaction (Eq. \ref{II}) indices to a point-estimates $\dot\phi_{[i,j]}$ models can violate homoscedasticity linear regression assumptions, especially in small samples. This occurs because Eq. \ref{SRI} and Eq. \ref{II} divide out sample size, and provide samples based on sparse evidence disproportionate weight in downstream analysis Fig. \ref{figWhoa}.a. Unlike Bayesian approaches that automatically adjust the influence of each point in proportion to the sample size of observations Fig \ref{figWhoa}.b, regression models assume homoscedasticity. Homoscedasticity implies equal error distribution between data points, leading to similar values in the diagonal covariance matrix  (Eq. \ref{covM1}).
 
 \begin{ceqn}
-  \begin{align}\label{rho}
-    \begin{psmallmatrix}
-      \lambda_{i}\\
-      \pi_{i}
-    \end{psmallmatrix} = 
-    \begin{psmallmatrix}
-      \beta_{C}\\C_{i}
-    \end{psmallmatrix} \circ 
-    \begin{psmallmatrix}
-      \sigma_{\lambda}^{2} \ \ \ \sigma_{\lambda}{\sigma_{\pi \rho }}\\
-      \sigma_{\lambda}{\sigma_{\pi \rho }} \ \ \ \sigma_{\pi}^{2}
-    \end{psmallmatrix}
+  \begin{align}\label{covM1}
+    C = 
+    \begin{bmatrix}
+      \sigma^2  & 0 & 0 & \cdots & 0  \\
+      0 & \sigma^2 & 0 & \cdots & 0\\
+      0 & 0 & \sigma^2 & \cdots & 0\\
+      \vdots  &  \vdots &  \vdots & \ddots &  \vdots \\
+      0 & 0 & 0 & \cdots & \sigma^2 \\
+      \end{bmatrix}
   \end{align}
-\end{ceqn}
-Where $\beta_{c}$ is a parametrizable predictors' effect, $C_{i}$ is a parametrizable individual characteristic. Thus, by specifying $\beta_{c}$, we can accurately define a particular tie probability $P(X_{ij})$ based on individuals' characteristics $C_{i}$ of a given dyad ($i$, $j$).\\
+  \end{ceqn}
+  Where $C$ is the covariance matrix, Diagonal elements $\sigma^2$ represent the variance of each observation error and they are all the same because the errors are identically distributed.
 
-$n$ is define as fellow: 
-
-\begin{ceqn}
-  \begin{align}\label{Bms}
-    n_{i} \sim Binomial(\mu_{Si}, \sigma_{Si})
-  \end{align}
-\end{ceqn}
+We propose using weighted linear regression that incorporates the sampling effort of each data point into the covariance matrix of errors, providing advantages when handling heteroscedastic data  (Eq. \ref{covM2}). 
 
 \begin{ceqn}
-  \begin{align}\label{Pl}
-    \mu_{Si} \sim Poisson(\lambda)
+  \begin{align}\label{covM2}
+    C = 
+    \begin{bmatrix}
+      \sigma_{1}^2  & 0 & 0 & \cdots & 0  \\
+      0 & \sigma_{2}^2 & 0 & \cdots & 0\\
+      0 & 0 & \sigma_{3}^2 & \cdots & 0\\
+      \vdots  &  \vdots &  \vdots & \ddots &  \vdots \\
+      0 & 0 & 0 & \cdots & \sigma_{m}^2 \\
+      \end{bmatrix}
   \end{align}
-\end{ceqn}
-\begin{ceqn}
-  \begin{align}\label{Sbc}
-        invertLogit(\sigma_{i}) = \beta_{obs}C_{i} + \sigma_{Si}
-  \end{align}
-\end{ceqn}
-\begin{ceqn}
-  \begin{align}\label{Ns}
-    \sigma_{Si} \sim Normal(0, \sigma_{S})
-  \end{align}
-\end{ceqn}
+  \end{ceqn}
+  Where $C$ is the covariance matrix and where diagonal elements $\sigma_{1}^2$ to $\sigma_{m}^2$ are not identical and each observation has its own variance, unlike in Eq.\ref{covM2}.
 
-Where $n_{i}$ is the number of observations for individual $i$, $\mu_{Si}$ is the mean population number of observations and $\sigma_{Si}$ the given variance for individual $i$. $\beta_{obs}$ is a given parametrizable observation predictors' effect and $C_{i}$ is individual $i$ characteristic. $\sigma_{Si}$ is individual $i$ variance draw from a gaussian distribution. Thus, by specifying $\beta_{obs}$, we can accurately define a particular observation bias based on individuals' characteristics.
+  For each approach in every simulation, we calculated the estimated effect size along with the permuted p-value. This was done to assess the accuracy of approach estimations and the correctness of hypothesis testing conclusions, respectively.
 
-Thus, the simulation has the following parameters: individual characteristic $\beta_{c}$, the true estimate, the amount of observation bias $\beta_{obs}$, and the amount of interaction bias $\psi$. This allows us to generate different scenarios by varying these simulation parameters independently and test the reliability of different methods across those scenarios. First, we tested the reliability of the association index, interaction index, Bayesian generative network, pre-network permutation, network permutation, and double permutation in a scenario without any bias.  Second, we tested the reliability of these methods in a scenario with only sampling bias. Third, we tested the reliability of these methods in a scenario with interaction bias.
+\begin{figure}[h]
+\caption{Example data on tie strength generated under a model where a covariate $Z$ has a strong positive effect on tie probability, $\phi_{[i,j]}$, but a negative effect on sampling effort, $E_{[i,j]}$. We plot the true dyadic tie strength on the x axis, and the simple ratio index on the y axis.  In frame (a), we see that many points lie along the diagonal (as expected), but there are also strips of points along the horizontal lines at $y=0.0$, $y=0.5$, and $y=1.0$, where the inferred tie strength is not all that reflective of true tie strength. These points correspond to estimates from small samples. Simply plugging in SRI estimates into a downstream regression leads to poor inference, because samples based on few data-points obscure the underlying predictors of tie strength.}\label{figWhoa}\centering
+
+\begin{subfigure}[b]{0.4\textwidth}
+         \centering
+         \caption{Simple ratio index}
+         \includegraphics[trim={0 0cm 0 0},clip,width=\textwidth]{Figures/ScatterFrameA.pdf}
+         \label{srmx3b_drs}
+     \end{subfigure}
+     
+  \begin{subfigure}[b]{0.4\textwidth}
+         \centering
+         \caption{A Bayesian model would scale the influence of each point in proportion to the sample size of observations, as we show here by scaling the alpha values of each point by $E_{[i,j]}$. The fact that most of the weight of evidence lies along the diagonal is now much more apparent.}
+         \includegraphics[trim={0 0cm 0 0},clip,width=\textwidth]{Figures/ScatterFrameB.pdf}
+         \label{srmx3b_drs}
+     \end{subfigure}
+\end{figure}
 
 \section{Results}
-\subsection{Compare STRAND to other methods on Binomial data, no bias}
+\subsection{Evaluating the accuracy of the simulation model.}
+We assessed the simulation method reliability based on variations in three terms. Initially, we simulated data without any influence of individuals' characteristics on their social interaction patterns, observations, or censoring (Fig. \ref{figSimTest}.A). Next, we simulated data with only an effect of individuals' characteristics on their social interaction patterns (Fig. \ref{figSimTest}.B). Additionally, we conducted a simulation with only an effect of individuals' characteristics on their observations (Fig. \ref{figSimTest}.C). Finally, we performed a simulation with only an effect of individuals' characteristics on their censoring (Fig. \ref{figSimTest}.D). For each simulation type, we used linear regressions to examine the relationship between individuals' characteristics and their social interaction patterns, observations, and censoring, ensuring the reliability of the simulation results. Regression outcomes are summarized in Table 2.
 
-\subsection{Compare STRAND to other methods on Binomial data, sampling bias}
+\begin{figure*}[t]
+  \caption{XXXX}\label{figSimTest}
+  \centering
+  \includegraphics[trim={0 0 0 0cm},clip,width=1\textwidth]{Figures/Appendix2/Figure3.png}
+\end{figure*}
 
-\subsection{Compare STRAND to other methods on Binomial data, interaction bias}
 
-\subsection{An empirical test case?}
+\subsection{Scenario 1}
+
+\subsection{Scenario 2}
+
+\subsection{Scenario 3}
+
+\subsection{Scenario 4}
+
+\subsection{Scenario 5}
+
+\subsection{Scenario 6}
 
 \section{Discussion}
-
-
-
 
 
 \bibliographystyle{SageH}

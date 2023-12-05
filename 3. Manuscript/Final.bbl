@@ -1,4 +1,4 @@
-\begin{thebibliography}{31}
+\begin{thebibliography}{30}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
@@ -17,10 +17,6 @@ Apicella CL, Marlowe FW, Fowler JH and Christakis NA (2012) Social networks and
 Back MD and Kenny DA (2010) The social relations model: How to understand
   dyadic processes.
 \newblock \emph{Social and Personality Psychology Compass} 4(10): 855--870.
-
-\bibitem[{Batagelj(1997)}]{batagelj1997notes}
-Batagelj V (1997) Notes on blockmodeling.
-\newblock \emph{Social networks} 19(2): 143--155.
 
 \bibitem[{Bateson and Martin(2021)}]{bateson2021measuring}
 Bateson M and Martin P (2021) \emph{Measuring behaviour: an introductory
@@ -109,14 +105,18 @@ Ravasz E, Somera AL, Mongru DA, Oltvai ZN and Barab{\'a}si AL (2002)
   Hierarchical organization of modularity in metabolic networks.
 \newblock \emph{science} 297(5586): 1551--1555.
 
-\bibitem[{Ready and Power(2021)}]{powerready2021}
-Ready E and Power E (2021) Measuring reciprocity: Double sampling, concordance,
-  and network construction.
-
 \bibitem[{Redhead et~al.(2021)Redhead, McElreath and
   Ross}]{redhead2021reliable}
 Redhead D, McElreath R and Ross CT (2021) Reliable network inference from
   unreliable data: A tutorial on latent network modeling using strand .
+
+\bibitem[{Ross et~al.()Ross, McElreath and Redhead}]{Ross2023JAE}
+Ross CT, McElreath R and Redhead D (????) Modelling animal network data in r
+  using strand.
+\newblock \emph{Journal of Animal Ecology} n/a(n/a).
+\newblock \doi{https://doi.org/10.1111/1365-2656.14021}.
+\newblock
+  \urlprefix\url{https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/1365-2656.14021}.
 
 \bibitem[{Ross et~al.(2023)Ross, McElreath and Redhead}]{ross2022modelling}
 Ross CT, McElreath R and Redhead D (2023) Modelling animal network data in r

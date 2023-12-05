@@ -1,7 +1,7 @@
 ###############################
 #######  Model outcomes #######
 ###############################
-# !! Create an interaction matrix according to the ties probability matrix and observation bias.
+# Create an interaction matrix according to the ties probability matrix and observation bias.
 # Network variables----------------------
 #' @param N_id Number of individuals
 #' @param B Tie probabilities
@@ -32,27 +32,32 @@
 
 #' @return
 
-
 simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
+
                                                                B = NULL,
                                                                V = 3,
                                                                groups=NULL,
+
                                                                sr_mu = c(0,0),
                                                                sr_sigma = c(0.3, 1.5),
                                                                sr_rho = 0.6,
+
                                                                dr_mu = c(0,0),
                                                                dr_sigma = 1,
                                                                dr_rho = 0.7,
+
                                                                individual_predictors = NULL,
                                                                dyadic_predictors = NULL,
                                                                individual_effects = NULL,
                                                                dyadic_effects = NULL,
+
                                                                exposure_predictors = NULL,
                                                                exposure_effects = NULL,
                                                                exposure_sigma = 1.9,
                                                                exposure_baseline = 50,
+
                                                                int_intercept = c(5,5),
-                                                               int_slope = c(5,5), #Change this to affect characteristics effect on detectability
+                                                               int_slope = c(0,0), #Change this to affect characteristics effect on detectability
                                                                simulate.interactions = TRUE){
   require(STRAND)
   require(ANTs)
@@ -80,15 +85,15 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   ###############################
   ####### Model true network ####
   ###############################
-  # !! True networks make reference to the network without bias.
-  # Create correlation matrices (aka matrixes). !! It defines the reciprocity of interactions.
+  # True networks make reference to the network without bias.
+  # Create correlation matrices (aka matrixes). It defines the reciprocity of interactions.
   Rho_sr = Rho_dr = Rho_int = diag(c(1,1))
   Rho_sr[1,2] = Rho_sr[2,1] = sr_rho
   Rho_dr[1,2] = Rho_dr[2,1] = dr_rho
 
   # Varying effects on individuals
-  # !! ## Determine for each dyad its baseline interaction frequencies (rmvnorm2) +
-  # !! ## individuals' characteristics effect on interactions sum(individual_effects[1,] * individual_predictors[i,])
+  # ## Determine for each dyad its baseline interaction frequencies (rmvnorm2) +
+  # ## individuals' characteristics effect on interactions sum(individual_effects[1,] * individual_predictors[i,])
   sr = matrix(NA, nrow=N_id, ncol=2)
   for( i in 1:N_id){
     sr[i,] = rmvnorm2(1 , Mu=sr_mu, sigma=sr_sigma, Rho= Rho_sr)
@@ -102,8 +107,8 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   # Build true network
   dr = p = y_true = matrix(NA, N_id, N_id)
   # Loop over upper triangle and create ties from i to j, and j to i
-  # !! Determine for each interaction its baseline interaction frequencies (rmvnorm2) +
-  # !! dyads' characteristics effect on interactions sum(dyadic_effects * dyadic_predictors[i, j,])
+  # Determine for each interaction its baseline interaction frequencies (rmvnorm2) +
+  # dyads' characteristics effect on interactions sum(dyadic_effects * dyadic_predictors[i, j,])
   for ( i in 1:(N_id-1) ){
     for ( j in (i+1):N_id){
       # Dyadic effects
@@ -114,7 +119,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
          dr_scrap[2] = dr_scrap[2] + sum(dyadic_effects*dyadic_predictors[j,i,])
         }
 
-       # !! ## If subgroups are declared, determine within and between group link frequencies.
+       # ## If subgroups are declared, determine within and between group link frequencies.
        B_i_j = B_j_i = c()
        for(v in 1:V){
           B_i_j[v] =  B[[v]][groups[i,v] , groups[j,v] ]
@@ -125,7 +130,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
     }
   }
 
-  # !! Sum dyad and interaction probabilities and create ties probabilities matrix.
+  # Sum dyad and interaction probabilities and create ties probabilities matrix.
   for ( i in 1:(N_id-1) ){
     for ( j in (i+1):N_id){
       p[i,j] = inv_logit( sr[i,1] + sr[j,2] + dr[i,j])
@@ -136,24 +141,24 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   ##################################
   #######  Model observation bias###
   ###############################
-  ideal_samps = matrix(NA, nrow=N_id, ncol=N_id) #!! Sample without bias.
-  true_samps = matrix(NA, nrow=N_id, ncol=N_id) #!! Sample with bias.
-  exposure_prob = rep(NA, N_id) #!! The probability of sample based on individual characteristics.
-  ideal_exposure = rep(NA, N_id) #!! Observation time without bias.
-  true_exposure = rep(NA, N_id) #!! Observation time with bias.
-  exposure_offset = rep(NA, N_id) #!! Observation
+  ideal_samps = matrix(NA, nrow=N_id, ncol=N_id) #Sample without bias.
+  true_samps = matrix(NA, nrow=N_id, ncol=N_id) #Sample with bias.
+  exposure_prob = rep(NA, N_id) #The probability of sample based on individual characteristics.
+  ideal_exposure = rep(NA, N_id) #Observation time without bias.
+  true_exposure = rep(NA, N_id) #Observation time with bias.
+  exposure_offset = rep(NA, N_id) #Observation
   diag(true_samps) = 0
   diag(ideal_samps) = 0
 
-  # !!  For each individual, determine:
+  #  For each individual, determine:
    for( i in 1:N_id){
-    ideal_exposure[i] = rpois(1, lambda=exposure_baseline) # !! Observation baseline.
-    exposure_offset[i] = rnorm(1,0,exposure_sigma) # !! Observation bias.
-    exposure_prob[i] = inv_logit(sum(exposure_effects*exposure_predictors[i,]) + exposure_offset[i]) # !! Its observation probabilities based on individual characteristics.
-    true_exposure[i] = rbinom(1, size=ideal_exposure[i], prob=exposure_prob[i]) # !! Its observations with bias.
+    ideal_exposure[i] = rpois(1, lambda=exposure_baseline) # Observation baseline.
+    exposure_offset[i] = rnorm(1,0,exposure_sigma) # Observation bias.
+    exposure_prob[i] = inv_logit(sum(exposure_effects*exposure_predictors[i,]) + exposure_offset[i]) # Its observation probabilities based on individual characteristics.
+    true_exposure[i] = rbinom(1, size=ideal_exposure[i], prob=exposure_prob[i]) # Its observations with bias.
   }
 
-  # !! For each dyad, determine its sampling with and without bias according to previous steps.
+  # For each dyad, determine its sampling with and without bias according to previous steps.
     for ( i in 1:(N_id-1) ){
       for ( j in (i+1):N_id){
         ideal_samps[i,j] = sum(ideal_exposure[i] + ideal_exposure[j])
@@ -179,8 +184,8 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
           p.ego =  int_intercept[1] + int_slope[1]*individual_predictors[a]
           p.alter = int_intercept[2] + int_slope[2]*individual_predictors[b]
         }else{
-          p.ego =  int_p[1]
-          p.alter = int_p[2]
+          p.ego =  int_intercept[1]
+          p.alter = int_intercept[2]
         }
 
         #Probability of censor data on ego
