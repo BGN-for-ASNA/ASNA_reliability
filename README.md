@@ -37,13 +37,13 @@ We employ different ASNA methods aimed at correcting for sampling biases, see ["
 ### 2.4. Bayesian approach developed by our team
 Using rethinking approaches, we use [model dyadic connections](https://www.youtube.com/watch?v=XDoAglqd7ss&list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN&index=15&pp=iAQB&ab_channel=RichardMcElreath)  combine with [measurement error approach](https://www.youtube.com/watch?v=PIuqxOBJqLU&list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN&index=17&ab_channel=RichardMcElreath). The model can be summarized as follows, considering that predictors are centered:
 <p align="center">
-$X_{ij} \sim Binomial(x_{ij}, N{ij})$
+$X_{ij} \sim Binomial(x_{ij}, N_{ij})$
 <p align="center">
 $x_{ij} = logistic(\alpha + \beta_{i1}P_{i1} + \beta_{j1}P_{j1} +... + \beta_{in}P_{in} + \beta_{jn}P_{jn})$
 <p align="center">
-$N{ij} = S_{i} + S_{j} +  ...$
+$N_{ij} = S_{i} + S_{j} +  ...$
 
-Where $X_{ij}$ represents "true network", $x_{ij}$ represents the the observed network,  $N{ij}$ represents the exposure for individuals $i$ and $j$ and $P_{1}$ to $P_{n}$ are the predictors of research interest for individuals $i$ and $j$. This is the 'measurement error approach' where we model the "true network" as a function of the observed network and a variance based on the error measurement.
+Where $X_{ij}$ represents "true network", $x_{ij}$ represents the the observed network,  $N_{ij}$ represents the exposure for individuals $i$ and $j$ and $P_{1}$ to $P_{n}$ are the predictors of research interest for individuals $i$ and $j$. This is the 'measurement error approach' where we model the "true network" as a function of the observed network and a variance based on the error measurement.
 
 We can use 'dyadic connections model' to estimate ($\sigma_{ij}$) as the outcome of the sampling effort of individual $i$ ($S_{j}$) and individual $j$ ($S_{j}$). Additionally, we can include any additional phenothypic traits ($...$) that might influence interaction observations (e.g., sex, age, hierarchical rank of $i$ and $j$) while examining their effects on $x_{ij}$.
 
