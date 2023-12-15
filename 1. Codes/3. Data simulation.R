@@ -140,7 +140,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
 
   ##################################
   #######  Model observation bias###
-  ###############################
+  ##################################
   ideal_samps = matrix(NA, nrow=N_id, ncol=N_id) #Sample without bias.
   true_samps = matrix(NA, nrow=N_id, ncol=N_id) #Sample with bias.
   exposure_prob = rep(NA, N_id) #The probability of sample based on individual characteristics.
@@ -177,7 +177,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
       if(true_exposure[a] == 0){next}
       for(b in 1:N_id){
         if(a == b){next}
-        cat("Individual ", a, '/', N_id, '\r')
+        #cat("Individual ", a, '/', N_id, '\r')
         if(!is.null(individual_predictors) &
            !is.infinite(int_intercept[1]) &
            !is.infinite(int_intercept[2])){
@@ -194,15 +194,18 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
         #Probability of censor data on alter
         prob.alter.unobserved = rbinom(true_exposure[a], 1, prob = inv_logit(p.alter))
 
-        r = rbinom(true_exposure[a] , size = 1, prob = p[a,b]*prob.focal.unobserved*prob.alter.unobserved)
-        interactions = rbind(interactions, data.frame('ego' = a, 'focal' = 1:true_exposure[a], 'alter' = b, 'interaction' = r,
+        #Probability of censor data
+        observed = rbinom(true_exposure[a] , size = 1, prob = p[a,b]*prob.focal.unobserved*prob.alter.unobserved) 
+
+          
+        interactions = rbind(interactions, data.frame('follow' = a, 'focal' = 1:true_exposure[a], 'sender' = a,  'receiver' = b, 'interaction' = observed,
                                                       'exposure' = true_exposure[a], 'sr_p' = p[a,b], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
       }
     }
 
-
-    net = df.to.mat(interactions, actor = 'ego', receiver = 'alter', weighted ='interaction')
+    net = df.to.mat(interactions, actor = 'sender', receiver = 'receiver', weighted ='interaction')
     net = net[colnames(net)[order(as.integer(colnames(net)))],colnames(net)[order(as.integer(colnames(net)))]]
+
     return(list(interactions = interactions,
                 network= net,
                 tie_strength=p,
@@ -228,11 +231,10 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
     }
   }
 
-  for ( i in 1:N_id ){
-    y_true[i,i] = 0
-    p[i,i] = 0
-    dr[i,i] = 0
-  }
+  diag(y_true) = 0
+  diag(p) = 0
+  diag(dr) = 0
+
 
   return(list(network=y_true,
               tie_strength=p,

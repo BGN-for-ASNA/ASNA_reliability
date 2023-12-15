@@ -674,7 +674,7 @@ test4$plots
 # 4. Testing when the coefficient of individual characteristics (individual_effects parameter) results in a significant effect on simulated data -------
 N_id = 30
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
-TEST = seq(from = 0, to = 0.04, by = 0.001)
+TEST = seq(from = 0, to = 0.6, by = 0.01)
 length(TEST)
 r = NULL
 a = 1
@@ -684,10 +684,10 @@ for (a in a:length(TEST)) {
                            N_id = N_id,
                            individual_predictors=Hairy, # individuals characteristics
                            individual_effects=matrix(c(TEST[a],TEST[a]),ncol=1, nrow=2), # individuals characteristics on interaction probability
-                           sr_mu =  c(0, 0), sr_sigma =  c(0.01,0.01), # no sender-receiver effect
-                           dr_mu = c(0,0), dr_sigma = 0.01, # no dyadic effect
+                           sr_mu =  c(0, 0), sr_sigma =  c(1,1), # no sender-receiver effect
+                           dr_mu = c(0,0), dr_sigma = 1, # no dyadic effect
                            exposure_predictors = NULL,
-                           exposure_effects = c(0, 0), exposure_sigma = 0.01, # exposure effect
+                           exposure_effects = c(0, 0), exposure_sigma = 1, # exposure effect
                            int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf),#no censoring effect
                            simulate.interactions = TRUE, print = FALSE) 
   }
@@ -703,7 +703,7 @@ for(a in 1: length(r)){
   }
 }
 
-error.rates(d, threshold = 0.015)
+error.rates(d, threshold = 0.20)
 
 #'
 #' From a visual perspective and error rates we can see that bellow a value of 0.20 for individual_effects parameters, we obtain no or or null effects.
@@ -716,11 +716,11 @@ Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 test = test.function(att = Hairy,
                       N_id = N_id,
                       individual_predictors=Hairy, # individuals characteristics
-                      individual_effects=matrix(c(0.15,0.15),ncol=1, nrow=2), # individuals characteristics on interaction probability
-                      sr_mu =  c(0, 0), sr_sigma =  c(0.1,0.1), # no sender-receiver effect
-                      dr_mu = c(0,0), dr_sigma = 0.01, # no dyadic effect
+                      individual_effects=matrix(c(0.2,0.2),ncol=1, nrow=2), # individuals characteristics on interaction probability
+                      sr_mu =  c(0, 0), sr_sigma =  c(1,1), # no sender-receiver effect
+                      dr_mu = c(0,0), dr_sigma = 1, # no dyadic effect
                       exposure_predictors = NULL,
-                      exposure_effects = c(0, 0), exposure_sigma = 0.01, # exposure effect
+                      exposure_effects = c(0, 0), exposure_sigma = 1, # exposure effect
                       int_intercept = c(Inf,Inf), int_slope = c(-Inf,-Inf),
                       simulate.interactions = T) #no censoring effect
 test$plots

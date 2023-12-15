@@ -8,6 +8,7 @@ simulations <- function(
     N_id =  seq(30, 50, by = 20),
     hairy_tie_effect = seq(-2, 2, by = 0.5),
     hairy_detect_effect = seq(-4, 4, by = 1),
+    
     # Block parameters
     blocks = TRUE,
     B = NULL,
@@ -15,19 +16,25 @@ simulations <- function(
     G = 3,
     diagB = -6.5,
     groups=NULL,
+    
     # Sender-receiver parameters
     sr_sigma = c(1.4, 0.8),
     sr_rho = 0.5,
+    
     # Dyadic parameters
     dr_sigma = 1.2,
     dr_rho = 0.8,
+    
     # Observation bias parameters
+    exposure.bias = TRUE,
     exposure_sigma = 2.9,
     exposure_baseline = 40,
+    
     # Interactions bias parameters
     simulate.interactions = TRUE,
     int_intercept =c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
     int_slope = c(-Inf,-Inf), # No effect of individuals attributes on missing interaction
+    
     # Simulation parameters
     BISON = TRUE,
     STRAND = TRUE, # use STRAN model
@@ -55,7 +62,7 @@ simulations <- function(
   cl <- ncores
   cl <-makeCluster(cl, type="PSOCK")
   registerDoParallel(cores=cl)
-  on.exit(parallel::stopCluster(cl))
+  on.exit(registerDoSEQ())
   #############################
   #######  Testing methods ####
   #############################
@@ -136,25 +143,59 @@ simulations <- function(
 
     # Make data--------------------------------
     N_id = grid_subsample$N_id[i]
-
+    Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
+    indiv =  data.frame(Hairy = Hairy)
     ## Variation in sr ad dr --------------
-    range_sr_sigma = seq(from = 0.5, to = 3, by = 0.2)
-    range_sr_rho = seq(from = -0.9, to = 0.9, by = 0.1)
-
-    range_dr_sigma = seq(from = 0.5, to = 3, by = 0.2)
-    range_dr_rho = seq(from = -0.9, to = 0.9, by = 0.1)
-
-    range_exposure_sigma  = seq(from = 0.5, to = 3, by = 0.2)
-    range_exposure_baseline = seq(from = 10, to = 100, by = 20)
-
-    picked_sr_sigma = sample(range_sr_sigma, 2)
-    picked_sr_rho = sample(range_sr_rho, 1)
-
-    picked_dr_sigma = sample(range_dr_sigma, 1)
-    picked_dr_rho = sample(range_dr_rho, 1)
-
-    picked_exposure_sigma  = sample(range_exposure_sigma, 1)
-    picked_exposure_baseline  = sample(range_exposure_baseline, 1)
+    if(is.null(sr_sigma)){
+      range_sr_sigma = seq(from = 0.5, to = 3, by = 0.2)
+      picked_sr_sigma = sample(range_sr_sigma, 2)
+    }else{
+      picked_sr_sigma = sr_sigma
+    }
+    
+    if(is.null(sr_rho)){
+      range_sr_rho = seq(from = -0.9, to = 0.9, by = 0.1)
+      picked_sr_rho = sample(range_sr_rho, 1)
+    }else{
+      picked_sr_rho = sr_rho
+    }
+    
+    if(is.null(dr_sigma)){
+      range_dr_sigma = seq(from = 0.5, to = 3, by = 0.2)
+      picked_dr_sigma = sample(range_dr_sigma, 1)
+    }else{
+      picked_dr_sigma = dr_sigma
+    }
+    
+    if(is.null(dr_rho)){
+      range_dr_rho = seq(from = -0.9, to = 0.9, by = 0.1)
+      picked_dr_rho = sample(range_dr_rho, 1)
+    }else{
+      picked_dr_rho = dr_rho
+    }
+    
+    if(is.null(exposure_sigma)){
+      range_exposure_sigma  = seq(from = 0.5, to = 3, by = 0.2)
+      picked_exposure_sigma = sample(range_dr_rho, 1)
+    }else{
+      picked_exposure_sigma = exposure_sigma
+    }
+    
+    if(is.null(exposure_baseline)){
+      range_exposure_baseline  = seq(from = 0.5, to = 3, by = 0.2)
+      picked_exposure_baseline  = sample(range_exposure_baseline, 1)
+    }else{
+      picked_exposure_baseline = exposure_baseline
+    }
+    
+    if(exposure.bias){
+      sample.percent = sample(seq(from = 0.05, to = 0.5, by = 0.01),1)
+      grid_subsample$detect_effect[i] =  grid_subsample$tie_effect[i]*sample.percent
+      exposure_predictors = cbind(rep(1,N_id),Hairy)
+    }else{
+      grid_subsample$detect_effect[i] = 0
+      exposure_predictors = NULL
+    }
 
     ## Block data -----------------
     if(blockModel){
@@ -170,11 +211,9 @@ simulations <- function(
       block = data.frame(Clique=factor(clique))
 
     }else{
-      NG = 1
+      NG = V = 1
       B = mean.within.GR = mean.between.GR = block = NULL
     }
-
-    Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 
     # Simulated data -----------------
     A = simulate_sbm_plus_srm_network_with_measurement_bias(
@@ -195,54 +234,8 @@ simulations <- function(
       exposure_baseline = picked_exposure_baseline,
       simulate.interactions = simulate.interactions,
       int_intercept = int_intercept, # Prob of miss interactions
-      int_slope =int_slope
+      int_slope = int_slope
     )
-
-    indiv =  data.frame(Hairy = Hairy)
-    ## Zero-inflated Poisson model ----------------------
-    #y = A$interaction$interaction
-    #exposure = A$interaction$exposure
-    ## Due to some individuals not being observed we will
-    #x = unique(A$interactions$ego)
-    #id = as.numeric(as.character(
-    #    factor(A$interactions$ego, levels = unique(A$interactions$ego), labels = seq_along(unique(A$interactions$ego)))
-    #  ))
-    #unique(id)
-
-    #library(rethinking)
-    #m <- ulam (
-    #  alist(
-    #    y ~ dzipois( p , lambda ),
-    #    logit(p) <- ap + a_id[id], #Probability of true zero
-    #    log(lambda) <- al + a_id[id] + log(exposure+1) , #  logarithm of the exposure to address observation bias
-
-    #    ap ~ dnorm(0,1),
-    #    al ~ dnorm(0,10),
-
-    #    a_id[id] ~ dnorm(0, sigma_id ),
-    #    sigma_id ~ dcauchy(0,1)
-    #  ) , data=list(y=y, exposure = exposure, id = id))
-
-    #r = precis(m, depth=2)
-    #logistic(r$mean[1]) # probability false zero
-    #exp(r$mean[2]) # rate interaction
-
-    #link.m <- link( m , data=list(y=y, exposure = exposure, id = id) )
-    #pred.p <- apply( link.m , 2 , mean )
-    #pred.p.PI <- apply( link.m , 2 , PI )
-
-    #vcov(m) # variance-covariance
-    #post <- extract.samples( m , n = N_id )
-    #head(post)
-    ## Effect size without bias --------------
-    tie_strength = A$network/(1+A$ideal_exposure)
-    colnames(tie_strength) = rownames(tie_strength) = 1:ncol(tie_strength)
-    df = ANTs:::df.create(tie_strength)
-    df$strength = met.strength(tie_strength)
-    df$hair = indiv$Hairy
-    test1.1 = lm(strength ~ hair, data = df, weights = A$ideal_exposure)
-    result = get.result(test1.1, strand = FALSE, name = 'ideal_exposure')
-
     # BISON------------------------
     if(simulate.interactions & BISON){
       library(bisonR)
@@ -268,7 +261,12 @@ simulations <- function(
     # STRAND--------------------------------
     if(STRAND){
       nets = list(Grooming = A$network)
-      exposure_nets = list(Exposure = A$true_samps)
+      
+      if(exposure.bias){
+        exposure_nets = list(Exposure = A$true_samps)
+      }else{
+        exposure_nets = NULL
+      }
 
 
       model_dat = make_strand_data(outcome = nets,
@@ -312,6 +310,8 @@ simulations <- function(
     df$hair = indiv$Hairy
     test1.1 = lm(strength ~ hair, data = df)
     result = get.result(test1.1, strand = FALSE, name = '2.Rates')
+    result
+    ggplot(df, aes(x = hair, y = strength))+geom_point()
     RESULTS = rbind(RESULTS, result)
 
     # Node label permutations
@@ -421,7 +421,18 @@ plots <- function(result){
 }
 
 # Simulation ----------
-result = simulations(Reps = 4, ncores = 4, simulate.interactions = T, STRAND = T, BISON = FALSE) # Simulate interactions with the probability of observing an interaction of 1.
+result = simulations(Reps = 1, ncores = 1, 
+                     sr_rho = 0, sr_sigma =  c(0,0), # no sender-receiver effect
+                     dr_rho = 0, dr_sigma = 0, # no dyadic effect
+                     N_id =  seq(30, 90, by = 10), 
+                     hairy_tie_effect = seq(-0.1, 0.1, by = 0.01),
+                     hairy_detect_effect = seq(0, 0, by = 0.5),
+                     BISON = FALSE,
+                     STRAND = T, 
+                     simulate.interactions = F, 
+                     int_intercept = c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
+                     int_slope = c(-Inf,-Inf),# No effect of individuals attributes
+                     blockModel = TRUE) # No block model
 p = plots(result)
 library(ggpubr)
 ggarrange(p[[1]], p[[2]], ncol = 2, nrow = 1, common.legend = TRUE)

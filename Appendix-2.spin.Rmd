@@ -1,10 +1,16 @@
+
+```{r}
 # Functions -------
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-#' This function uses the "3. Data simulation.R" function to generate simulated data. 
-#' Once the data is generated, the function evaluates the relationship between individual characteristics and sociality, exposure, and censoring. 
-#' We tested under different variations of sociality, exposure, and censoring to ensure the simulation generates accurate data, for example, when the individual_effects parameter is set to 0.
-#' Additionally, we conducted tests with different values of the individual_effects parameter to identify when it generates non-significant relationships between individual characteristics and sociality. 
-#' This helps in determining a threshold for false positive and false negative rates when testing different methods.
+```
+
+This function uses the "3. Data simulation.R" function to generate simulated data. 
+Once the data is generated, the function evaluates the relationship between individual characteristics and sociality, exposure, and censoring. 
+We tested under different variations of sociality, exposure, and censoring to ensure the simulation generates accurate data, for example, when the individual_effects parameter is set to 0.
+Additionally, we conducted tests with different values of the individual_effects parameter to identify when it generates non-significant relationships between individual characteristics and sociality. 
+This helps in determining a threshold for false positive and false negative rates when testing different methods.
+
+```{r}
 library(sjPlot)
 library(ggplot2)
 library(lmerTest)
@@ -295,9 +301,12 @@ test.strand <- function(att = NULL,
   return(list('arguments'=  as.list( sys.call()), 'data' = data, 'model_dat' = model_dat, 'fit' = fit,
               'summary' = r, 'diag' = tmp, 'matrix' = m))
 }
+```
 
-#' @param var A list of variation of a single argument
-#' @param list A list of arguments for test.strand
+@param var A list of variation of a single argument
+@param list A list of arguments for test.strand
+
+```{r}
 test.scenarios <- function(name = "",
                            var = list(dr_rho = seq(0.01, 0.8, length.out=10)),
                            list = list(att = NULL,
@@ -611,9 +620,12 @@ test1 = test.function(att = Hairy,
                       simulate.interactions = T,
                       legend = "Figure 1. No Relationship between individuals characteristics (a) sociality, (b) sociality corrected by exposure, (c) exposure, or (d) censoring.") 
 test1$plots
+```
 
-#' The results of the regressions show, as expected, no significant effect in the relationship between individual characteristics, sociality, exposure, or censoring.
-#'
+The results of the regressions show, as expected, no significant effect in the relationship between individual characteristics, sociality, exposure, or censoring.
+
+
+```{r}
 ## 1.2. There is a relationship between individual characteristics and sociality, but there is no relationship between individual characteristics, observation bias, and censoring
 test2 = test.function(att = Hairy,
                       N_id = N_id,
@@ -628,9 +640,12 @@ test2 = test.function(att = Hairy,
                       legend = "Figure 2. Relationship between individuals characteristics and (a) sociality, (b) sociality corrected by exposure, 
                       but no relationship betweenindividuals characteristics (c) exposure, (d) censoring, or (d) censoring.") 
 test2$plots
+```
 
-#' The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and sociality, but no significant effect between  individuals characteristics exposure, and censoring.
-#'
+The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and sociality, but no significant effect between  individuals characteristics exposure, and censoring.
+
+
+```{r}
 ## 1.3. There is no relationship between individual characteristics,  sociality and censoring, but there is a relationship between individual characteristics and exposure
 test3 = test.function(att = Hairy,
                       N_id = N_id,
@@ -645,11 +660,12 @@ test3 = test.function(att = Hairy,
                       legend = "Figure 3. No relationship between individuals characteristics and (a) sociality, (b) sociality corrected by exposure, (d) censoring, 
                       but precense of relationship betweenindividuals characteristics and (c) exposure.") 
 test3$plots
+```
 
-#' The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and exposure 
-#' which lead to a significant effect between individuals characteristics and (a) sociality and near significant effect between individuals characteristics and (b) correct ed sociality.
+The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and exposure 
+which lead to a significant effect between individuals characteristics and (a) sociality and near significant effect between individuals characteristics and (b) correct ed sociality.
 
-
+```{r}
 ## 1.4. There is no relationship between individual characteristics, sociality and exposure but there is a relationship between individual characteristics and censoring
 test4 = test.function(att = Hairy,
                       N_id = N_id,
@@ -664,17 +680,18 @@ test4 = test.function(att = Hairy,
                       legend = "Figure 5. No relationship between individuals characteristics and (a) sociality, (b) sociality corrected by exposure,
                       (c) exposure, but precense of relationship between individuals characteristics and (d) censoring.") 
 test4$plots
-#' 
-#' The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and censoring 
-#' which lead to a significant effect between individuals characteristics, (a) sociality and (b) correct ed sociality.
-#' 
+```
 
 
+The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and censoring 
+which lead to a significant effect between individuals characteristics, (a) sociality and (b) correct ed sociality.
 
+
+```{r}
 # 4. Testing when the coefficient of individual characteristics (individual_effects parameter) results in a significant effect on simulated data -------
 N_id = 30
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
-TEST = seq(from = 0, to = 0.04, by = 0.001)
+TEST = seq(from = 0, to = 0.6, by = 0.01)
 length(TEST)
 r = NULL
 a = 1
@@ -684,10 +701,10 @@ for (a in a:length(TEST)) {
                            N_id = N_id,
                            individual_predictors=Hairy, # individuals characteristics
                            individual_effects=matrix(c(TEST[a],TEST[a]),ncol=1, nrow=2), # individuals characteristics on interaction probability
-                           sr_mu =  c(0, 0), sr_sigma =  c(0.01,0.01), # no sender-receiver effect
-                           dr_mu = c(0,0), dr_sigma = 0.01, # no dyadic effect
+                           sr_mu =  c(0, 0), sr_sigma =  c(1,1), # no sender-receiver effect
+                           dr_mu = c(0,0), dr_sigma = 1, # no dyadic effect
                            exposure_predictors = NULL,
-                           exposure_effects = c(0, 0), exposure_sigma = 0.01, # exposure effect
+                           exposure_effects = c(0, 0), exposure_sigma = 1, # exposure effect
                            int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf),#no censoring effect
                            simulate.interactions = TRUE, print = FALSE) 
   }
@@ -703,24 +720,26 @@ for(a in 1: length(r)){
   }
 }
 
-error.rates(d, threshold = 0.015)
+error.rates(d, threshold = 0.20)
+```
 
-#'
-#' From a visual perspective and error rates we can see that bellow a value of 0.20 for individual_effects parameters, we obtain no or or null effects.
-#' We will use values of individual_effects ranging from 0 to 0.19 for simulations without sociality effect and values ranging 0.2 to 0.4 for simulations with sociality effect.
-#'
 
+From a visual perspective and error rates we can see that bellow a value of 0.20 for individual_effects parameters, we obtain no or or null effects.
+We will use values of individual_effects ranging from 0 to 0.19 for simulations without sociality effect and values ranging 0.2 to 0.4 for simulations with sociality effect.
+
+
+```{r}
 ## 2.1. An example of individual_effects being equal to 0.2 in simulated data
 N_id = 50
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 test = test.function(att = Hairy,
                       N_id = N_id,
                       individual_predictors=Hairy, # individuals characteristics
-                      individual_effects=matrix(c(0.15,0.15),ncol=1, nrow=2), # individuals characteristics on interaction probability
-                      sr_mu =  c(0, 0), sr_sigma =  c(0.1,0.1), # no sender-receiver effect
-                      dr_mu = c(0,0), dr_sigma = 0.01, # no dyadic effect
+                      individual_effects=matrix(c(0.2,0.2),ncol=1, nrow=2), # individuals characteristics on interaction probability
+                      sr_mu =  c(0, 0), sr_sigma =  c(1,1), # no sender-receiver effect
+                      dr_mu = c(0,0), dr_sigma = 1, # no dyadic effect
                       exposure_predictors = NULL,
-                      exposure_effects = c(0, 0), exposure_sigma = 0.01, # exposure effect
+                      exposure_effects = c(0, 0), exposure_sigma = 1, # exposure effect
                       int_intercept = c(Inf,Inf), int_slope = c(-Inf,-Inf),
                       simulate.interactions = T) #no censoring effect
 test$plots
@@ -774,12 +793,14 @@ for(a in 1: length(r)){
 }
 
 error.rates(d, threshold = 0.30)
+```
 
-#'
-#' From a visual perspective and error rates we can see that above a value of 0.30 for individual_effects parameters, we start to observe increase of false positive.
-#' We will use values of exposure_effects ranging from 0 to 0.20 for simulations without exposure bias and values ranging 0.4 to 0.6 for simulations with exposure bias.
-#'
 
+From a visual perspective and error rates we can see that above a value of 0.30 for individual_effects parameters, we start to observe increase of false positive.
+We will use values of exposure_effects ranging from 0 to 0.20 for simulations without exposure bias and values ranging 0.4 to 0.6 for simulations with exposure bias.
+
+
+```{r}
 ## 2.1. An example of exposure_effects being equal to 0.2 in simulated data
 N_id = 50
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
@@ -841,12 +862,14 @@ for(a in 1: length(r)){
 }
 
 error.rates(d, threshold = 0.10)
+```
 
-#'
-#' From a visual perspective and error rates we can see that above a value of 0.30 for individual_effects parameters, we start to observe increase of false positive.
-#' We will use values of exposure_effects ranging from 0 to 0.20 for simulations without exposure bias and values ranging 0.4 to 0.6 for simulations with exposure bias.
-#'
 
+From a visual perspective and error rates we can see that above a value of 0.30 for individual_effects parameters, we start to observe increase of false positive.
+We will use values of exposure_effects ranging from 0 to 0.20 for simulations without exposure bias and values ranging 0.4 to 0.6 for simulations with exposure bias.
+
+
+```{r}
 ## 2.1. An example of censoring intercept and slope are equal to 0.1 in simulated data
 N_id = 50
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
@@ -877,3 +900,13 @@ test$plots
 
 
 save.image(file='2. Results/Appendices/Appendix.RData')
+```
+
+
+
+---
+title: Appendix-2.R
+author: sebastian_sosa
+date: '2023-12-14'
+
+---
