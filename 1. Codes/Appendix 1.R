@@ -1,16 +1,20 @@
+---
+  title: "Appendix 1"
+date: "2023-12-18"
+output: pdf_document
+---
+  
+# Function from XXX
 library(ANTs)
 library(ggplot2)
 library(ggpubr)
-### function to create a network (matrix n x n) from data collection (obs) and focal id using simple ratio index (sri)
-############################################################################################################
-######### Modification  1 (conceptual): Global index approach
 make_network <- function(obs, focal.id) {
   N <- ncol(obs)
   network <- matrix(0,nrow=N, ncol=N)
   for (i in 1:(N-1)) {
     for (j in (i+1):N) {
       xab <- sum(obs[which(focal.id %in% c(i,j)),c(i,j)]>0)
-      ############################################################################################################
+      ####################################################################################################
       ######### Modification  1.1 : Computing SRI where xab is the association between a and b,
       #########                     ya is the number of observations of a without b, and
       #########                     yb is the number of observations of b without a
@@ -21,7 +25,7 @@ make_network <- function(obs, focal.id) {
       if(yb < 0){yb = 0}
       if(ya < 0){ya = 0}
       sri <- ((xab) /(xab + ya + yb ))
-
+      
       if(!is.nan(sri)){
         network[i,j] <- sri
         network[j,i] <- sri
@@ -37,12 +41,12 @@ make_network <- function(obs, focal.id) {
 make_network.corrected <- function(obs, focal.id) {
   N <- ncol(obs)
   network <- matrix(0,nrow=N, ncol=N)#SRI
-
+  
   # Calcule SRI
   for (i in 1:(N-1)) {
     for (j in (i+1):N) {
       xab <- sum(obs[which(focal.id %in% c(i,j)),c(i,j)]>0)
-      ############################################################################################################
+      ###################################################################################################
       ######### Modification  1.2 : Computing SRI where xab is the association between a and b,
       #########                     ya is the number of observations of a without b, and
       #########                     yb is the number of observations of b without a
@@ -57,14 +61,14 @@ make_network.corrected <- function(obs, focal.id) {
       if(!is.nan(sri)){
         network[i,j] <- sri
         network[j,i] <- sri
-
+        
       }else{
         network[i,j] <- 0
         network[j,i] <- 0
       }
     }
   }
-
+  
   # Calcule Bias d'ibservations
   obs.per.ind.Bias =   rep(0, nrow(network))
   for (x in 1:ncol(network)) {
@@ -74,39 +78,34 @@ make_network.corrected <- function(obs, focal.id) {
   dif.mean = mean.obs - obs.per.ind.Bias
   dif.mean.obs = abs(dif.mean)
   #dif.mean = abs(dif.mean.obs)
-
+  
   # Calcule Nombre d'interactions
   int = colSums(obs)
-  #mean.obs = mean(int, na.rm = T)
-  #dif.mean = mean.obs - int
-  #dif.mean = abs(dif.mean)
-
+  
+  
   # définition de dif.mean
   #dif.mean = dif.mean/dif.mean.obs
   dif.mean = dif.mean.obs # similar false negatives rates
-  #dif.mean = int/obs.per.ind.Bias # 100% false negatives
-  #dif.mean = int
-  #dif.mean = obs.per.ind.Bias
-  #dif.mean
-
+  
+  
   # CReation matrice en fonction de la définition de dif.mean
   fa = matrix(0, ncol = nrow(network), nrow = nrow(network))
   for (a in 1:nrow(network)) {
     fa[a,] = dif.mean[a]
   }
-
+  
   fb = t(fa)
-
+  
   sampling.effort = (fa + fb)
   diag(sampling.effort) = 0
-
+  
   # Formule de correction
   GI = (network/(sd(int)/sampling.effort))
   return(GI)
 }
 
 error.rates <- function(R, p.side = "two.side"){
-
+  
   if(p.side == "two.side"){
     d1 = data.frame(
       "Biases" = rep(TRUE, 2),
@@ -120,10 +119,10 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network",]$p_value_two_side >0.05)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric",]$p_value_two_side>0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric",]),
                    sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network",]$p_value_two_side >0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network",]))
-
+      
     )
-
-
+    
+    
     d2 =  data.frame(
       "Biases" = rep(TRUE, 2),
       "Error Type" = rep("False negatives rates", 2),
@@ -136,9 +135,9 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network.corrected",]$p_value_two_side >0.05)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network.corrected",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric.corrected",]$p_value_two_side>0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric.corrected",]),
                    sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network.corrected",]$p_value_two_side >0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network.corrected",]))
-
+      
     )
-
+    
     d3 = data.frame(
       "Error Type" = rep("False positives rates", 2),
       "Biases" = rep(TRUE, 2),
@@ -151,9 +150,9 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network",]$p_value_two_side <0.05)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric",]$p_value_two_side<0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric",]),
                    sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network",]$p_value_two_side <0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network",]))
-
+      
     )
-
+    
     d4 = data.frame(
       "Error Type" = rep("False positives rates", 2),
       "Biases" = rep(TRUE, 2),
@@ -166,7 +165,7 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network.corrected",]$p_value_two_side <0.05)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network.corrected",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric.corrected3",]$p_value_two_side<0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric.corrected",]),
                    sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network.corrected",]$p_value_two_side <0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network.corrected",]))
-
+      
     )
   }
   if(p.side == "rigth.side"){
@@ -182,10 +181,10 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network",]$p_value_rigth_side >0.05)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric",]$p_value_rigth_side>0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric",]),
                    sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network",]$p_value_rigth_side >0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network",]))
-
+      
     )
-
-
+    
+    
     d2 =  data.frame(
       "Biases" = rep(TRUE, 2),
       "Error Type" = rep("False negatives rates", 2),
@@ -198,9 +197,9 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network.corrected",]$p_value_rigth_side >0.05)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network.corrected",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric.corrected",]$p_value_rigth_side>0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric.corrected",]),
                    sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network.corrected",]$p_value_rigth_side >0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network.corrected",]))
-
+      
     )
-
+    
     d3 = data.frame(
       "Error Type" = rep("False positives rates", 2),
       "Biases" = rep(TRUE, 2),
@@ -213,9 +212,9 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network",]$p_value_rigth_side <0.05)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric",]$p_value_rigth_side<0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric",]),
                    sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network",]$p_value_rigth_side <0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network",]))
-
+      
     )
-
+    
     d4 = data.frame(
       "Error Type" = rep("False positives rates", 2),
       "Biases" = rep(TRUE, 2),
@@ -228,7 +227,7 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network.corrected",]$p_value_rigth_side <0.05)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network.corrected",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric.corrected3",]$p_value_rigth_side<0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric.corrected",]),
                    sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network.corrected",]$p_value_rigth_side <0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network.corrected",]))
-
+      
     )
   }
   if(p.side == "left.side"){
@@ -244,10 +243,10 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network",]$p_value_left_side >0.05)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric",]$p_value_left_side>0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric",]),
                    sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network",]$p_value_left_side >0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network",]))
-
+      
     )
-
-
+    
+    
     d2 =  data.frame(
       "Biases" = rep(TRUE, 2),
       "Error Type" = rep("False negatives rates", 2),
@@ -260,9 +259,9 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network.corrected",]$p_value_left_side >0.05)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Eigen.network.corrected",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric.corrected",]$p_value_left_side>0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.parametric.corrected",]),
                    sum(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network.corrected",]$p_value_left_side >0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == T & R$test %in% "Alters.network.corrected",]))
-
+      
     )
-
+    
     d3 = data.frame(
       "Error Type" = rep("False positives rates", 2),
       "Biases" = rep(TRUE, 2),
@@ -275,9 +274,9 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network",]$p_value_left_side <0.05)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric",]$p_value_left_side<0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric",]),
                    sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network",]$p_value_left_side <0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network",]))
-
+      
     )
-
+    
     d4 = data.frame(
       "Error Type" = rep("False positives rates", 2),
       "Biases" = rep(TRUE, 2),
@@ -290,16 +289,15 @@ error.rates <- function(R, p.side = "two.side"){
                         sum(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network.corrected",]$p_value_left_side <0.05)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Eigen.network.corrected",])),
       "Alters" = c(sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric.corrected3",]$p_value_left_side<0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.parametric.corrected",]),
                    sum(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network.corrected",]$p_value_left_side <0.05, na.rm = T)*100/nrow(R[R$FemPhenotypeBias == F & R$test %in% "Alters.network.corrected",]))
-
+      
     )
   }
   RESULTS = rbind(d1,d2, d3, d4)
   return(RESULTS)
 }
-############################################################################################################
 
+############################################################################################################
 ### function to generate pre-network permutations (swaps of individuals between focals)
-# No modifications
 rand_network <- function(obs.p, focal.id, n.perm,n_focals) {
   N <- ncol(obs.p)
   networks_rand <- array(0, c(n.perm,N,N))
@@ -309,16 +307,16 @@ rand_network <- function(obs.p, focal.id, n.perm,n_focals) {
       o <- 1:n_focals
       a <- sample(o,1)
       b <- sample(o[-a],1)
-
+      
       # check if these are different individuals and they have associates
       if ((focal.id[a] != focal.id[b]) & (sum(obs.p[a,])>0) & (sum(obs.p[b,])>0)) {
         # next select two associates to swap
         d <- sample(which(obs.p[a,] > 0),1)
         e <- sample(which(obs.p[b,] > 0),1)
-
+        
         # check they do not occur in the other focal
         if ((obs.p[a,e] == 0) & obs.p[b,d] == 0) {
-
+          
           # now check we have 4 distinct individuals, otherwise repeat this process
           if (!(d %in% c(focal.id[a], focal.id[b], e)) & !(e %in% c(focal.id[a], focal.id[b], d))) {
             break;
@@ -326,7 +324,7 @@ rand_network <- function(obs.p, focal.id, n.perm,n_focals) {
         }
       }
     }
-
+    
     # swap individuals
     obs.p[a,d] <- 0
     obs.p[b,d] <- 1
@@ -347,16 +345,16 @@ rand_network2 <- function(obs.p, focal.id, n.perm,n_focals) {
       o <- 1:n_focals
       a <- sample(o,1)
       b <- sample(o[-a],1)
-
+      
       # check if these are different individuals and they have associates
       if ((focal.id[a] != focal.id[b]) & (sum(obs.p[a,])>0) & (sum(obs.p[b,])>0)) {
         # next select two associates to swap
         d <- sample(which(obs.p[a,] > 0),1)
         e <- sample(which(obs.p[b,] > 0),1)
-
+        
         # check they do not occur in the other focal
         if ((obs.p[a,e] == 0) & obs.p[b,d] == 0) {
-
+          
           # now check we have 4 distinct individuals, otherwise repeat this process
           if (!(d %in% c(focal.id[a], focal.id[b], e)) & !(e %in% c(focal.id[a], focal.id[b], d))) {
             break;
@@ -364,7 +362,7 @@ rand_network2 <- function(obs.p, focal.id, n.perm,n_focals) {
         }
       }
     }
-
+    
     # swap individuals
     obs.p[a,d] <- 0
     obs.p[b,d] <- 1
@@ -377,7 +375,7 @@ rand_network2 <- function(obs.p, focal.id, n.perm,n_focals) {
 }
 
 ### Function to allocate number of observations to groups
-# No modifications
+
 rand_vect <- function(N, M, sd = 1, pos.only = TRUE) {
   vec <- rnorm(N, M/N, sd)
   if (abs(sum(vec)) < 0.01) vec <- vec + 1
@@ -395,13 +393,13 @@ rand_vect <- function(N, M, sd = 1, pos.only = TRUE) {
   vec
 }
 
-### MAIN SIMULATION FUNCTION#########
+### MAIN SIMULATION FUNCTION #########
 #' @param  GS numeric argument indicating group size
-#' @param  ObsBia numeric argument indicating the degree of observation bias [0.5-1.0]
+#' @param  ObsBia numeric argument indicating the percent of censoring bias [0.5-1.0]
 #' @param  FemPhenotypeBias boolean argument indicating whether a phenotype bias is present among females
 #' @param  nfocals numeric argument indicating number of focal samples
 #' @param  N.perm numeric argument indicating number of permutations
-Simulation<-function(GS,ObsBias,FemSexRatio,FemPhenotypeBias,nfocals,N.Perm)
+Simulation<-function(GS,ObsBias,FemSexRatio,FemPhenotypeBias,nfocals,N.Perm, print = FALSE)
 {
   # Set parameters
   N <- GS
@@ -470,25 +468,25 @@ Simulation<-function(GS,ObsBias,FemSexRatio,FemPhenotypeBias,nfocals,N.Perm)
       group_size.tmp[g] <- group_size.tmp[g]-1
       obs[g,id] <- 1
     }
-
+    
   }
   # Select a focal individual from each group
   focal.id <- apply(obs,1,function(x) { sample(which(x==1),1)})
-
+  
   # Now remove cases where individuals occur in a group for which they are focal
   obs[cbind(1:n_focals,focal.id)] <- 0
-
+  
   ## NOW DO NETWORK ANALYSIS ON THESE DATA
   # Calculate network
   Net.Ori <- make_network(obs,focal.id)
   Net.Ori.corrected <- make_network.corrected(obs,focal.id)
   Net.Ori.corrected[is.infinite(Net.Ori.corrected)] = 0
-
+  
   # Remove some observations according to the degre of observation bias ObsBias
   # Generate probability of being observed (males=1,females=ObsBias)
   ids$OBS_PROB <- ObsBias
   ids$OBS_PROB[which(ids$SEX=="M")] <- 1
-
+  
   # Remove observations from GBI
   obs.Bias <- obs
   for (i in 1:N) {
@@ -499,34 +497,35 @@ Simulation<-function(GS,ObsBias,FemSexRatio,FemPhenotypeBias,nfocals,N.Perm)
   Net.Biais.corrected <- make_network.corrected(obs.Bias,focal.id)
   Net.Biais.corrected[is.infinite(Net.Biais.corrected)] = 0
   Net.Biais.corrected[is.nan(Net.Biais.corrected)] = 0
-
+  
   # Calculate Strength
   ids$DEGREE <- rowSums(Net.Ori)
   ids$DEGREE.Corrected <- rowSums(Net.Ori.corrected)
-
+  
   ids$DEGREE.Bias <- rowSums(Net.Biais)
   ids$DEGREE.Bias.Corrected <- rowSums(Net.Biais.corrected)
-
-
+  
+  
   # Sampling effort for each individuals--------------------
   obs.per.ind.Bias =   rep(0, nrow(ids))
   for (x in 1:nrow(ids)) {
     obs.per.ind.Bias[x] = length(which(focal.id %in% x))
   }
   ids$obs.bias = obs.per.ind.Bias
-
-  print(ggplot(ids, aes(x = DEGREE, y = DEGREE.Bias, color = SEX))+geom_point())
+  if(print){
+    print(ggplot(ids, aes(x = DEGREE, y = DEGREE.Bias, color = SEX))+geom_point())
+  }
   ############################################################################################################
   ######### Modification  2 (extension): Compute degree and eigenvector
   ids$alters <- met.degree(Net.Ori)
   ids$alters.Bias <- met.degree(Net.Biais)
   ids$alters.Bias.Corrected <- (ids$alters.Bias)/ obs.per.ind.Bias
   if(any(is.infinite(ids$alters.Bias.Corrected))){ids$alters.Bias.Corrected[which(is.infinite(ids$alters.Bias.Corrected))] = NA}
-
+  
   ids$eigen <- met.eigen(Net.Ori)
   ids$eigen.Bias <- ((met.eigen(Net.Biais)))
   ids$eigen.Bias.Corrected <- ((met.eigen(Net.Biais.corrected)))
-
+  
   ############################################################################################################
   ######### results visualization
   ############################################################################################################
@@ -534,25 +533,37 @@ Simulation<-function(GS,ObsBias,FemSexRatio,FemPhenotypeBias,nfocals,N.Perm)
   p2 = ggplot(ids, aes(x = SEX, y = DEGREE.Bias, group = SEX))+ geom_boxplot()+geom_point()
   p3 = ggplot(ids, aes(x = SEX, y = DEGREE.Bias.Corrected, group = SEX))+ geom_boxplot()+geom_point()
   p4 = ggplot(ids, aes(x = SEX, y = DEGREE.Bias.Corrected2, group = SEX))+ geom_boxplot()+geom_point()
-
+  
   p4 = ggplot(ids, aes(x = SEX, y = alters, group = SEX))+ geom_boxplot()+geom_point()
   p5 = ggplot(ids, aes(x = SEX, y = alters.Bias, group = SEX))+ geom_boxplot()+geom_point()
   p6 = ggplot(ids, aes(x = SEX, y = alters.Bias.Corrected, group = SEX))+ geom_boxplot()+geom_point()
-
+  
   p7 = ggplot(ids, aes(x = SEX, y = eigen, group = SEX))+ geom_boxplot()+geom_point()
   p8 = ggplot(ids, aes(x = SEX, y = eigen.Bias, group = SEX))+ geom_boxplot()+geom_point()
   p9 = ggplot(ids, aes(x = SEX, y = eigen.Bias.Corrected, group = SEX))+ geom_boxplot()+geom_point()
-
+  
   #p10 = ggplot(data=NULL, aes(x = ids$SEX, y= obs.per.ind.Bias, group = ids$SEX))+geom_boxplot()+geom_point()
   #print(ggarrange(p1, p2,p3, p4, p10, ncol = 3, nrow = 2))
-
-  print(ggarrange(p1, p2,p3,p4,p5, p6, p7, p8, p9, ncol = 3, nrow = 3))
-
-
-
+  if(print){
+    print(ggarrange(p1, p2,p3,p4,p5, p6, p7, p8, p9, ncol = 3, nrow = 3))
+  }
+  
   return(ids)
 }
 
-result = Simulation(GS = 50 ,ObsBias = 0.5, FemSexRatio = 0.5, FemPhenotypeBias = TRUE, nfocals = 100, N.Perm = 1)
-ggplot(result, aes(x = SEX, y = obs.bias, group = SEX))+geom_boxplot()+geom_point()
-summary(lm(obs.bias~SEX, data = result))
+
+# Testing presence of exposure bias in simulation
+N = 100
+result = NULL
+for(a in 1:N){
+  GS.sample = sample(30:100, 1)
+  ObsBias.sample = sample(0.5:0.1)# exposure bias appear when censoring bias is simulated
+  sim = Simulation(GS = GS.sample,ObsBias = ObsBias.sample, FemSexRatio = 0.5 ,FemPhenotypeBias = TRUE, nfocals = 1000, N.Perm = 1)
+  ggplot(sim, aes(x = SEX, y = obs.bias, group = SEX))+geom_boxplot()+geom_point()
+  s = summary(lm(obs.bias~SEX, data = sim))$coefficients[2,]
+  result = rbind(result, data.frame(t(s), GS.sample, ObsBias.sample, 'sim'=a))
+}
+exposure.bias = sum(result$Pr...t.. < 0.05)/nrow(result)*100
+cat(exposure.bias, '%')
+
+
