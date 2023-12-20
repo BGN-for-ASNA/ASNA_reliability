@@ -69,7 +69,7 @@ simulations <- function(
   r <- foreach(i = 1:nrow(grid_subsample)) %dopar% {
     library(ANTs)
     library(STRAND)
-    source("./1. Codes/3. Data simulation.R")
+    source("./1.Codes/3.data_simulation.R")
     RESULTS = NULL
 
     # "Bayesian P value".---------------
@@ -420,45 +420,6 @@ plots <- function(result){
   return(list(p1, p4))
 }
 
-# Simulation ----------
-result = simulations(Reps = 1, ncores = 1, 
-                     sr_rho = 0, sr_sigma =  c(0,0), # no sender-receiver effect
-                     dr_rho = 0, dr_sigma = 0, # no dyadic effect
-                     N_id =  seq(30, 90, by = 10), 
-                     hairy_tie_effect = seq(-0.1, 0.1, by = 0.01),
-                     hairy_detect_effect = seq(0, 0, by = 0.5),
-                     BISON = FALSE,
-                     STRAND = T, 
-                     simulate.interactions = F, 
-                     int_intercept = c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-                     int_slope = c(-Inf,-Inf),# No effect of individuals attributes
-                     blockModel = TRUE) # No block model
-p = plots(result)
-library(ggpubr)
-ggarrange(p[[1]], p[[2]], ncol = 2, nrow = 1, common.legend = TRUE)
-
-# Rates of false negatives -------------
-t1 = tapply(result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$`p-value`, result[result$tie_effect > 0.5 | result$tie_effect < -0.5,]$approach, function(x){sum(x >= 0.05)/length(x)})
-
-# Rates of false positives -------------
-t2 = tapply(result[result$tie_effect <= 0.5 &  result$tie_effect  >= -0.5,]$`p-value`, result[result$tie_effect<= 0.5 &  result$tie_effect  >= -0.5,]$approach, function(x){sum(x <= 0.05)/length(x)})
-
-summary = data.frame("Approaches" = c(names(t1),  names(t2)), "Error type" = c(rep('False negatives', 7), rep('False positives', 7)) ,"Percent" = c(t1, t2))
-summary$Percent = summary$Percent * 100
-summary
-
-write.csv(result, "SIM -2 to 2.csv", row.names = FALSE)
-write.csv(summary, "SIM -2 to 2 rates of type I and type II errors.csv", row.names = FALSE)
-save.image("SIM -2 to 2.RData")
-
-ggplot(result[result$tie_effect>= -0.5 & result$tie_effect <= 0.5,], aes(x = tie_effect,  y = z,group = sim, label = z))+
-  geom_point(aes(shape = approach, size = N_id, color = exposure_sigma ),  show.legend = TRUE, alpha = 0.5) +
-  geom_hline(yintercept = 0, linetype = "dashed")+
-  facet_grid( . ~ detect_effect, space="free") +
-  theme(legend.position = 'none')+
-  ylab("Estimated effect size (z-score)") +
-  xlab("True efect size") +
-  theme(axis.text = element_text(size = 9))
 
 
 
