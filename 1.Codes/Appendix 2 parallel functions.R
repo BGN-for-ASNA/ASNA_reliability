@@ -18,12 +18,12 @@ test.function <- function(att = NULL,
                           groups=NULL,
                           
                           sr_mu = c(0,0),
-                          sr_sigma = c(1, 1),
+                          sr_sigma = c(1.7,0.8),
                           sr_rho = 0.5,
                           
                           dr_mu = c(0,0),
-                          dr_sigma = 1,
-                          dr_rho = 0.75,
+                          dr_sigma = 1.2,
+                          dr_rho = 0.8,
                           
                           individual_predictors = NULL,
                           dyadic_predictors = NULL,
@@ -198,12 +198,12 @@ test.strand <- function(att = NULL,
                         groups=NULL,
                         
                         sr_mu = c(0,0),
-                        sr_sigma = c(1, 1),
+                        sr_sigma = c(1.7,0.8),
                         sr_rho = 0.5,
                         
                         dr_mu = c(0,0),
-                        dr_sigma = 1,
-                        dr_rho = 0.75,
+                        dr_sigma = 1.2,
+                        dr_rho = 0.8,
                         
                         individual_predictors = NULL,
                         dyadic_predictors = NULL,
@@ -306,11 +306,12 @@ test.scenarios <- function(name = "",
                                        groups=NULL,
                                        
                                        sr_mu = c(0,0),
-                                       sr_sigma = c(1, 1),
-                                       sr_rho = 0,
+                                       sr_sigma = c(1.7,0.8),
+                                       sr_rho = 0.5,
                                        
                                        dr_mu = c(0,0),
-                                       dr_sigma = 1,
+                                       dr_sigma = 1.2,
+                                       dr_rho = 0.8,
                                        
                                        individual_predictors = NULL,
                                        dyadic_predictors = NULL,
@@ -400,9 +401,10 @@ plot.function <- function(result){
   data$tested = names(result[[length(result)]])
   
   library(ggplot2)
-  p = ggplot(data, aes(x = Simulated, y = Estimated, group = name))+
-    geom_boxplot()+geom_point()+facet_grid(~name, scales="free" )+
-    ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))
+  p = ggplot(data[grepl(data$tested[[1]], data$name , fixed = TRUE),], aes(x = Simulated, y = Estimated, group = name))+
+    geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
+    ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
+    theme(text = element_text(size=20))
   return(p)
 }
 
@@ -476,7 +478,7 @@ test.scenarios(var = list(dr_mu = seq(0.5, 1, length.out=10)),
                name = " interactions"
 )
 
-
+# Plots -----------------------------------------
 load("2.Results/Appendices/2/dr_mu interactions.Rdata")
 p.dr_mu_interactions = plot.function(result)
 p.dr_mu_interactions

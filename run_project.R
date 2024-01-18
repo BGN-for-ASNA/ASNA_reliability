@@ -1,5 +1,7 @@
 library(rmarkdown)
 library(ggpubr)
+library(ggplot2)
+library(ggrepel)
 # Generate appendices-------------
 render("1.Codes/Appendix 1.R",
        output_format = pdf_document(),
@@ -15,8 +17,8 @@ render(input = "1.Codes/Appendix 2.R",
 source('1.Codes/2.data_simulation.R')
 source('1.Codes/3.simulation.R')
 result1 = simulations(Reps = 100, ncores = 100, 
-                      sr_rho = 0, sr_sigma =  c(1,1), # no sender-receiver effect
-                      dr_rho = 0, dr_sigma = 1, # no dyadic effect
+                      sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
+                      dr_rho = 0.8, dr_sigma = 1.2,
                       exposure_sigma = 1, 
                       N_id =  seq(30, 90, by = 10), 
                       hairy_tie_effect = seq(-0.19, 0.19, by = 0.01),
@@ -31,8 +33,8 @@ result1 = simulations(Reps = 100, ncores = 100,
 write.csv(result1, "2.Results/Simulations/No differences in sociality, no biases.csv", row.names = FALSE)
 ## Differences in sociality, no biases----------
 result2 = simulations(Reps = 100, ncores = 100, 
-                      sr_rho = 0, sr_sigma =  c(1,1), # no sender-receiver effect
-                      dr_rho = 0, dr_sigma = 1, # no dyadic effect
+                      sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
+                      dr_rho = 0.8, dr_sigma = 1.2,
                       exposure_sigma = 1,
                       N_id =  seq(30, 90, by = 10), 
                       hairy_tie_effect =  c(seq(-0.40, -0.20, by = 0.01), seq(0.20, 0.40, by = 0.01)),
@@ -48,8 +50,8 @@ write.csv(result2, "2.Results/Simulations/Differences in sociality, no biases.cs
 
 ## Differences in sociality, exposure bias----------
 result3 = simulations(Reps = 100, ncores = 100, 
-                      sr_rho = 0, sr_sigma =  c(1,1), # no sender-receiver effect
-                      dr_rho = 0, dr_sigma = 1, # no dyadic effect
+                      sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
+                      dr_rho = 0.8, dr_sigma = 1.2,
                       exposure_sigma = 1,
                       N_id =  seq(30, 90, by = 10), 
                       hairy_tie_effect =  c(seq(-0.40, -0.20, by = 0.01), seq(0.20, 0.40, by = 0.01)),
@@ -65,8 +67,8 @@ write.csv(result3, "2.Results/Simulations/Differences in sociality, exposure bia
 
 ## Differences in sociality, censorign bias----------
 result4 = simulations(Reps = 100, ncores = 100, 
-                      sr_rho = 0, sr_sigma =  c(1,1), # no sender-receiver effect
-                      dr_rho = 0, dr_sigma = 1, # no dyadic effect
+                      sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
+                      dr_rho = 0.8, dr_sigma = 1.2,
                       exposure_sigma = 1,
                      N_id =  seq(30, 90, by = 10), 
                      hairy_tie_effect =  c(seq(-0.40, -0.20, by = 0.01), seq(0.20, 0.40, by = 0.01)),
@@ -80,58 +82,104 @@ result4 = simulations(Reps = 100, ncores = 100,
 write.csv(result4, "2.Results/Simulations/Differences in sociality, censorign bias.csv", row.names = FALSE)
 save.image("2.Results/Simulations/Simulations.RData")
 
-# Get results-------------
-## Rates of false negatives and false positives------------------
+## Get results-------------
+### Rates of false negatives and false positives------------------
 error.rates <- function(result, threshold){
-  t1 = tapply(result[result$tie_effect > threshold | result$tie_effect < -threshold,]$`p-value`, result[result$tie_effect > threshold | result$tie_effect < -threshold,]$approach, function(x){sum(x >= 0.05)/length(x)})
-  t2 = tapply(result[result$tie_effect <= threshold &  result$tie_effect  >= -threshold,]$`p-value`, result[result$tie_effect<= threshold &  result$tie_effect  >= -threshold,]$approach, function(x){sum(x <= 0.05)/length(x)})
   
-  if(length(t1) != 0 & length(t2) != 0){
+  lower = result[result$tie_effect < threshold &  result$tie_effect  > -threshold,]$p.value
+  upper = result[result$tie_effect >= threshold | result$tie_effect <= -threshold,]$p.value
+  
+  if(length(lower) != 0){
+    t1 = tapply(result[result$tie_effect < threshold &  result$tie_effect  > -threshold,]$p.value, result[result$tie_effect < threshold & result$tie_effect > -threshold,]$approach, function(x){sum(x <= 0.05)/length(x)})
+  }else{t1 = NULL}
+  if(length(upper) != 0){
+    t2 = tapply(result[result$tie_effect >= threshold | result$tie_effect <= -threshold,]$p.value, result[result$tie_effect >= threshold | result$tie_effect <= -threshold,]$approach, function(x){sum(x >= 0.05)/length(x)})
+  }else{t2 = NULL}
+  
+  if(!is.null(t1) & !is.null(t2)){
     summary = data.frame("Approaches" = c(names(t1),  names(t2)), 
-                         "Error type" = c(rep('False negatives', length(t1)),
-                                          rep('False positives', length(t2))) ,
+                         "Error type" = c(rep('False positives', length(t1)),
+                                          rep('False negatives', length(t2))) ,
                          "Percent" = c(t1, t2))
     
     summary$Percent = summary$Percent * 100
     return(summary)
   }
-  if(length(t1) != 0 & length(t2) == 0){
+  if(!is.null(t1) != 0 & is.null(t2)){
     summary = data.frame("Approaches" = names(t1), 
-                         "Error type" = rep('False negatives', length(t1)) ,
+                         "Error type" = rep('False positives', length(t1)) ,
                          "Percent" = t1)
     
     summary$Percent = summary$Percent * 100
     return(summary)
   }
-  if(length(t1) == 0 & length(t2) != 0){
+  if(is.null(t1) & !is.null(t2)){
     summary = data.frame("Approaches" = names(t2), 
-                         "Error type" = rep('False positives', length(t2)) ,
+                         "Error type" = rep('False negatives', length(t2)) ,
                          "Percent" = t2)
     
     summary$Percent = summary$Percent * 100
     return(summary)
   }
-
-  
 }
-rates1 = error.rates(result1, threshold = 0.20)
-rates2 = error.rates(result2, threshold = 0.19)
-rates3 = error.rates(result3, threshold = 0.19)
-rates4 = error.rates(result4, threshold = 0.19)
+get.rates <- function(path, threshold = 0.2){
+  files = list.files(path)
+  results = errors = NULL
+  for(a in 1:length(files)){
+    if(grepl('.csv', files[a], fixed = TRUE)){
+      tmp = read.csv(paste(path,files[a], sep = ''))
+      type = gsub('.csv', '', files[a])
+      tmp$type = type
+      results = rbind(results, tmp)
 
-rates1$type = "Sim1"
-rates2$type = "Sim2"
-rates3$type = "Sim3"
-rates4$type = "Sim4"
+      tmp =  error.rates(tmp, threshold = threshold)
+      tmp$type = type
+      errors = rbind(errors, tmp)
+    }
+  }
+  rownames(errors) = NULL
+  return(list(errors, results))
+}
+error = get.rates(path = 'C:/Users/sebastian_sosa/Downloads/sim/', threshold = 0.20)
 
-rates = rbind(rates1, rates2, rates3, rates4)
 
 ## Plots------------------
 ### Rates------------------
-ggplot(rates, aes(x = type, y= Percent, group = Approaches, color =Approaches))+geom_point()+geom_line()
+tmp = error[[1]]
+tmp$Approaches = gsub("2.","",tmp$Approaches)
+tmp$Approaches = gsub("3.","",tmp$Approaches)
+tmp2 = tmp[tmp$type == "No biases",]
+ggplot(tmp, aes(x = type, y = Percent, group = Approaches, colour  = Approaches, label = Approaches))+geom_point(aes(size = 2))+geom_line()+facet_grid(~ Error.type) +
+  geom_label_repel(data = tmp2, aes(x = type, y = Percent, colour = Approaches),
+                   nudge_x = 1,
+                   nudge_y = 8,
+                   segment.curvature = -1e-20,
+                   force = 10,
+                   direction = "y",
+                   hjust= 0)+
+  theme(legend.position = 'None', text = element_text(size=20))+xlab("Error type")+geom_hline(yintercept = 5, linetype = "dashed", color = 'red')
 
-### Coefficients------------------
-plots(result1)[[1]]
-plots(result2)[[1]]
-plots(result3)[[1]]
-plots(result4)[[1]]
+tmp = error[[2]]
+tmp$approach = gsub("2.","",tmp$approach)
+tmp$approach = gsub("3.","",tmp$approach)
+
+ggplot(tmp[tmp$type == "No biases", ], aes(x = tie_effect,  y = z, group = sim, label = z))+
+  geom_point(aes(color = sr_rho, size = detect_effect), show.legend = TRUE, alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed")+
+  facet_grid( . ~ approach, space="free") +
+  theme(legend.position = 'none')+
+  ylab("Estimated effect size (z-score)") +
+  xlab("True effect size") +
+  theme(axis.text = element_text(size = 12),axis.text.x = element_text(angle=45),strip.text = element_text(size = 12))
+
+
+
+ggplot(tmp[tmp$approach == '2.Rates weigthed' & tmp$type == 'Exposure bias',], aes(x = tie_effect, y = `p.value`, group = approach))+
+  geom_point(aes(size = N_id,  color = detect_effect), show.legend = TRUE, position=position_jitter(0.2))+
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red", size=1)+
+  xlab("True effect size")+
+  geom_vline(xintercept = 0.25, linetype = "dashed")+
+  geom_vline(xintercept = -0.25, linetype = "dashed")+
+  facet_grid( . ~ approach, space="free")
+
+

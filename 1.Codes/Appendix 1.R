@@ -897,8 +897,8 @@ for (a in 1:N) {
     nfocals = 1000,
     N.Perm = 1
   )
-  ggplot(sim, aes(x = SEX, y = obs.bias, group = SEX)) + geom_boxplot() +
-    geom_point()
+  ggplot(sim, aes(x = SEX, y = obs.bias, group = SEX, color = SEX)) + geom_boxplot() +
+    geom_point(aes(size = 5), show.legend = F)+theme(text = element_text(size=20), legend.position = 'None')+ylab('Sampling effort')
   s = summary(lm(obs.bias ~ SEX, data = sim))$coefficients[2, ]
   result = rbind(result, data.frame(t(s), GS.sample, ObsBias.sample, 'sim' =
                                       a))

@@ -69,9 +69,36 @@ simulations <- function(
   r <- foreach(i = 1:nrow(grid_subsample)) %dopar% {
     library(ANTs)
     library(STRAND)
-    source("./1.Codes/3.data_simulation.R")
+    source("./1.Codes/2.data_simulation.R")
     RESULTS = NULL
 
+    # pre-network permutation-----------
+    preNetPerm = function (df, focal = 'focal', alters = 'receiver', ctrl = 'focal', nperm = 10, progress = T, index = 'sri') 
+    {
+      col.alters <- ANTs:::df.col.findId(df, alters)
+      col.focal <- ANTs:::df.col.findId(df, focal)
+      col.ctrl <- ANTs:::df.col.findId(df, ctrl)
+      
+      ctrl <- c(col.ctrl, col.focal)
+      df <- df.ctrlFactor(df, control = ctrl)
+      df$control <- as.factor(df$control)
+      Vecids <- unique(c(as.character(df[, col.focal]), as.character(df[, col.alters])))
+      group_scan <- unique(df$control)
+      
+      GBI2 <- ANTs:::df_to_gbi(df, ncol(df), col.focal, Vecids, group_scan)
+      GBI <- ANTs:::df_to_gbi(df, ncol(df), col.alters, Vecids, group_scan) 
+
+      result <- ANTs:::perm_dataStream1_focal(GBI, GBI2, nperm = nperm, 
+                                       progress = progress, method = index)
+      result <- lapply(seq_along(result), function(x, Vecids, i) {
+        colnames(x[[i]]) <- Vecids
+        rownames(x[[i]]) <- Vecids
+        attr(x[[i]], "permutation") <- i
+        return(x[[i]])
+      }, x = result, Vecids = Vecids)
+      return(result)
+    }
+    
     # "Bayesian P value".---------------
     P_se = function(x){
       M_x = mean(x)
@@ -239,8 +266,8 @@ simulations <- function(
     # BISON------------------------
     if(simulate.interactions & BISON){
       library(bisonR)
-      A$interactions$ego = as.factor(A$interactions$ego)
-      A$interactions$alter = as.factor(A$interactions$alter)
+      A$interactions$ego = as.factor(A$interactions$sender)
+      A$interactions$alter = as.factor(A$interactions$receiver)
       priors <- get_default_priors("binary")
       fit_edge <- bison_model(
         (interaction | exposure) ~ dyad(ego, alter),
@@ -379,6 +406,45 @@ simulations <- function(
     result$approach = paste(result$approach, 'permuted', sep = " ")
     result$`p-value` = ptest
     RESULTS = rbind(RESULTS, result)
+    
+    # SRI pre-network weighted--------------------------------
+    d = A$interactions
+    d = d[d$interaction == 1, ] #keeping only interactions
+    d$sender = as.character(d$sender)
+    d$receiver = as.character(d$receiver)
+    #d$ctrl = paste(d$follow, d$focal, sep = '_')
+    ## Pre-net permutation
+    perms =preNetPerm(d,focal = 'follow', alters='receiver', ctrl = 'focal', nperm=1000, progress=F, index='sri')
+    tmp = perms[[1]]
+    r = met.strength(x,df,1)
+    r$id = as.numeric(r$id)
+    r = r[order(r$id),]
+    r$sampling = A$true_exposure
+    r$hair = indiv$Hairy
+    test = lm(strength ~ hair, data = r, weights = r$sampling)
+    result = get.result(test, strand = FALSE, name = 'SRI weigthed preNet')
+    
+    coefs = unlist(lapply(perms, function(x){
+      r = met.strength(x,df,1)
+      r$id = as.numeric(r$id)
+      r = r[order(r$id),]
+      r$sampling = A$true_exposure
+      r$hair = indiv$Hairy
+      test = coef(lm(strength ~ hair, data = r, weights = r$sampling))[2]
+    }))
+    ptest = ANTs:::stat.p(coefs)[3]
+    result$`p-value` = ptest
+    RESULTS = rbind(RESULTS, result)
+    
+    # Node label permutations
+    ptest = unlist(lapply(perm, function(x, exposure){
+      m = lm(data = x, formula = strength ~ hair, weights = exposure)
+      summary(m)$coefficients[2,1]
+    }, exposure = A$true_exposure))
+    ptest = ANTs:::stat.p(ptest)[3]
+    result$approach = paste(result$approach, 'permuted', sep = " ")
+    result$`p-value` = ptest
+    RESULTS = rbind(RESULTS, result)
   }
 
   #############################
@@ -407,13 +473,13 @@ plots <- function(result){
     facet_grid( . ~ approach, space="free") +
     theme(legend.position = 'none')+
     ylab("Estimated effect size (z-score)") +
-    xlab("True efect size") +
+    xlab("True effect size") +
     theme(axis.text = element_text(size = 14))
 
  p4 = ggplot(result, aes(x = tie_effect, y = `p-value`, group = approach))+
    geom_point(aes(size = detect_effect,  color = sr_rho), alpha = 0.5, show.legend = TRUE, position=position_jitter(0.2))+
    geom_hline(yintercept=0.05, linetype="dashed", color = "red", size=1)+
-   xlab("True efect size")+
+   xlab("True effect size")+
    geom_vline(xintercept = 0.5, linetype = "dashed")+
    geom_vline(xintercept = -0.5, linetype = "dashed")+
    facet_grid( . ~ approach, space="free")

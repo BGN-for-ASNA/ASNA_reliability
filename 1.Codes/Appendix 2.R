@@ -89,10 +89,10 @@ for (a in a:length(TEST)) {
                            N_id = N_id,
                            individual_predictors=Hairy, # individuals characteristics
                            individual_effects=matrix(c(TEST[a],TEST[a]),ncol=1, nrow=2), # individuals characteristics on interaction probability
-                           sr_mu =  c(0, 0), sr_sigma =  c(0.01,0.01), # no sender-receiver effect
-                           dr_mu = c(0,0), dr_sigma = 0.01, # no dyadic effect
+                           sr_mu =  c(0, 0), sr_sigma =  c(0.5,0.5), # no sender-receiver effect
+                           dr_mu = c(0,0), dr_sigma = 0.5, # no dyadic effect
                            exposure_predictors = NULL,
-                           exposure_effects = c(0, 0), exposure_sigma = 0.01, # exposure effect
+                           exposure_effects = c(0, 0), exposure_sigma = 0.5, # exposure effect
                            int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf),#no censoring effect
                            simulate.interactions = TRUE, print = FALSE) 
   }
@@ -245,7 +245,7 @@ for(a in 1: length(r)){
   }
 }
 
-error.rates(d, threshold = 0.10)
+error.rates(d, threshold = 0.20)
 
 #'
 #' From a visual perspective and error rates we can see that above a value of 0.30 for individual_effects parameters, we start to observe increase of false positive.
@@ -253,17 +253,17 @@ error.rates(d, threshold = 0.10)
 #'
 
 ## 4.1. An example of censoring intercept and slope are equal to 0.1 in simulated data
-N_id = 50
+N_id = 100
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 test = test.function(att = Hairy,
                      N_id = N_id,
                      individual_predictors=Hairy, # individuals characteristics
-                     individual_effects=matrix(c(0,0),ncol=1, nrow=2), # individuals characteristics on interaction probability
+                     individual_effects=matrix(c(0.2,0.2),ncol=1, nrow=2), # individuals characteristics on interaction probability
                      sr_mu =  c(0, 0), sr_sigma =  c(1,1), # no sender-receiver effect
                      dr_mu = c(0,0), dr_sigma = 1, # no dyadic effect
                      exposure_predictors = NULL,
                      exposure_effects = c(0, 0), exposure_sigma = 1, # exposure effect
-                     int_intercept = c(0.1,0.1), int_slope = c(0.1,0.1),
+                     int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf),
                      simulate.interactions = T) #no censoring effect
 test$plots
 
@@ -271,12 +271,12 @@ test$plots
 test = test.function(att = Hairy,
                      N_id = N_id,
                      individual_predictors=Hairy, # individuals characteristics
-                     individual_effects=matrix(c(0,0),ncol=1, nrow=2), # individuals characteristics on interaction probability
-                     sr_mu =  c(0, 0), sr_sigma =  c(1,1), # no sender-receiver effect
-                     dr_mu = c(0,0), dr_sigma = 1, # no dyadic effect
+                     individual_effects=matrix(c(0.18,0.18),ncol=1, nrow=2), # individuals characteristics on interaction probability
+                     sr_mu =  c(0, 0), sr_sigma =  c(0.5,0.5), # no sender-receiver effect
+                     dr_mu = c(0,0), dr_sigma = 0.5, # no dyadic effect
                      exposure_predictors = NULL,
                      exposure_effects = c(0, 0), exposure_sigma = 1, # exposure effect
-                     int_intercept = c(0.2,0.2), int_slope = c(0.2,0.2),
+                     int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf),
                      simulate.interactions = T) #no censoring effect
 test$plots
 
