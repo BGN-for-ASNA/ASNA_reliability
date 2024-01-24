@@ -2,6 +2,38 @@
 ##  Simulations parameters ####
 ###############################
 ###############################
+## Individuals parameters
+#Reps = 100
+#N_id =  seq(30, 50, by = 20)
+#hairy_tie_effect = seq(-2, 2, by = 0.5)
+#hairy_detect_effect = seq(-4, 4, by = 1)
+## Block parameter
+#blocks = TRUE
+#B = NULL
+#V = 1
+#G = 3
+#diagB = -6.5
+#groups=NULL
+## Sender-receiver parameter
+#sr_sigma = c(1.4, 0.8)
+#sr_rho = 0.5
+## Dyadic parameter
+#dr_sigma = 1.2
+#dr_rho = 0.8
+## Observation bias parameter
+#exposure.bias = TRUE
+#exposure_sigma = 2.9
+#exposure_baseline = 40
+## Interactions bias parameter
+#simulate.interactions = TRUE
+#int_intercept =c(Inf,Inf) #invert log of inf = 1 of prob to observe interaction for both focal and alte
+#int_slope = c(-Inf,-Inf) # No effect of individuals attributes on missing interactio
+## Simulation parameter
+#BISON = TRUE
+#STRAND = TRUE # use STRAN mode
+#ncores = 1 # number of core
+#blockModel = TRUE
+
 simulations <- function(
     # Individuals parameters
     Reps = 100,
@@ -41,9 +73,8 @@ simulations <- function(
     ncores = 1, # number of cores
     blockModel = TRUE
 ){
-  require(parallel)
-  require(foreach)
-  require(doParallel)
+  #require(parallel)
+  #require(doParallel)
   ########################################
   #######  Create grid of simulations ####
   ########################################
@@ -59,14 +90,24 @@ simulations <- function(
   #############################
   #######  Parallelisation ####
   #############################
+  require(foreach)
+  library(doSNOW)
   cl <- ncores
-  cl <-makeCluster(cl, type="PSOCK")
-  registerDoParallel(cores=cl)
+  
+  cl <- makeCluster(cl, outfile="")
+  registerDoSNOW(cl)
+  pb <- txtProgressBar(max = nrow(grid_subsample), style = 3)
+  progress <- function(n) setTxtProgressBar(pb, n)
+  opts <- list(progress = progress)
+  #cl <-makeCluster(cl, type="PSOCK")
+  #registerDoParallel(cores=cl)
+  
   on.exit(registerDoSEQ())
   #############################
   #######  Testing methods ####
   #############################
-  r <- foreach(i = 1:nrow(grid_subsample)) %dopar% {
+  r <- foreach(i = 1:nrow(grid_subsample),.options.snow = opts) %dopar% {
+    print(i)
     library(ANTs)
     library(STRAND)
     source("./1.Codes/2.data_simulation.R")
@@ -263,6 +304,7 @@ simulations <- function(
       int_intercept = int_intercept, # Prob of miss interactions
       int_slope = int_slope
     )
+    A$network[is.na(A$network)] = 0
     # BISON------------------------
     if(simulate.interactions & BISON){
       library(bisonR)
@@ -287,6 +329,7 @@ simulations <- function(
 
     # STRAND--------------------------------
     if(STRAND){
+      
       nets = list(Grooming = A$network)
       
       if(exposure.bias){
@@ -308,7 +351,7 @@ simulations <- function(
                                           focal_regression = ~ Hairy,
                                           target_regression = ~ Hairy,
                                           dyad_regression = ~  1,
-                                          mode="mcmc",
+                                          mode="mcmc",return_predicted_network = TRUE,
                                           stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
                                                                       iter_warmup = 1000, iter_sampling = 1000,
                                                                       max_treedepth = NULL, adapt_delta = .98))
@@ -318,15 +361,25 @@ simulations <- function(
                                                      focal_regression = ~ Hairy,
                                                      target_regression = ~ Hairy,
                                                      dyad_regression = ~  1,
-                                                     mode="mcmc",
+                                                     mode="mcmc",return_predicted_network = TRUE,
                                                      stan_mcmc_parameters = list(chains = 1, parallel_chains = 1, refresh = 1,
                                                                                  iter_warmup = 1000, iter_sampling = 1000,
                                                                                  max_treedepth = NULL, adapt_delta = .98))
       }
-
+      
       res = summarize_strand_results(fit)
       result = get.result(res, strand = TRUE)
       RESULTS = rbind(RESULTS, result)
+      
+      # Compare estimated network
+      est_net <- round(apply(res$samples$predicted_network_sample,2:3,mean ))
+      m = matrix(0, ncol = N_id, nrow = N_id)
+      for(a in 1:N_id){
+        x = res$samples$predicted_network_sample[,,a]
+        m[,a] = apply(x,2,mean)
+      }
+      
+      plot(m,A$network/(1+A$true_samps))
     }
 
     # Rates of interactions unweighted--------------------------------
@@ -338,7 +391,7 @@ simulations <- function(
     test1.1 = lm(strength ~ hair, data = df)
     result = get.result(test1.1, strand = FALSE, name = '2.Rates')
     result
-    ggplot(df, aes(x = hair, y = strength))+geom_point()
+    #ggplot(df, aes(x = hair, y = strength))+geom_point()
     RESULTS = rbind(RESULTS, result)
 
     # Node label permutations
@@ -407,44 +460,44 @@ simulations <- function(
     result$`p-value` = ptest
     RESULTS = rbind(RESULTS, result)
     
-    # SRI pre-network weighted--------------------------------
-    d = A$interactions
-    d = d[d$interaction == 1, ] #keeping only interactions
-    d$sender = as.character(d$sender)
-    d$receiver = as.character(d$receiver)
-    #d$ctrl = paste(d$follow, d$focal, sep = '_')
-    ## Pre-net permutation
-    perms =preNetPerm(d,focal = 'follow', alters='receiver', ctrl = 'focal', nperm=1000, progress=F, index='sri')
-    tmp = perms[[1]]
-    r = met.strength(x,df,1)
-    r$id = as.numeric(r$id)
-    r = r[order(r$id),]
-    r$sampling = A$true_exposure
-    r$hair = indiv$Hairy
-    test = lm(strength ~ hair, data = r, weights = r$sampling)
-    result = get.result(test, strand = FALSE, name = 'SRI weigthed preNet')
-    
-    coefs = unlist(lapply(perms, function(x){
-      r = met.strength(x,df,1)
-      r$id = as.numeric(r$id)
-      r = r[order(r$id),]
-      r$sampling = A$true_exposure
-      r$hair = indiv$Hairy
-      test = coef(lm(strength ~ hair, data = r, weights = r$sampling))[2]
-    }))
-    ptest = ANTs:::stat.p(coefs)[3]
-    result$`p-value` = ptest
-    RESULTS = rbind(RESULTS, result)
-    
-    # Node label permutations
-    ptest = unlist(lapply(perm, function(x, exposure){
-      m = lm(data = x, formula = strength ~ hair, weights = exposure)
-      summary(m)$coefficients[2,1]
-    }, exposure = A$true_exposure))
-    ptest = ANTs:::stat.p(ptest)[3]
-    result$approach = paste(result$approach, 'permuted', sep = " ")
-    result$`p-value` = ptest
-    RESULTS = rbind(RESULTS, result)
+    ## SRI pre-network weighted--------------------------------
+    #d = A$interactions
+    #d = d[d$interaction == 1, ] #keeping only interactions
+    #d$sender = as.character(d$sender)
+    #d$receiver = as.character(d$receiver)
+    ##d$ctrl = paste(d$follow, d$focal, sep = '_')
+    ### Pre-net permutation
+    #perms =preNetPerm(d,focal = 'follow', alters='receiver', ctrl = 'focal', nperm=1000, progress=F, index='sri')
+    #tmp = perms[[1]]
+    #r = met.strength(x,df,1)
+    #r$id = as.numeric(r$id)
+    #r = r[order(r$id),]
+    #r$sampling = A$true_exposure
+    #r$hair = indiv$Hairy
+    #test = lm(strength ~ hair, data = r, weights = r$sampling)
+    #result = get.result(test, strand = FALSE, name = 'SRI weigthed preNet')
+    #
+    #coefs = unlist(lapply(perms, function(x){
+    #  r = met.strength(x,df,1)
+    #  r$id = as.numeric(r$id)
+    #  r = r[order(r$id),]
+    #  r$sampling = A$true_exposure
+    #  r$hair = indiv$Hairy
+    #  test = coef(lm(strength ~ hair, data = r, weights = r$sampling))[2]
+    #}))
+    #ptest = ANTs:::stat.p(coefs)[3]
+    #result$`p-value` = ptest
+    #RESULTS = rbind(RESULTS, result)
+    #
+    ## Node label permutations
+    #ptest = unlist(lapply(perm, function(x, exposure){
+    #  m = lm(data = x, formula = strength ~ hair, weights = exposure)
+    #  summary(m)$coefficients[2,1]
+    #}, exposure = A$true_exposure))
+    #ptest = ANTs:::stat.p(ptest)[3]
+    #result$approach = paste(result$approach, 'permuted', sep = " ")
+    #result$`p-value` = ptest
+    #RESULTS = rbind(RESULTS, result)
   }
 
   #############################

@@ -1,6 +1,6 @@
-PWD c:\Users\sebastian_sosa\OneDrive\Travail\Max Planck\Projects\ASNA_reliability\3. Manuscript
+PWD c:\Users\sebastian_sosa\OneDrive\Travail\Max Planck\Projects\ASNA_reliability\3.Manuscript
 INPUT C:\Users\sebastian_sosa\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Users\sebastian_sosa\OneDrive\Travail\Max Planck\Projects\ASNA_reliability\3. Manuscript\Final.tex
+INPUT c:\Users\sebastian_sosa\OneDrive\Travail\Max Planck\Projects\ASNA_reliability\3.Manuscript\Final.tex
 OUTPUT Final.log
 INPUT .\sagej.cls
 INPUT sagej.cls
@@ -9,10 +9,10 @@ INPUT C:\Program Files\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Program Files\MiKTeX\tex\latex\base\size10.clo
 INPUT C:\Program Files\MiKTeX\tex\latex\base\size10.clo
 INPUT C:\Program Files\MiKTeX\tex\latex\base\size10.clo
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\psnfss\times.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\psnfss\times.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\psnfss\helvet.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\psnfss\helvet.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\times.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\times.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\helvet.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\helvet.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\keyval.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\keyval.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\graphicx.sty
@@ -35,12 +35,12 @@ INPUT C:\Program Files\MiKTeX\tex\latex\graphics\rotating.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\rotating.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\tools\calc.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\tools\calc.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\textcase\textcase.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\textcase\textcase.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\booktabs\booktabs.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\booktabs\booktabs.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\endnotes\endnotes.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\endnotes\endnotes.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\textcase\textcase.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\textcase\textcase.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\booktabs\booktabs.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\booktabs\booktabs.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\endnotes\endnotes.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\endnotes\endnotes.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsfonts\amsfonts.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsfonts\amsfonts.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsfonts\amssymb.sty
@@ -55,59 +55,59 @@ INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsopn.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amstext.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amstext.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsopn.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\amscls\amsthm.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\amscls\amsthm.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\amscls\amsthm.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\amscls\amsthm.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\tracefnt.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\tracefnt.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\geometry\geometry.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\geometry\geometry.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
 INPUT C:\Program Files\MiKTeX\tex\generic\iftex\ifvtex.sty
 INPUT C:\Program Files\MiKTeX\tex\generic\iftex\ifvtex.sty
 INPUT C:\Program Files\MiKTeX\tex\generic\iftex\iftex.sty
 INPUT C:\Program Files\MiKTeX\tex\generic\iftex\iftex.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\geometry\geometry.cfg
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\geometry\geometry.cfg
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\geometry\geometry.cfg
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\tools\ftnright.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\tools\ftnright.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\caption\caption.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\caption\caption.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\caption\caption3.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\caption\caption3.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\natbib\natbib.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\natbib\natbib.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\caption\caption.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\caption\caption.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\caption\caption3.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\caption\caption3.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\natbib\natbib.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\natbib\natbib.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\etoolbox\etoolbox.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\etoolbox\etoolbox.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\mathtools\mathtools.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\mathtools\mathtools.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\mathtools\mhsetup.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\mathtools\mhsetup.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\ncctools\nccmath.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\ncctools\nccmath.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\pdflscape\pdflscape.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\pdflscape\pdflscape.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\pdflscape\pdflscape-nometadata.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\pdflscape\pdflscape-nometadata.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\ncctools\nccmath.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\ncctools\nccmath.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\pdflscape\pdflscape.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\pdflscape\pdflscape.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\pdflscape\pdflscape-nometadata.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\pdflscape\pdflscape-nometadata.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\lscape.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\lscape.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\txfonts.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\txfonts.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\txfonts.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\txfonts.sty
 INPUT .\fancybox.sty
 INPUT fancybox.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\epstopdf-pkg\epstopdf.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\epstopdf-pkg\epstopdf.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\infwarerr\infwarerr.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\infwarerr\infwarerr.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\grfext\grfext.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\grfext\grfext.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\kvoptions\kvoptions.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\kvoptions\kvoptions.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\kvsetkeys\kvsetkeys.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\kvsetkeys\kvsetkeys.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\grfext\grfext.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\grfext\grfext.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\kvsetkeys\kvsetkeys.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\kvsetkeys\kvsetkeys.sty
 INPUT C:\Program Files\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
 INPUT C:\Program Files\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\epstopdf-pkg\epstopdf-base.sty
@@ -117,34 +117,34 @@ INPUT C:\Program Files\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\hyperref.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\hyperref.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\pdfescape\pdfescape.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\pdfescape\pdfescape.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\hycolor\hycolor.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\hycolor\hycolor.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\auxhook\auxhook.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\auxhook\auxhook.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\hycolor\hycolor.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\hycolor\hycolor.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\nameref.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\nameref.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\refcount\refcount.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\refcount\refcount.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\pd1enc.def
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\pd1enc.def
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\pd1enc.def
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\intcalc\intcalc.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\intcalc\intcalc.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\puenc.def
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\puenc.def
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\puenc.def
 INPUT C:\Program Files\MiKTeX\tex\latex\url\url.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\url\url.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\bitset\bitset.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\bitset\bitset.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
 INPUT C:\Program Files\MiKTeX\tex\generic\atbegshi\atbegshi.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\atbegshi-ltx.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\atbegshi-ltx.sty
@@ -154,10 +154,10 @@ INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\hpdftex.def
 INPUT C:\Program Files\MiKTeX\tex\latex\atveryend\atveryend.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\atveryend-ltx.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\atveryend-ltx.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\xcolor\xcolor.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\xcolor\xcolor.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\color.cfg
@@ -166,8 +166,8 @@ INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\color.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\caption\subcaption.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\caption\subcaption.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\caption\subcaption.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\caption\subcaption.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\pgfplots\pgfplotstable.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\pgfplots\pgfplotstable.sty
 INPUT C:\Program Files\MiKTeX\tex\generic\pgfplots\pgfplots.revision.tex
@@ -329,29 +329,29 @@ INPUT C:\Program Files\MiKTeX\tex\generic\pgfplots\numtable\pgfplotstable.code.t
 INPUT C:\Program Files\MiKTeX\tex\generic\pgfplots\numtable\pgfplotstable.coltype.code.tex
 INPUT C:\Program Files\MiKTeX\tex\latex\tools\array.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\tools\array.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\enumitem\enumitem.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\enumitem\enumitem.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\enumitem\enumitem.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\enumitem\enumitem.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\inputenc.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\inputenc.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\colortbl\colortbl.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\colortbl\colortbl.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\colortbl\colortbl.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\colortbl\colortbl.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\color.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\multirow\multirow.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\multirow\multirow.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\arydshln\arydshln.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\arydshln\arydshln.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\framed\framed.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\framed\framed.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\lipsum\lipsum.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\lipsum\lipsum.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\multirow\multirow.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\multirow\multirow.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\arydshln\arydshln.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\arydshln\arydshln.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\framed\framed.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\framed\framed.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\lipsum\lipsum.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\lipsum\lipsum.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\l3packages\l3keys2e\l3keys2e.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\l3packages\l3keys2e\l3keys2e.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\l3kernel\expl3.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\l3kernel\expl3.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\lipsum\lipsum.ltd.tex
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\lipsum\lipsum.ltd.tex
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\lipsum\lipsum.ltd.tex
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\lipsum\lipsum.ltd.tex
 INPUT C:\Program Files\MiKTeX\tex\latex\tools\multicol.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\tools\multicol.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\listings\listings.sty
@@ -371,28 +371,28 @@ INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstlang2.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstlang3.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstlang3.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstlang3.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\lineno\lineno.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\lineno\lineno.sty
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txr.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txr.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txr.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\lineno\lineno.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\lineno\lineno.sty
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txr.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txr.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txr.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
 INPUT .\Final.aux
 INPUT .\Final.aux
 INPUT Final.aux
 OUTPUT Final.aux
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omltxmi.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omltxmi.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omltxmi.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omstxsy.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omstxsy.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omstxsy.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omxtxex.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omxtxex.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\omxtxex.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxexa.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxexa.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxexa.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omltxmi.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omltxmi.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omltxmi.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omstxsy.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omstxsy.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omstxsy.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omxtxex.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omxtxex.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\omxtxex.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxexa.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxexa.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxexa.fd
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -404,191 +404,191 @@ OUTPUT Final.pdf
 INPUT .\Final.out
 INPUT .\Final.out
 OUTPUT Final.out
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txss.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txss.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txss.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txss.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txss.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txss.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
 INPUT C:\Program Files\MiKTeX\tex\latex\base\ulasy.fd
 INPUT C:\Program Files\MiKTeX\tex\latex\base\ulasy.fd
 INPUT C:\Program Files\MiKTeX\tex\latex\base\ulasy.fd
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\latex-fonts\lasy10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\latex-fonts\lasy7.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\latex-fonts\lasy5.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsya.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsya.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsya.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsyb.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsyb.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsyb.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxmia.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxmia.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxmia.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsyc.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsyc.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\utxsyc.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ts1txss.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ts1txss.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ts1txss.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\tcxss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsya.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsya.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsya.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsyb.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsyb.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsyb.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxmia.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxmia.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxmia.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsyc.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsyc.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\utxsyc.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ts1txss.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ts1txss.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ts1txss.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\tcxss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\latex-fonts\lasy10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\latex-fonts\lasy8.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\latex-fonts\lasy6.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsssl.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txbss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsssl.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txbss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
 INPUT C:\Users\sebastian_sosa\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
 INPUT C:\Program Files\MiKTeX\fonts\enc\dvips\base\8r.enc
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\tcxss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtcxss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txbss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txbss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txbss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txr.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsssl.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsssl.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txsssl.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvro.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxsssl.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txmi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txmi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txsssl.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvro.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxsssl.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txr.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\tcxss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtcxss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txbss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txbss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txbss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txr.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsssl.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsssl.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txsssl.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvro.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxsssl.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txmi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txmi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txsssl.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvro.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxsssl.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txr.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txbss.tfm
 INPUT .\Figures\Example.pdf
 INPUT .\Figures\Example.pdf
 INPUT .\Figures\Example.pdf
 INPUT .\Figures\Example.pdf
 INPUT .\Figures\Example.pdf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txr.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txmi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txbss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txss.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txr.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txmi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txbss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxbss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txss.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxphvr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxss.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsy.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txex.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\latex-fonts\lasy9.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsya.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyb.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txmia.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txsyc.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txexa.tfm
 INPUT .\Figures\ScatterFrameA.pdf
 INPUT .\Figures\ScatterFrameA.pdf
 INPUT .\Figures\ScatterFrameA.pdf
@@ -611,44 +611,44 @@ INPUT .\Figures\Appendix2\Figure3.png
 INPUT .\Final.bbl
 INPUT .\Final.bbl
 INPUT Final.bbl
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txtt.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txtt.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\tex\latex\txfonts\ot1txtt.fd
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\txtt.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txr.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txmi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txr.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txmi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\vf\public\txfonts\txmi.vf
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txr.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txmi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txr.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxr.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txmi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\vf\public\txfonts\txmi.vf
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxmi.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\rtxptmri.tfm
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txtt.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txtt.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\ot1txtt.fd
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\txtt.tfm
 INPUT Final.aux
 INPUT .\Final.out
 INPUT .\Final.out
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\rtcxss.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\rtcxss.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\rtxi.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\rtxi.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\rtxmi.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\rtxmi.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\rtxr.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\rtxr.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\txex.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\txex.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\txsy.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\txsy.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\txtt.pfb
-INPUT C:\Users\sebastian_sosa\AppData\Roaming\MiKTeX\fonts\type1\public\txfonts\txtt.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\rtcxss.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\rtcxss.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\rtxi.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\rtxi.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\rtxmi.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\rtxmi.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\rtxr.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\rtxr.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\txex.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\txex.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\txsy.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\txsy.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\txtt.pfb
+INPUT C:\Users\sebastian_sosa\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\txtt.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\urw\helvetic\uhvb8a.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\urw\helvetic\uhvb8a.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\urw\helvetic\uhvr8a.pfb

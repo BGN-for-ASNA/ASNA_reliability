@@ -209,14 +209,14 @@ where $\alpha$ is an intercept term, $\lambda$ is a vector of individual-specifi
 
 For example, if $S$ is an animal-specific measure, like body size, and $Q$ is a dyad-specific measure, like a matrix of relatedness ties, then the ellipsis  may be replaced with:  $\kappa_{[1]}S_{[i]} + \kappa_{[2]}S_{[j]} + \kappa_{[3]}Q_{[i,j]}$, to give the effects of body size on the probability of sending ties to any target and receiving ties from any target, and the effects of kinship on the probability of dyadic ties.
 
-%To model block structure, we can consider a list of $V$ categorical variables describing individuals $i$ and $j$. Let $B_{[v,b_1,b_2]}$ be a three-dimensional parameter array, %where $v$ run over variables, and $b_1$ and $b_2$ run over the category levels within variables. Finally, let the function  $b(i,v)$ return the block of individual $i$ for variable %$v$. Then, we can define $\Gamma(i,j,V)$, such that: 
-%\begin{ceqn}
-%\begin{equation}\label{link}
-%\Gamma(i,j,V) = \left(\sum_{v=1}^{V} B_{[v,b(i,v),b(j,v)]} \right)
-%\end{equation}
-%\end{ceqn}
-%where the probability of a tie from individual $i$ in block $b(i,v)$ to individual $j$ in block $b(j,v)$ for variable $v$ is controlled by the corresponding entry in the array of %block parameters, $B_{[v,b(i,v),b(j,v)]}$.\\
-% For discrete block modeling, we can utilize the assortativity coefficient: https://arxiv.org/pdf/cond-mat/0209450.pdf
+To model block structure, we can consider a list of $V$ categorical variables describing individuals $i$ and $j$. Let $B_{[v,b_1,b_2]}$ be a three-dimensional parameter array, %where $v$ run over variables, and $b_1$ and $b_2$ run over the category levels within variables. Finally, let the function  $b(i,v)$ return the block of individual $i$ for variable %$v$. Then, we can define $\Gamma(i,j,V)$, such that: 
+\begin{ceqn}
+\begin{equation}\label{link}
+\Gamma(i,j,V) = \left(\sum_{v=1}^{V} B_{[v,b(i,v),b(j,v)]} \right)
+\end{equation}
+\end{ceqn}
+where the probability of a tie from individual $i$ in block $b(i,v)$ to individual $j$ in block $b(j,v)$ for variable $v$ is controlled by the corresponding entry in the array of %block parameters, $B_{[v,b(i,v),b(j,v)]}$.\\
+ For discrete block modeling, we can utilize the assortativity coefficient: https://arxiv.org/pdf/cond-mat/0209450.pdf
 
 \subsubsection{Priors}
 To complete the model definition, we define vague priors. We model the sender and receiver effects jointly using a multivariate normal distribution. This allows for generalized correlations at the individual level to be detected---i.e., we can detect if individuals who groom others are also more likely to be groomed by others. For computational efficiency \citep{stan2021, lewandowski2009generating}, it is best to write the multivariate normal as:

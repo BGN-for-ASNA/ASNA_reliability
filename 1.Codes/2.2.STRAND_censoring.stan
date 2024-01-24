@@ -20,7 +20,7 @@ data{
   array[N_id,N_id,N_responses] int exposure;       //# Exposure for each outcome
   
   //# Censored data
-  array[N_id,N_id,N_responses] int censoring;       //# Censoring for each outcome
+  array[N_id, N_responses] int censoring;       //# Censoring for each outcome
   
   //# Accessory paramters
   matrix[22, 2] priors;                       //# Priors in a matrix, see details in the make_priors() function
