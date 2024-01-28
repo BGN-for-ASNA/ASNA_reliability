@@ -160,8 +160,19 @@ simulations <- function(
       y = c(coef(x)[2],confint(x, level = 0.9)[2,])
       return(y)
     }
-    get.result <- function(test1.1, strand = TRUE, name){
+    get.result <- function(test1.1, strand = TRUE, name, original.matrix, exposure){
       if(strand){
+        
+        # Compare estimated network
+        m = matrix(0, ncol = N_id, nrow = N_id)
+        for(a in 1:N_id){
+          x = res$samples$predicted_network_sample[,,a]
+          m[,a] = apply(x,2,mean)
+        }
+        
+ 
+        cor = cor(met.strength(m), met.strength(original.matrix/exposure))
+        
         # "Bayesian P value"
         strand_est = P_se(test1.1$sample$srm_model_samples$focal_coeffs[,1])
         a = test1.1$sample$srm_model_samples$focal_coeffs[,1]
@@ -180,12 +191,14 @@ simulations <- function(
         result$NG = ifelse(is.null(NG), NA, NG)
         result$mean.between.GR = ifelse(is.null(mean.between.GR), NA, mean.between.GR)
         result$mean.within.GR = ifelse(is.null(mean.within.GR), NA, mean.within.GR)
-
+        result$predictedVoriginal = cor
         colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
                              'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
-                             'NG', 'mean.between.GR', 'mean.within.GR')
+                             'NG', 'mean.between.GR', 'mean.within.GR', "prediction_correlation")
         return(result)
       }else{
+        
+        cor = cor(test1.1$fitted.values, test1.1$model$strength)
         ants_p = summary(test1.1)$coefficients[2,4]
         ants_se = summary(test1.1)$coefficients[2,2]
         result = as.data.frame(t(data.frame(unlist(c(unlist(get_res(test1.1)), grid_subsample[i,],ants_p, ants_se)))))
@@ -201,10 +214,10 @@ simulations <- function(
         result$NG = ifelse(is.null(NG), NA, NG)
         result$mean.between.GR = ifelse(is.null(mean.between.GR), NA, mean.between.GR)
         result$mean.within.GR = ifelse(is.null(mean.within.GR), NA, mean.within.GR)
-
+        result$predictedVoriginal = corM
         colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
                              'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
-                             'NG', 'mean.between.GR', 'mean.within.GR')
+                             'NG', 'mean.between.GR', 'mean.within.GR', "prediction_correlation")
         return(result)
       }
     }
@@ -368,18 +381,9 @@ simulations <- function(
       }
       
       res = summarize_strand_results(fit)
-      result = get.result(res, strand = TRUE)
+      result = get.result(res, strand = TRUE, 
+                          original.matrix = A$network, exposure = (1+A$true_samps))
       RESULTS = rbind(RESULTS, result)
-      
-      # Compare estimated network
-      est_net <- round(apply(res$samples$predicted_network_sample,2:3,mean ))
-      m = matrix(0, ncol = N_id, nrow = N_id)
-      for(a in 1:N_id){
-        x = res$samples$predicted_network_sample[,,a]
-        m[,a] = apply(x,2,mean)
-      }
-      
-      plot(m,A$network/(1+A$true_samps))
     }
 
     # Rates of interactions unweighted--------------------------------

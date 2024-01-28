@@ -37,7 +37,7 @@ test.function <- function(att = NULL,
                           
                           int_intercept = c(Inf,Inf),
                           int_slope = c(Inf,Inf),
-                          simulate.interactions = FALSE,
+                          simulate.interactions = T,
                           test = TRUE,
                           print = TRUE,
                           legend = ''){
@@ -198,12 +198,12 @@ test.strand <- function(att = NULL,
                         groups=NULL,
                         
                         sr_mu = c(0,0),
-                        sr_sigma = c(1.7,0.8),
-                        sr_rho = 0.5,
+                        sr_sigma = c(0.3, 1.5),
+                        sr_rho = 0.6,
                         
                         dr_mu = c(0,0),
                         dr_sigma = 1.2,
-                        dr_rho = 0.8,
+                        dr_rho = 0.7,
                         
                         individual_predictors = NULL,
                         dyadic_predictors = NULL,
@@ -211,7 +211,7 @@ test.strand <- function(att = NULL,
                         dyadic_effects = NULL,
                         exposure_predictors = NULL,
                         exposure_effects = NULL,
-                        exposure_sigma = 1,
+                        exposure_sigma = 1.9,
                         exposure_baseline = 50,
                         int_intercept = c(Inf,Inf),
                         int_slope = c(Inf,Inf),
@@ -329,15 +329,14 @@ test.scenarios <- function(name = "",
   require(foreach)
   require(doParallel)
   cl <- length(var[[1]])
-  #registerDoParallel(cores=cl)
+  registerDoParallel(cores=cl)
   on.exit(registerDoSEQ())
   result <- foreach(i = 1:length(var[[1]]), .export = ls(globalenv())) %dopar% {
     #result <- NULL
     #for(i in 1:length(var[[1]])){
-    set.seed(1)
     if(names(var) %in% c('sr_mu', 'sr_sigma', 'dr_mu')){
       tmp = list(c(1.7*var[[1]][i], 1*var[[1]][i]))
-    }else{ tmp = var[[1]][i]}
+    }else{tmp = var[[1]][i]}
     
     if(names(var) %in% names(list)){
       if(is.list(tmp)){
@@ -410,12 +409,16 @@ plot.function <- function(result){
 
 
 # 1. Testing simulation sr and dyadic effects------
+N_id = 50
+Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
-               list = list(sr_mu = c(0,0),
+               list = list(sr_mu = c(0.5,0.5),
                            sr_sigma  = c(1, 1),
-                           sr_rho = 0,
-                           dr_mu = c(0,0),
-                           dr_rho = 0,
+                           sr_rho = 0.6,
+                           dr_mu = c(0.5,0.5),
+                           dr_rho = 0.7,
+                           att = Hairy,
+                           N_id = N_id,
                            simulate.interactions = TRUE),
                name = " interactions"
 )
@@ -424,10 +427,10 @@ test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
 test.scenarios(var = list(sr_rho = seq(0.5, 1, length.out=10)),
                list = list(sr_mu = c(0,0),
                            sr_sigma  = c(1, 1),
+                           sr_rho = 0.5,
                            dr_mu = c(0,0),
-                           dr_rho = 0,
-                           dr_sigma = 1,
-                           sr_rho = 0,
+                           att = Hairy,
+                           N_id = N_id,
                            simulate.interactions = TRUE),
                name = " interactions"
 )
@@ -435,22 +438,22 @@ test.scenarios(var = list(sr_rho = seq(0.5, 1, length.out=10)),
 test.scenarios(var = list(dr_rho = seq(0.5, 1, length.out=10)),
                list = list(sr_mu = c(0,0),
                            sr_sigma  = c(1, 1),
+                           sr_rho = 0.5,
                            dr_mu = c(0,0),
-                           dr_rho = 0,
-                           dr_sigma = 1,
-                           sr_rho = 0,
+                           att = Hairy,
+                           N_id = N_id,
                            simulate.interactions = TRUE),
                name = " interactions"
 )
 
 
 test.scenarios(var = list(sr_mu = seq(0.5, 1, length.out=10)),
-               list = list(sr_mu = c(0,0),
-                           sr_sigma  = c(1, 1),
+               list = list(sr_sigma  = c(1, 1),
+                           sr_rho = 0.5,
                            dr_mu = c(0,0),
-                           dr_rho = 0.75,
-                           dr_sigma = 1,
-                           sr_rho = 0,
+                           dr_rho = 0.8,
+                           att = Hairy,
+                           N_id = N_id,
                            simulate.interactions = TRUE),
                name = " interactions"
 )
@@ -458,11 +461,11 @@ test.scenarios(var = list(sr_mu = seq(0.5, 1, length.out=10)),
 
 test.scenarios(var = list(sr_sigma = seq(0.5, 1, length.out=10)),
                list = list(sr_mu = c(0,0),
-                           sr_sigma  = c(1, 1),
+                           sr_rho = 0.5,
                            dr_mu = c(0,0),
-                           dr_rho = 0.75,
-                           dr_sigma = 1,
-                           sr_rho = 0,
+                           dr_rho = 0.8,
+                           att = Hairy,
+                           N_id = N_id,
                            simulate.interactions = TRUE),
                name = " interactions"
 )
@@ -470,10 +473,10 @@ test.scenarios(var = list(sr_sigma = seq(0.5, 1, length.out=10)),
 test.scenarios(var = list(dr_mu = seq(0.5, 1, length.out=10)),
                list = list(sr_mu = c(0,0),
                            sr_sigma  = c(1, 1),
-                           dr_mu = c(0,0),
-                           dr_rho = 0.75,
-                           dr_sigma = 1,
-                           sr_rho = 0,
+                           sr_rho = 0.5,
+                           dr_rho = 0.8,
+                           att = Hairy,
+                           N_id = N_id,
                            simulate.interactions = TRUE),
                name = " interactions"
 )
