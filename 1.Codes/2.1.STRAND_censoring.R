@@ -1,22 +1,22 @@
-#library(STRAND)
-#source("./1.Codes/2.data_simulation.R")
-#
-#N_id = 30
-#Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
-#indiv =  data.frame(Hairy = Hairy)
-#
-#A = simulate_sbm_plus_srm_network_with_measurement_bias(N_id = N_id)
-#
-#nets = list(Grooming = A$network)
-#exposure_nets = list(Exposure = A$true_samps)
-#
-#NG = sample(c(1,3,7), 1) # Random number of groups
-#clique = sample(1:NG, N_id, replace = TRUE)
-#mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
-#B = matrix(rnorm(NG*NG, mean.within.GR, sd = 1), NG, NG)
-#mean.between.GR = sample(c(seq(from = 0, to = 9, by = 1)), 1) # Increase randomly the probability of  ties within groups.
-#diag(B) = diag(B) + rnorm(NG, mean.between.GR, sd = 1)
-#block = data.frame(Clique=factor(clique))
+library(STRAND)
+source("./1.Codes/2.data_simulation.R")
+
+N_id = 30
+Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
+indiv =  data.frame(Hairy = Hairy)
+individual_effects=matrix(c(1, 1),ncol=1, nrow=2)
+A = simulate_sbm_plus_srm_network_with_measurement_bias(N_id = N_id, individual_predictors= Hairy, individual_effects=individual_effects)
+
+nets = list(Grooming = A$network)
+exposure_nets = list(Exposure = A$true_samps)
+
+NG = sample(c(1,3,7), 1) # Random number of groups
+clique = sample(1:NG, N_id, replace = TRUE)
+mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
+B = matrix(rnorm(NG*NG, mean.within.GR, sd = 1), NG, NG)
+mean.between.GR = sample(c(seq(from = 0, to = 9, by = 1)), 1) # Increase randomly the probability of  ties within groups.
+diag(B) = diag(B) + rnorm(NG, mean.between.GR, sd = 1)
+block = data.frame(Clique=factor(clique))
 
 make_strand_data_censoring = function(outcome = nets,
                                        individual_covariates = indiv,
