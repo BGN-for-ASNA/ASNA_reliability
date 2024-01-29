@@ -38,6 +38,10 @@ make_strand_data_censoring = function(outcome = nets,
   if (outcome_mode == "poisson") {
     outcome_mode_numeric = 3
   }
+  if (outcome_mode == "binomial" & !is.null(censoring)) {
+    outcome_mode_numeric = 4
+  }
+  
   if (is.null(outcome_mode_numeric)) 
     stop("outcome_mode not supported")
   if (is.null(self_report)) {
