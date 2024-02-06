@@ -18,7 +18,9 @@ data{
     matrix [22, 2] priors;
     
     int export_network;
-    int outcome_mode;                           
+    int outcome_mode; 
+    
+    vector[N_id] censoring_set2;
 }
 
 transformed data{
@@ -79,7 +81,10 @@ parameters{
     vector[N_params[3]-1] dyad_effects;  
     vector[N_params[4]-1] censoring_effects; 
     
-    
+    vector[N_id] cens2;
+    real alpha;
+    real beta;
+    real<lower=0> sigma;
 }
 
 model{
@@ -133,7 +138,7 @@ model{
     //# priors for 
     B[1,1] ~ normal(logit(priors[10,1]/sqrt(N_id)), priors[10,2]);
 
-    //# Censoring priors for social relations model
+    //# Censoring priors for social relations model 
     for(i in 1:N_id)
     censoring_raw[i] ~ normal(0,1);//# which default prior?
 
@@ -147,21 +152,26 @@ model{
       cens[i] = diag_pre_multiply(censoring_sigma, censoring_L) * censoring_raw[i] + censoring_terms;
     }
     
+    cens2 ~ normal(alpha + beta* censoring_set2, sigma);
+    
     //# likelihood
     for ( i in 1:N_id ) {
       for ( j in 1:N_id ) {
         if ( i != j ) {
           if(outcome_mode==1){
-            outcomes[i,j,1] ~ bernoulli_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]);  //# Then model the outcomes
+            //outcomes[i,j,1] ~ bernoulli_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]);  //# Then model the outcomes
+             outcomes[i,j,1] ~ bernoulli(inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j])*inv_logit(cens[i,1]+cens[j,2]));
           }
           if(outcome_mode==2){
-            outcomes[i,j,1] ~ binomial_logit(exposure[i,j,1], B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] );  //# Then model the outcomes
+            //outcomes[i,j,1] ~ binomial_logit(exposure[i,j,1], B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] );  //# Then model the outcomes
+             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j])*inv_logit(cens[i,1]+cens[j,2]));
           }
           if(outcome_mode==3){
             outcomes[i,j,1] ~ poisson_log(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]);  //# Then model the outcomes
           }
           if(outcome_mode==4){
-            outcomes[i,j,1] ~ binomial_logit(exposure[i,j,1], B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] + cens[i,1]);
+             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j])*inv_logit(cens[i,1]+cens[j,2]));
+            //outcomes[i,j,1] ~ binomial_logit(exposure[i,j,1], B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] + cens[i,1]);
           }
         }
       }
