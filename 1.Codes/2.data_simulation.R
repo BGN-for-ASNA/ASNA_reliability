@@ -173,6 +173,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   ###################################
   if(simulate.interactions){
     censoring = matrix(NA, N_id, N_id)
+    cens = rep(0, N_id)
     interactions = NULL
     for(a in 1:N_id){# For a given individual
       if(true_exposure[a] == 0){next}
@@ -189,39 +190,35 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
           p.alter = int_intercept[2]
         }
 
-        #Probability of censor data on ego
-        prob.focal.unobserved = rbinom(true_exposure[a], 1, prob = inv_logit(p.ego))
-
-        #Probability of censor data on alter
-        prob.alter.unobserved = rbinom(true_exposure[a], 1, prob = inv_logit(p.alter))
+        ##Probability of censor data on ego
+        #prob.focal.unobserved = rbinom(true_exposure[a], 1, prob = inv_logit(p.ego))
+#
+        ##Probability of censor data on alter
+        #prob.alter.unobserved = rbinom(true_exposure[a], 1, prob = inv_logit(p.alter))
 
         censoring[a,b] = inv_logit(p.ego)*inv_logit(p.alter)
         
         #Probability of censor data
-        observed = rbinom(true_exposure[a] , size = 1, prob = p[a,b]*prob.focal.unobserved*prob.alter.unobserved) 
+        observedWithoutCensoring = rbinom(true_exposure[a] , size = 1, prob = p[a,b])
+        Nobservations = sum(observedWithoutCensoring == 1)
+        
+        observed = observedWithoutCensoring
+        observed[which(observed == 1)] = rbinom(Nobservations, size = 1, prob = inv_logit(p.ego) * inv_logit(p.alter)) 
+      
+        #if(sum(observedWithoutCensoring - observed)>2){stop()}
+        cens[a] = cens[a] + sum(observedWithoutCensoring - observed)
+        cens[b] = cens[b] + sum(observedWithoutCensoring - observed)
+        #observed = rbinom(true_exposure[a] , size = 1, prob = p[a,b]* inv_logit(p.ego) * inv_logit(p.alter)) 
 
           
         interactions = rbind(interactions, data.frame('follow' = a, 'focal' = 1:true_exposure[a], 'sender' = a,  'receiver' = b, 'interaction' = observed,
-                                                      'exposure' = true_exposure[a], 'sr_p' = p[a,b], 's_i' = prob.focal.unobserved, 'r_i' = prob.alter.unobserved))
+                                                      'exposure' = true_exposure[a], 'sr_p' = p[a,b], 's_i' = inv_logit(p.ego), 'r_i' = inv_logit(p.alter)))
       }
     }
 
     net = df.to.mat(interactions, actor = 'sender', receiver = 'receiver', weighted ='interaction')
     net = net[colnames(net)[order(as.integer(colnames(net)))],colnames(net)[order(as.integer(colnames(net)))]]
     
-    #return(list(interactions = interactions,
-    #            network= net,
-    #            tie_strength=p,
-    #            group_ids=groups,
-    #            individual_predictors=individual_predictors,
-    #            dyadic_predictors=dyadic_predictors,
-    #            exposure_predictors=exposure_predictors,
-    #            sr=sr,
-    #            dr=dr,
-    #            true_samps=true_samps,
-    #            ideal_samps=ideal_samps,
-    #            ideal_exposure=ideal_exposure,
-    #            true_exposure=true_exposure))
   }
   ###############################
   #######  Model outcomes #######
