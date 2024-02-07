@@ -224,12 +224,22 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   #######  Model outcomes #######
   ###############################
   # Create an interaction matrix according to the ties probability matrix and observation bias.
-  for ( i in 1:(N_id-1) ){
-    for ( j in (i+1):N_id){
-      y_true[i,j] = rbinom( 1 , size=true_samps[i,j], prob = p[i,j]*censoring[i,j] )
-      y_true[j,i] = rbinom( 1 , size=true_samps[j,i], prob = p[j,i]*censoring[j,i])
+  if(simulate.interactions){
+    for ( i in 1:(N_id-1) ){
+      for ( j in (i+1):N_id){
+        y_true[i,j] = rbinom( 1 , size=true_samps[i,j], prob = p[i,j]*censoring[i,j] )
+        y_true[j,i] = rbinom( 1 , size=true_samps[j,i], prob = p[j,i]*censoring[j,i])
+      }
+    }
+  }else{
+    for ( i in 1:(N_id-1) ){
+      for ( j in (i+1):N_id){
+        y_true[i,j] = rbinom( 1 , size=true_samps[i,j], prob = p[i,j])
+        y_true[j,i] = rbinom( 1 , size=true_samps[j,i], prob = p[j,i])
+      }
     }
   }
+
 
   diag(y_true) = 0
   diag(p) = 0
