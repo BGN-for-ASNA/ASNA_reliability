@@ -152,7 +152,7 @@ model{
       cens[i] = diag_pre_multiply(censoring_sigma, censoring_L) * censoring_raw[i] + censoring_terms;
     }
     
-    cens2 ~ normal(alpha + beta* censoring_set2, sigma);
+    cens2 ~ alpha + beta* censoring_set2;
     
     //# likelihood
     for ( i in 1:N_id ) {

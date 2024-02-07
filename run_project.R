@@ -9,8 +9,8 @@ render("1.Codes/Appendix 1.R",
 
 
 render(input = "1.Codes/Appendix 2.R",
-        output_format = pdf_document(),
-        output_file = "2.Results/Appendices/2/Appendix 2.pdf")
+       output_format = pdf_document(),
+       output_file = "2.Results/Appendices/2/Appendix 2.pdf")
 
 # Generate analysis-------------
 ## No differences in sociality, no biases----------
@@ -70,15 +70,15 @@ result4 = simulations(Reps = 100, ncores = 100,
                       sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
                       dr_rho = 0.8, dr_sigma = 1.2,
                       exposure_sigma = 1,
-                     N_id =  seq(30, 90, by = 10), 
-                     hairy_tie_effect =  c(seq(-0.40, -0.20, by = 0.01), seq(0.20, 0.40, by = 0.01)),
-                     hairy_detect_effect = seq(0, 0, by = 0.5),
-                     BISON = FALSE,
-                     STRAND = T, 
-                     simulate.interactions = F, 
-                     int_intercept = c(4,4), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-                     int_slope = c(-1,-1),# No effect of individuals attributes
-                     blockModel = TRUE) # No block model
+                      N_id =  seq(30, 90, by = 10), 
+                      hairy_tie_effect =  c(seq(-0.40, -0.20, by = 0.01), seq(0.20, 0.40, by = 0.01)),
+                      hairy_detect_effect = seq(0, 0, by = 0.5),
+                      BISON = FALSE,
+                      STRAND = T, 
+                      simulate.interactions = F, 
+                      int_intercept = c(4,4), #invert log of inf = 1 of prob to observe interaction for both focal and alter
+                      int_slope = c(-1,-1),# No effect of individuals attributes
+                      blockModel = TRUE) # No block model
 write.csv(result4, "2.Results/Simulations/Differences in sociality, censorign bias.csv", row.names = FALSE)
 save.image("2.Results/Simulations/Simulations.RData")
 
@@ -131,7 +131,7 @@ get.rates <- function(path, threshold = 0.2){
       type = gsub('.csv', '', files[a])
       tmp$type = type
       results = rbind(results, tmp)
-
+      
       tmp =  error.rates(tmp, threshold = threshold)
       tmp$type = type
       errors = rbind(errors, tmp)
@@ -141,7 +141,6 @@ get.rates <- function(path, threshold = 0.2){
   return(list(errors, results))
 }
 error = get.rates(path = 'C:/Users/sebastian_sosa/Downloads/sim/', threshold = 0.20)
-
 
 ## Plots------------------
 ### Rates------------------

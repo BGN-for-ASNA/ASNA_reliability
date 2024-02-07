@@ -351,6 +351,7 @@ test.scenarios <- function(name = "",
       L = c(tmp, list)
       names(L) = c(names(var), names(list))
     }
+    
     #result[[i]] = do.call('test.strand',L)
     r = do.call('test.strand',L)
     return(r)
@@ -363,31 +364,48 @@ test.scenarios <- function(name = "",
 
 plot.function <- function(result){
   data =  NULL
+  tested =  subset(result, (names(result) == "tested"))$tested
+  tmp1 =  subset(result, !(names(result) == "tested"))
   for(a in 1:(length(result)-1)){
-    tmp = result[[a]]
+    tmp = tmp1[[a]]
     
     t1 = data.frame(Estimated = tmp$diag[1,1],
                     Simulated = 1,
                     name = "B")
     
-    t2 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[1]),
-                    Simulated = tmp$arguments$sr_sigma[1],
+    t2 = data.frame(Estimated = as.numeric(tmp$summary$summary[tmp$summary$summary$Variable %in% 'focal effects sd',]$Median),
+                    Simulated =ifelse(!is.null(tmp$arguments$sr_sigma[1]),  
+                                      tmp$arguments$sr_sigma[1],
+                                      rep(NA, 
+                                          length(as.numeric(tmp$summary$summary$Median[1])))),
                     name = "sr_sigma1")
     
-    t3 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[2]),
-                    Simulated = tmp$arguments$sr_sigma[2],
+    t3 = data.frame(Estimated = as.numeric(tmp$summary$summary[tmp$summary$summary$Variable %in% 'target effects sd',]$Median),
+                    Simulated =ifelse(!is.null(tmp$arguments$sr_sigma[2]),  
+                                      tmp$arguments$sr_sigma,
+                                      rep(NA, 
+                                          length(as.numeric(tmp$summary$summary$Median[2])))),
                     name = "sr_sigma2")
     
-    t4 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[4]),
-                    Simulated = tmp$arguments$sr_rho,
+    t4 = data.frame(Estimated = as.numeric(tmp$summary$summary[tmp$summary$summary$Variable %in% 'focal-target effects rho (generalized recipocity)',]$Median),
+                    Simulated =ifelse(!is.null(tmp$arguments$sr_rho),  
+                                      tmp$arguments$sr_rho,
+                                      rep(NA, 
+                                          length(as.numeric(tmp$summary$summary$Median[4])))),
                     name = "sr_rho")
     
-    t5 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[3]),
-                    Simulated = tmp$arguments$dr_sigma,
+    t5 = data.frame(Estimated = as.numeric(tmp$summary$summary[tmp$summary$summary$Variable %in% 'dyadic effects sd',]$Median),
+                    Simulated =ifelse(!is.null(tmp$arguments$dr_sigma),  
+                                      tmp$arguments$dr_sigma,
+                                      rep(NA, 
+                                          length(as.numeric(tmp$summary$summary$Median[3])))),
                     name = "dr_sigma")
     
-    t6 = data.frame(Estimated = as.numeric(tmp$summary$summary$Median[5]),
-                    Simulated =  tmp$arguments$dr_rho,
+    t6 = data.frame(Estimated = as.numeric(tmp$summary$summary[tmp$summary$summary$Variable %in% 'dyadic effects rho (dyadic recipocity)',]$Median),
+                    Simulated =ifelse(!is.null(tmp$arguments$dr_rho),  
+                                      tmp$arguments$dr_rho,
+                                      rep(NA, 
+                                          length(as.numeric(tmp$summary$summary$Median[5])))),
                     name = "dr_rho")
     
     t = rbind(t1, t2, t3, t4, t5, t6)
@@ -400,10 +418,26 @@ plot.function <- function(result){
   data$tested = names(result[[length(result)]])
   
   library(ggplot2)
-  p = ggplot(data[grepl(data$tested[[1]], data$name , fixed = TRUE),], aes(x = Simulated, y = Estimated, group = name))+
-    geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
-    ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
-    theme(text = element_text(size=20))
+  if(data$tested[1] == 'sr_sigma'){
+    p1 = ggplot(data[data$name %in% c('sr_sigma1'),], aes(x = Simulated, y = Estimated, group = name))+
+      geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
+      ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
+      theme(text = element_text(size=15))
+    
+    p2 = ggplot(data[data$name %in% c('sr_sigma2'),], aes(x = Simulated, y = Estimated, group = name))+
+      geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
+      ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
+      theme(text = element_text(size=15))
+    
+    return(list(p1,p2))
+    
+  }else{
+    p = ggplot(data[data$name %in% data$tested[1],], aes(x = Simulated, y = Estimated, group = name))+
+      geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
+      ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
+      theme(text = element_text(size=15))
+  }
+  
   return(p)
 }
 
@@ -411,6 +445,21 @@ plot.function <- function(result){
 # 1. Testing simulation sr and dyadic effects------
 N_id = 50
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
+result = test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
+                        list = list(sr_mu = c(0.5,0.5),
+                                    sr_sigma  = c(1, 1),
+                                    sr_rho = 0.6,
+                                    dr_mu = c(0.5,0.5),
+                                    dr_rho = 0.7,
+                                    att = Hairy,
+                                    N_id = N_id,
+                                    simulate.interactions = TRUE),
+                        name = " interactions"
+)
+
+
+
+
 test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
                list = list(sr_mu = c(0.5,0.5),
                            sr_sigma  = c(1, 1),
@@ -447,16 +496,16 @@ test.scenarios(var = list(dr_rho = seq(0.5, 1, length.out=10)),
 )
 
 
-test.scenarios(var = list(sr_mu = seq(0.5, 1, length.out=10)),
-               list = list(sr_sigma  = c(1, 1),
-                           sr_rho = 0.5,
-                           dr_mu = c(0,0),
-                           dr_rho = 0.8,
-                           att = Hairy,
-                           N_id = N_id,
-                           simulate.interactions = TRUE),
-               name = " interactions"
-)
+#test.scenarios(var = list(sr_mu = seq(0.5, 1, length.out=10)),
+#               list = list(sr_sigma  = c(1, 1),
+#                           sr_rho = 0.5,
+#                           dr_mu = c(0,0),
+#                           dr_rho = 0.8,
+#                           att = Hairy,
+#                           N_id = N_id,
+#                           simulate.interactions = TRUE),
+#               name = " interactions"
+#)
 
 
 test.scenarios(var = list(sr_sigma = seq(0.5, 1, length.out=10)),
@@ -470,44 +519,36 @@ test.scenarios(var = list(sr_sigma = seq(0.5, 1, length.out=10)),
                name = " interactions"
 )
 
-test.scenarios(var = list(dr_mu = seq(0.5, 1, length.out=10)),
-               list = list(sr_mu = c(0,0),
-                           sr_sigma  = c(1, 1),
-                           sr_rho = 0.5,
-                           dr_rho = 0.8,
-                           att = Hairy,
-                           N_id = N_id,
-                           simulate.interactions = TRUE),
-               name = " interactions"
-)
+#test.scenarios(var = list(dr_mu = seq(0.5, 1, length.out=10)),
+#               list = list(sr_mu = c(0,0),
+#                           sr_sigma  = c(1, 1),
+#                           sr_rho = 0.5,
+#                           dr_rho = 0.8,
+#                           att = Hairy,
+#                           N_id = N_id,
+#                           simulate.interactions = TRUE),
+#               name = " interactions"
+#)
 
 # Plots -----------------------------------------
-load("2.Results/Appendices/2/dr_mu interactions.Rdata")
-p.dr_mu_interactions = plot.function(result)
-p.dr_mu_interactions
-ggsave('2.Results/Appendices/2/p.dr_mu_interactions.png')
+#load("2.Results/Appendices/2/dr_mu interactions.Rdata")
+#p.dr_mu_interactions = plot.function(result)
+#p.dr_mu_interactions
+#load("2.Results/Appendices/2/sr_mu interactions.Rdata")
+#p.sr_mu_interactions = plot.function(result)
+#p.sr_mu_interactions
 
 load("2.Results/Appendices/2/dr_rho interactions.Rdata")
 p.dr_rho_interactions = plot.function(result)
-p.dr_rho_interactions
-ggsave('2.Results/Appendices/2/p.dr_rho_interactions.png')
 
 load("2.Results/Appendices/2/dr_sigma interactions.Rdata")
 p.dr_sigma_interactions = plot.function(result)
-p.dr_sigma_interactions
-ggsave('2.Results/Appendices/2/p.dr_sigma_interactions.png')
-
-load("2.Results/Appendices/2/sr_mu interactions.Rdata")
-p.sr_mu_interactions = plot.function(result)
-p.sr_mu_interactions
-ggsave('2.Results/Appendices/2/p.sr_mu_interactions.png')
 
 load("2.Results/Appendices/2/sr_rho interactions.Rdata")
 p.sr_rho_interactions = plot.function(result)
-p.sr_rho_interactions
-ggsave('2.Results/Appendices/2/p.sr_rho_interactions.png')
 
 load("2.Results/Appendices/2/sr_sigma interactions.Rdata")
 p.sr_sigma_interactions = plot.function(result)
-p.sr_sigma_interactions
-ggsave('2.Results/Appendices/2/p.sr_sigma_interactions.png')
+
+ggpubr::ggarrange(p.dr_rho_interactions, p.dr_sigma_interactions, p.sr_rho_interactions, p.sr_sigma_interactions[[1]], p.sr_sigma_interactions[[2]],  ncol = 3, nrow = 2)
+ggsave('2.Results/Appendices/2/Appendix 2 plot.png')
