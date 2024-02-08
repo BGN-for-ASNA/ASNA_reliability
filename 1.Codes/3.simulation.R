@@ -214,7 +214,7 @@ simulations <- function(
         result$NG = ifelse(is.null(NG), NA, NG)
         result$mean.between.GR = ifelse(is.null(mean.between.GR), NA, mean.between.GR)
         result$mean.within.GR = ifelse(is.null(mean.within.GR), NA, mean.within.GR)
-        result$predictedVoriginal = corM
+        result$predictedVoriginal = cor
         colnames(result) = c('scale(hair)','5 %','95 %', 'N_id', 'tie_effect', 'detect_effect', 'p-value', 'se',
                              'approach', 'sim', 'sr_sigma', 'sr_rho', 'dr_sigma','dr_rho','exposure_sigma','exposure_baseline',
                              'NG', 'mean.between.GR', 'mean.within.GR', "prediction_correlation")
