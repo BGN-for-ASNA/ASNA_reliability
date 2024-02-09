@@ -1,4 +1,5 @@
 #' # 1. Run parallel functions: to assess simulation parameter accuracy.
+options(warn = -1)
 source("1.Codes/Appendix 2 parallel functions.R")
 load("2.Results/Appendices/2/dr_rho interactions.Rdata")
 p.dr_rho_interactions = plot.function(result)
