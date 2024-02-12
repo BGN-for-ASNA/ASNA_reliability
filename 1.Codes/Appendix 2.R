@@ -1,4 +1,4 @@
-#' # 1. Run parallel functions: to assess simulation parameter accuracy.
+#' # 1. Run parallel functions: to assess simulation parameter accuracy
 options(warn = -1)
 source("1.Codes/Appendix 2 parallel functions.R")
 load("2.Results/Appendices/2/dr_rho interactions.Rdata")
@@ -15,7 +15,7 @@ p.sr_sigma_interactions = plot.function(result)
 
 ggpubr::ggarrange(p.dr_rho_interactions, p.dr_sigma_interactions, p.sr_rho_interactions, p.sr_sigma_interactions[[1]], p.sr_sigma_interactions[[2]],  ncol = 3, nrow = 2)
 
-#' # 2. Testing individual characteristics on sociality, exposure, and censoring  -------
+#' # 2. Testing individual characteristics on sociality, exposure, and censoring
 N_id = 50
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 ## Run parallel functions: to assess simulation parameter accuracy..1. Individual characteristics do not impact sociality, exposure, or censoring
@@ -62,8 +62,7 @@ test3$plots
 
 #' The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and exposure 
 #' which lead to a significant effect between individuals characteristics and (a) sociality and near significant effect between individuals characteristics and (b) correct ed sociality.
-
-
+#'
 ##' ## 2.3. There is no relationship between individual characteristics, sociality and exposure but there is a relationship between individual characteristics and censoring
 test4 = test.function(att = Hairy,
                       N_id = N_id,
@@ -133,7 +132,8 @@ test = test.function(att = Hairy,
                      simulate.interactions = T) #no censoring effect
 test$plots
 
-##' ## 3.2. An example of individual_effects being equal to 0.4 in simulated data
+#'
+#' ## 3.2. An example of individual_effects being equal to 0.4 in simulated data
 N_id = 50
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 test = test.function(att = Hairy,
@@ -146,7 +146,7 @@ test = test.function(att = Hairy,
                      simulate.interactions = T) #no censoring effect
 test$plots
 
-
+#'
 #' # 4. Testing when the coefficient of exposure (exposure_effects parameter) lead to significant effect on simulated data
 N_id = 30
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
@@ -183,7 +183,7 @@ error.rates(d, threshold =  1)
 #' From a visual perspective and error rates we can see that above a value of 0.30 for individual_effects parameters, we start to observe increase of false positive.
 #' We will use values of exposure_effects ranging from 0 to 0.20 for simulations without exposure bias and values ranging 0.4 to 0.6 for simulations with exposure bias.
 #'
-
+#'
 #' ## 4.1. An example of exposure_effects being equal to 0.2 in simulated data
 N_id = 50
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
@@ -209,7 +209,7 @@ test = test.function(att = Hairy,
 test$plots
 
 #' Sociality patterns observed in plot (a) are only due to exposure bias (plot (c)).
-
+#'
 #' # 5. Testing when the coefficient of censoring (int_slope parameter) lead to significant effect on simulated data
 N_id = 30
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
@@ -248,7 +248,7 @@ error.rates(d, threshold = 0.20)
 #' From a visual perspective and error rates we can see that above a value of 0.30 for individual_effects parameters, we start to observe increase of false positive.
 #' We will use values of exposure_effects ranging from 0 to 0.20 for simulations without exposure bias and values ranging 0.4 to 0.6 for simulations with exposure bias.
 #'
-
+#'
 #' ## 5.1. An example of censoring intercept and slope are equal to 0.1 in simulated data
 N_id = 100
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)

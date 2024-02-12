@@ -446,12 +446,12 @@ plot.function <- function(result){
     p1 = ggplot(data[data$name %in% c('sr_sigma1'),], aes(x = Simulated, y = Estimated, group = name))+
       geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
       ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
-      theme(text = element_text(size=15))
+      theme(text = element_text(size=11))
     
     p2 = ggplot(data[data$name %in% c('sr_sigma2'),], aes(x = Simulated, y = Estimated, group = name))+
       geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
       ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
-      theme(text = element_text(size=15))
+      theme(text = element_text(size=11))
     
     return(list(p1,p2))
     
@@ -459,7 +459,7 @@ plot.function <- function(result){
     p = ggplot(data[data$name %in% data$tested[1],], aes(x = Simulated, y = Estimated, group = name))+
       geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
       ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
-      theme(text = element_text(size=15))
+      theme(text = element_text(size=11))
   }
   
   return(p)
@@ -480,9 +480,6 @@ result = test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
                                     simulate.interactions = T),
                         name = " interactions"
 )
-
-
-
 
 test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
                list = list(sr_mu = c(0.5,0.5),
