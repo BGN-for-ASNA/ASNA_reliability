@@ -216,6 +216,30 @@ test.strand <- function(att = NULL,
                         int_intercept = c(Inf,Inf),
                         int_slope = c(Inf,Inf),
                         simulate.interactions = FALSE){
+  #V = 1
+  #B = NULL
+  #groups=NULL
+  #att = list$att
+  #dr_sigma = 0.5
+  #sr_mu = c(0.5, 0.5)
+  #sr_sigma = c(1, 1)
+  #sr_rho = 0.6
+  #dr_mu = c(0.5, 0.5)
+  #dr_rho = 0.7
+  #N_id = 20
+  #simulate.interactions = T
+  #individual_predictors = NULL
+  #dyadic_predictors = NULL
+  #individual_effects = NULL
+  #dyadic_effects = NULL
+  #exposure_predictors = NULL
+  #exposure_effects = NULL
+  #exposure_sigma = 1.9
+  #exposure_baseline = 50
+  #int_intercept = c(Inf,Inf)
+  #int_slope = c(Inf,Inf)
+  #simulate.interactions = FALSE
+  
   
   #if(is.null(att)){stop("Individuals attributes (att) can't be NULL")}
   data = simulate_sbm_plus_srm_network_with_measurement_bias(N_id = N_id,
@@ -422,12 +446,12 @@ plot.function <- function(result){
     p1 = ggplot(data[data$name %in% c('sr_sigma1'),], aes(x = Simulated, y = Estimated, group = name))+
       geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
       ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
-      theme(text = element_text(size=15))
+      theme(text = element_text(size=11))
     
     p2 = ggplot(data[data$name %in% c('sr_sigma2'),], aes(x = Simulated, y = Estimated, group = name))+
       geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
       ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
-      theme(text = element_text(size=15))
+      theme(text = element_text(size=11))
     
     return(list(p1,p2))
     
@@ -435,7 +459,7 @@ plot.function <- function(result){
     p = ggplot(data[data$name %in% data$tested[1],], aes(x = Simulated, y = Estimated, group = name))+
       geom_point(aes(size = 5), show.legend = F)+#facet_grid(~name, scales="free")+
       ggtitle(paste(names(result$tested)[1], ' variation from ', result$tested[[1]][1], ' to ', result$tested[[1]][length(result$tested[[1]])]))+
-      theme(text = element_text(size=15))
+      theme(text = element_text(size=11))
   }
   
   return(p)
@@ -443,7 +467,7 @@ plot.function <- function(result){
 
 
 # 1. Testing simulation sr and dyadic effects------
-N_id = 50
+N_id = 20
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 result = test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
                         list = list(sr_mu = c(0.5,0.5),
@@ -453,12 +477,9 @@ result = test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
                                     dr_rho = 0.7,
                                     att = Hairy,
                                     N_id = N_id,
-                                    simulate.interactions = TRUE),
+                                    simulate.interactions = T),
                         name = " interactions"
 )
-
-
-
 
 test.scenarios(var = list(dr_sigma = seq(0.5, 1, length.out=10)),
                list = list(sr_mu = c(0.5,0.5),
