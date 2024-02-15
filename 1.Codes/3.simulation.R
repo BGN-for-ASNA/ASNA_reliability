@@ -26,8 +26,8 @@
 #exposure_baseline = 40
 ## Interactions bias parameter
 #simulate.interactions = TRUE
-#int_intercept =c(Inf,Inf) #invert log of inf = 1 of prob to observe interaction for both focal and alte
-#int_slope = c(-Inf,-Inf) # No effect of individuals attributes on missing interactio
+#cens_intercept =c(Inf,Inf) #invert log of inf = 1 of prob to observe interaction for both focal and alte
+#cens_slope = c(-Inf,-Inf) # No effect of individuals attributes on missing interactio
 ## Simulation parameter
 #BISON = TRUE
 #STRAND = TRUE # use STRAN mode
@@ -62,12 +62,13 @@ simulations <- function(
     exposure_sigma = 2.9,
     exposure_baseline = 40,
     
-    # Interactions bias parameters
-    simulate.interactions = TRUE,
-    int_intercept =c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-    int_slope = c(-Inf,-Inf), # No effect of individuals attributes on missing interaction
+    # Interactions bias parameters    censoring = FALSE
+    simulate.censoring = False,
+    cens_intercept =c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
+    cens_slope = c(-Inf,-Inf), # No effect of individuals attributes on missing interaction
     
     # Simulation parameters
+    simulate.interactions = TRUE,# Required for BISON and pre-network permutations
     BISON = TRUE,
     STRAND = TRUE, # use STRAN model
     ncores = 1, # number of cores
@@ -107,7 +108,6 @@ simulations <- function(
   #######  Testing methods ####
   #############################
   r <- foreach(i = 1:nrow(grid_subsample),.options.snow = opts) %dopar% {
-    print(i)
     library(ANTs)
     library(STRAND)
     source("./1.Codes/2.data_simulation.R")
@@ -314,8 +314,9 @@ simulations <- function(
       exposure_sigma = picked_exposure_sigma,
       exposure_baseline = picked_exposure_baseline,
       simulate.interactions = simulate.interactions,
-      int_intercept = int_intercept, # Prob of miss interactions
-      int_slope = int_slope
+      simulate.censoring = simulate.censoring,
+      cens_intercept = cens_intercept, # Prob of miss interactions
+      cens_slope = cens_slope
     )
     A$network[is.na(A$network)] = 0
     # BISON------------------------

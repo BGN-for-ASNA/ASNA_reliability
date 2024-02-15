@@ -25,9 +25,10 @@ result1 = simulations(Reps = 100, ncores = 100,
                       hairy_detect_effect = seq(0, 0, by = 0.5),
                       BISON = FALSE,
                       STRAND = T, 
-                      simulate.interactions = F, 
-                      int_intercept = c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-                      int_slope = c(-Inf,-Inf),# No effect of individuals attributes
+                      simulate.interactions = F,
+                      simulate.censoring = F,
+                      cens_intercept = c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
+                      cens_slope = c(Inf,Inf),# No effect of individuals attributes
                       blockModel = TRUE) # No block model
 
 write.csv(result1, "2.Results/Simulations/No differences in sociality, no biases.csv", row.names = FALSE)
@@ -42,8 +43,9 @@ result2 = simulations(Reps = 100, ncores = 100,
                       BISON = FALSE,
                       STRAND = T, 
                       simulate.interactions = F, 
-                      int_intercept = c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-                      int_slope = c(-Inf,-Inf),# No effect of individuals attributes
+                      simulate.censoring = F,
+                      cens_intercept = c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
+                      cens_slope = c(Inf,Inf),# No effect of individuals attributes
                       blockModel = TRUE) # No block model
 write.csv(result2, "2.Results/Simulations/Differences in sociality, no biases.csv", row.names = FALSE)
 
@@ -59,8 +61,9 @@ result3 = simulations(Reps = 100, ncores = 100,
                       BISON = FALSE,
                       STRAND = T, 
                       simulate.interactions = F, 
-                      int_intercept = c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-                      int_slope = c(-Inf,-Inf),# No effect of individuals attributes
+                      simulate.censoring = F,
+                      cens_intercept = c(Inf,Inf), #invert log of inf = 1 of prob to observe interaction for both focal and alter
+                      cens_slope = c(Inf,Inf),# No effect of individuals attributes
                       blockModel = TRUE) # No block model
 write.csv(result3, "2.Results/Simulations/Differences in sociality, exposure bias.csv", row.names = FALSE)
 
@@ -76,8 +79,9 @@ result4 = simulations(Reps = 100, ncores = 100,
                       BISON = FALSE,
                       STRAND = T, 
                       simulate.interactions = F, 
-                      int_intercept = c(4,4), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-                      int_slope = c(-1,-1),# No effect of individuals attributes
+                      simulate.censoring = F, 
+                      cens_intercept = c(4,4), #invert log of inf = 1 of prob to observe interaction for both focal and alter
+                      cens_slope = c(-1,-1),# No effect of individuals attributes
                       blockModel = TRUE) # No block model
 write.csv(result4, "2.Results/Simulations/Differences in sociality, censorign bias.csv", row.names = FALSE)
 save.image("2.Results/Simulations/Simulations.RData")
