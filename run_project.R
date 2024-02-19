@@ -36,6 +36,7 @@ result1 = simulations(Reps = 100, ncores = 100,
                       blockModel = TRUE) # No block model
 
 write.csv(result1, "2.Results/Simulations/No differences in sociality, no biases.csv", row.names = FALSE)
+
 ## Differences in sociality, no biases----------
 result2 = simulations(Reps = 100, ncores = 100, 
                       sr_rho = 0.5, sr_sigma =  c(1.7,0.8),

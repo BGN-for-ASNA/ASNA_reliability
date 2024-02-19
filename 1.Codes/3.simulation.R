@@ -155,7 +155,7 @@ simulations <- function(
       return(P_x/N_x)
     }
 
-    # Build table-------------
+    # Build results-------------
     get_res = function(x) {
       y = c(coef(x)[2],confint(x, level = 0.9)[2,])
       return(y)
