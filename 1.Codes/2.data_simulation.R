@@ -159,24 +159,26 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   exposure_offset = rep(NA, N_id) #Observation
   diag(true_samps) = 0
   diag(ideal_samps) = 0
-
+  mu = rep(NA, N_id)
+  
   #  For each individual, determine:
-   for( i in 1:N_id){
-    ideal_exposure[i] = rpois(1, lambda=exposure_baseline) # Observation baseline.
-    exposure_offset[i] = rnorm(1,0,exposure_sigma) # Observation bias.
-    exposure_prob[i] = inv_logit(sum(exposure_effects*exposure_predictors[i,]) + exposure_offset[i]) # Its observation probabilities based on individual characteristics.
-    true_exposure[i] = rbinom(1, size=ideal_exposure[i], prob=exposure_prob[i]) # Its observations with bias.
+  for( i in 1:N_id){
+    ideal_exposure[i] = rpois(1, lambda=exposure_baseline)
+    exposure_offset[i] = rnorm(1, 0.001, exposure_sigma)/4# Reduce variance as scale is exponential
+    mu[i] = exp(sum(exposure_effects*exposure_predictors[i,]) + exposure_offset[i])
+    true_exposure[i] = ceiling(rgamma(n = 1, shape = mu[i]*ideal_exposure[i]/10, scale = ideal_exposure[i]/10))
   }
 
   # For each dyad, determine its sampling with and without bias according to previous steps.
-    for ( i in 1:(N_id-1) ){
-      for ( j in (i+1):N_id){
-        ideal_samps[i,j] = sum(ideal_exposure[i] + ideal_exposure[j])
-        ideal_samps[j,i] = ideal_samps[i,j]
-        true_samps[i,j] = sum(true_exposure[i] + true_exposure[j])
-        true_samps[j,i] = true_samps[i,j]
-      }
+  for ( i in 1:(N_id-1) ){
+    for ( j in (i+1):N_id){
+      ideal_samps[i,j] = sum(ideal_exposure[i] + ideal_exposure[j])
+      ideal_samps[j,i] = ideal_samps[i,j]
+      true_samps[i,j] = sum(true_exposure[i] + true_exposure[j])
+      true_samps[j,i] = true_samps[i,j]
     }
+  }
+  
   ###################################
   #######  Model censoring bias###
   ###################################
@@ -198,7 +200,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
         }
 
         censoring[a,b] = inv_logit(p.ego)*inv_logit(p.alter)
-        censoring[b,a] = inv_logit(p.ego)*inv_logit(p.alter)
+        #censoring[b,a] = inv_logit(p.ego)*inv_logit(p.alter)
         
         if(true_exposure[a] == 0){next}
         

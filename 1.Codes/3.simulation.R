@@ -2,7 +2,7 @@
 ##  Simulations parameters ####
 ###############################
 ###############################
-## Individuals parameters
+# Individuals parameters
 #Reps = 100
 #N_id =  seq(30, 50, by = 20)
 #hairy_tie_effect = seq(-2, 2, by = 0.5)
@@ -25,7 +25,7 @@
 #exposure_sigma = 2.9
 #exposure_baseline = 40
 ## Interactions bias parameter
-#simulate.interactions = TRUE
+#simulate.censoring = TRUE
 #cens_intercept =c(Inf,Inf) #invert log of inf = 1 of prob to observe interaction for both focal and alte
 #cens_slope = c(-Inf,-Inf) # No effect of individuals attributes on missing interactio
 ## Simulation parameter

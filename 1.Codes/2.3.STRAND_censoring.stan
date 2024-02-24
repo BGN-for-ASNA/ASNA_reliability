@@ -20,7 +20,8 @@ data{
     int export_network;
     int outcome_mode; 
     
-    vector[N_id] censoring_set2;
+    //vector[N_id] censoring_factor; 
+    //array[N_id] int<lower=0,upper=1> censoring;
 }
 
 transformed data{
@@ -71,8 +72,8 @@ parameters{
     cholesky_factor_corr[2] dr_L;
     matrix[N_id, N_id] dr_raw;
     
-    vector<lower=0>[2] censoring_sigma;  //# Variation of censoring effects
-    cholesky_factor_corr[2] censoring_L;
+    //vector<lower=0>[2] censoring_sigma;  //# Variation of censoring effects
+    //cholesky_factor_corr[2] censoring_L;
     array[N_id] vector[2] censoring_raw;
 
     //# Effects of covariate
@@ -81,10 +82,8 @@ parameters{
     vector[N_params[3]-1] dyad_effects;  
     vector[N_params[4]-1] censoring_effects; 
     
-    vector[N_id] cens2;
     real alpha;
     real beta;
-    real<lower=0> sigma;
 }
 
 model{
@@ -138,21 +137,29 @@ model{
     //# priors for 
     B[1,1] ~ normal(logit(priors[10,1]/sqrt(N_id)), priors[10,2]);
 
-    //# Censoring priors for social relations model 
+    ////# Random regression for censoring ---------------------------------------------
+    //for(i in 1:N_id)
+    //censoring_raw[i] ~ normal(0,1);//# which default prior?
+    //censoring_sigma ~ exponential(priors[15,1]);//# which default prior?
+    //censoring_L ~ lkj_corr_cholesky(priors[17,1]);//# which default prior?
+    //for(i in 1:N_id){
+    //  vector[2] censoring_terms;
+    //  censoring_terms[1] = dot_product(censoring_effects,  to_vector(censoring_individual_predictors[i]));
+    //  censoring_terms[2] = dot_product(censoring_effects,  to_vector(censoring_individual_predictors[i]));
+    //  cens[i] = diag_pre_multiply(censoring_sigma, censoring_L) * censoring_raw[i] + censoring_terms;
+    //}
+    
+    // Binomial regression for censoring ---------------------------------------------
     for(i in 1:N_id)
-    censoring_raw[i] ~ normal(0,1);//# which default prior?
-
-    censoring_sigma ~ exponential(priors[15,1]);//# which default prior?
-    censoring_L ~ lkj_corr_cholesky(priors[17,1]);//# which default prior?
-
-    for(i in 1:N_id){
-      vector[2] censoring_terms;
+      censoring_raw[i] ~ normal(0,1);
+    for (i in 1:N_id){
+      //censoring[i] = inv_logit(alpha + beta* censoring_factor[i]);
+      vector[1] censoring_terms;
       censoring_terms[1] = dot_product(censoring_effects,  to_vector(censoring_individual_predictors[i]));
-      censoring_terms[2] = dot_product(censoring_effects,  to_vector(censoring_individual_predictors[i]));
-      cens[i] = diag_pre_multiply(censoring_sigma, censoring_L) * censoring_raw[i] + censoring_terms;
+      cens[i] = censoring_raw[i] + censoring_terms[1];
     }
     
-    cens2 ~ alpha + beta* censoring_set2;
+
     
     //# likelihood
     for ( i in 1:N_id ) {
@@ -160,17 +167,17 @@ model{
         if ( i != j ) {
           if(outcome_mode==1){
             //outcomes[i,j,1] ~ bernoulli_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]);  //# Then model the outcomes
-             outcomes[i,j,1] ~ bernoulli(inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j])*inv_logit(cens[i,1]+cens[j,2]));
+             outcomes[i,j,1] ~ bernoulli(inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] + cens[i] + cens[j]));
           }
           if(outcome_mode==2){
             //outcomes[i,j,1] ~ binomial_logit(exposure[i,j,1], B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] );  //# Then model the outcomes
-             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j])*inv_logit(cens[i,1]+cens[j,2]));
+             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] + cens[i] + cens[j]));
           }
           if(outcome_mode==3){
             outcomes[i,j,1] ~ poisson_log(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]);  //# Then model the outcomes
           }
           if(outcome_mode==4){
-             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j])*inv_logit(cens[i,1]+cens[j,2]));
+             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]+ cens[i] + cens[j]));
             //outcomes[i,j,1] ~ binomial_logit(exposure[i,j,1], B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] + cens[i,1]);
           }
         }
