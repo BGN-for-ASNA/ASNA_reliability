@@ -8,7 +8,9 @@ library(sjPlot)
 library(ggplot2)
 library(lmerTest)
 library(ANTs)
+library(rstan)
 set.seed(1)
+options(warn = -1)
 source("1.Codes/2.data_simulation.R")
 test.function <- function(att = NULL,
                           
@@ -24,6 +26,7 @@ test.function <- function(att = NULL,
                           dr_mu = c(0,0),
                           dr_sigma = 1.2,
                           dr_rho = 0.8,
+
                           
                           individual_predictors = NULL,
                           dyadic_predictors = NULL,
@@ -64,8 +67,8 @@ test.function <- function(att = NULL,
                                                              exposure_effects = exposure_effects,
                                                              exposure_sigma = exposure_sigma,
                                                              exposure_baseline = exposure_baseline,
-                                                             int_intercept = int_intercept,
-                                                             int_slope = int_slope,
+                                                             cens_intercept = int_intercept,
+                                                             cens_slope = int_slope,
                                                              simulate.interactions = simulate.interactions)
   
   if(test & !is.null(att)){
@@ -260,8 +263,8 @@ test.strand <- function(att = NULL,
                                                              exposure_effects = exposure_effects,
                                                              exposure_sigma = exposure_sigma,
                                                              exposure_baseline = exposure_baseline,
-                                                             int_intercept = int_intercept,
-                                                             int_slope = int_slope,
+                                                             cens_intercept = int_intercept,
+                                                             cens_slope = int_slope,
                                                              simulate.interactions = simulate.interactions)
   if(is.null(att)){
     model_dat = make_strand_data(outcome = list(Grooming = data$network),

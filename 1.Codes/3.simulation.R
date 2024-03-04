@@ -95,11 +95,11 @@ simulations <- function(
   library(doSNOW)
   cl <- ncores
   
-  cl <- makeCluster(cl, outfile="")
+  cl <- makeCluster(cl)
   registerDoSNOW(cl)
-  pb <- txtProgressBar(max = nrow(grid_subsample), style = 3)
-  progress <- function(n) setTxtProgressBar(pb, n)
-  opts <- list(progress = progress)
+  #pb <- txtProgressBar(max = nrow(grid_subsample), style = 3)
+  #progress <- function(n) setTxtProgressBar(pb, n)
+  #opts <- list(progress = progress)
   #cl <-makeCluster(cl, type="PSOCK")
   #registerDoParallel(cores=cl)
   
@@ -107,7 +107,7 @@ simulations <- function(
   #############################
   #######  Testing methods ####
   #############################
-  r <- foreach(i = 1:nrow(grid_subsample),.options.snow = opts) %dopar% {
+  r <- foreach(i = 1:nrow(grid_subsample)) %dopar% {
     library(ANTs)
     library(STRAND)
     source("./1.Codes/2.data_simulation.R")
