@@ -69,6 +69,31 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
                                                                cens_intercept = c(Inf,Inf),
                                                                cens_slope = c(Inf,Inf), #Change this to affect characteristics effect on detectability
                                                                simulate.interactions = TRUE){
+  
+    N_id = 30
+    B = NULL
+    V = 3
+    groups=NULL
+    sr_mu = c(0,0)
+    sr_sigma = c(0.3, 1.5)
+    sr_rho = 0.6
+    dr_mu = c(0,0)
+    dr_sigma = 1
+    dr_rho = 0.7
+    individual_predictors = NULL
+    dyadic_predictors = NULL
+    individual_effects = NULL
+    dyadic_effects = NULL
+    exposure_predictors = NULL
+    exposure_effects = NULL
+    exposure_sigma = 1.9
+    exposure_baseline = 50
+    simulate.censoring = TRUE
+    cens_intercept = c(Inf,Inf)
+    cens_slope = c(Inf,Inf)
+    simulate.interactions = TRUE
+    
+  
   require(STRAND)
   require(ANTs)
   ###############################
@@ -259,22 +284,34 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   diag(dr) = 0
   y_true[is.na(y_true)] = 0
   
-  #colnames(y_true) = rownames(y_true) = 1:ncol(y_true)
-  #interactions = 
-  #for(a in 1:(N_id-1)){
-  #  for(b in (i+1):N_id){
-  #    int = rep(0, true_samps[a,b])
-  #    int[sample(1:true_samps[a,b],  y_true[a,b] , replace = F)] = 1
-  #    interactions = rbind(interactions, data.frame('i' = a, 'j' = b, 'exposure' = 1:true_samps[a,b], 'int' = int))
-  #  }
-  #}
-  
-  
-  if(simulate.censoring  & simulate.interactions ){
-    net = df.to.mat(interactions, actor = 'sender', receiver = 'receiver', weighted ='interaction', sym = T)
-    net = net[colnames(net)[order(as.integer(colnames(net)))],colnames(net)[order(as.integer(colnames(net)))]]
-    y_true = net
-  }else{net = y_true}
+  colnames(y_true) = rownames(y_true) = 1:ncol(y_true)
+  interactions = NULL
+
+  for(a in 1:N_id){
+    for(b in a:N_id){
+      if(a != b){
+        samp = true_samps[a,b]
+        if(y_true[a,b] != 0){
+          interactions = rbind(interactions, data.frame('i' = a, 'j' = b,
+                                                        'int' = rep(1, y_true[a,b])))
+        }
+        if(y_true[b,a] != 0){
+          interactions = rbind(interactions, data.frame('i' = b, 'j' = a,
+                                                        'int' = rep(1,y_true[b,a])))
+        }else{receive = NULL}
+        
+        N = samp - y_true[a,b] - y_true[b,a]
+        if(N<0){
+          next
+        }
+        interactions = rbind(interactions, data.frame('i' = a, 'j' = b, 
+                                                      'int' = rep(0, )))
+      }
+    }
+  }
+  #tmp = df.to.mat(interactions, 'i', 'j', weighted = 'int', sym = F)
+  #tmp = tmp[order(as.numeric(colnames(tmp))),order(as.numeric(colnames(tmp)))]
+  #all(tmp == y_true)
   
   
   return(list(interactions = interactions,
