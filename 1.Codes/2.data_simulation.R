@@ -299,13 +299,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
           interactions = rbind(interactions, data.frame('i' = b, 'j' = a,
                                                         'int' = rep(1,y_true[b,a])))
         }else{receive = NULL}
-        
-        N = samp - y_true[a,b] - y_true[b,a]
-        if(N<0){
-          next
-        }
-        interactions = rbind(interactions, data.frame('i' = a, 'j' = b, 
-                                                      'int' = rep(0, )))
+
       }
     }
   }
