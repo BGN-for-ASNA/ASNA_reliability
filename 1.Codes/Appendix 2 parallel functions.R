@@ -44,6 +44,8 @@ test.function <- function(att = NULL,
                           test = TRUE,
                           print = TRUE,
                           legend = ''){
+  
+
   require(ggplot2)
   require(ggpubr)
   data = simulate_sbm_plus_srm_network_with_measurement_bias(N_id = N_id,
@@ -63,10 +65,12 @@ test.function <- function(att = NULL,
                                                              dyadic_predictors = dyadic_predictors,
                                                              individual_effects = individual_effects,
                                                              dyadic_effects = dyadic_effects,
+                                                             
                                                              exposure_predictors = exposure_predictors,
                                                              exposure_effects = exposure_effects,
                                                              exposure_sigma = exposure_sigma,
                                                              exposure_baseline = exposure_baseline,
+                                                             
                                                              cens_intercept = int_intercept,
                                                              cens_slope = int_slope,
                                                              simulate.interactions = simulate.interactions)
@@ -74,21 +78,21 @@ test.function <- function(att = NULL,
   if(test & !is.null(att)){
     if(simulate.interactions){
       df = cbind(Hairy, met.strength(data$network), 
-                 met.strength(data$network/(1+data$true_samps)), data$true_exposure, tapply(data$interactions$s_i, data$interactions$sender  , mean))
+                 data$true_exposure, met.strength(data$censoring))
       df = as.data.frame(df)
     }else{
       df = cbind(Hairy, met.strength(data$network),
-                 met.strength(data$network/(1+data$true_samps)), data$true_exposure)
+                 data$true_exposure,met.strength(data$censoring))
       df= as.data.frame(df)
       df$Censoring = 1
     }
     
-    colnames(df) = c('att','Strength', 'Strength.corrected', 'Exposure', 'Censoring')
+    colnames(df) = c('att','Strength',  'Exposure', 'Censoring')
     
     p1 = ggplot(df, aes( x= att, y = Strength))+geom_point(aes(size = 1), alpha = 0.5, show.legend=c(size=FALSE, alpha = FALSE))+xlab("Individuals characteristics")+theme(text = element_text(size=13))+ labs(tag = "(a)")
-    p2 = ggplot(df, aes( x= att, y = Strength.corrected))+geom_point(aes(size = 1), alpha = 0.5, show.legend =  c(size=FALSE, alpha = FALSE))+xlab("Individuals characteristics")+theme(text = element_text(size=13))+labs(tag = "(b)")
-    p3 = ggplot(df, aes( x= att, y = Exposure))+geom_point(aes(size = 1), alpha = 0.5, show.legend =  c(size=FALSE, alpha = FALSE))+xlab("Individuals characteristics")+theme(text = element_text(size=13))+ labs(tag = "(c)")
-    p4 = ggplot(df, aes( x= att, y = Censoring))+geom_point(aes(size = 1),alpha = 0.5,  show.legend =  c(size=FALSE, alpha = FALSE))+xlab("Individuals characteristics")+theme(text = element_text(size=13))+ labs(tag = "(d)")
+    #p2 = ggplot(df, aes( x= att, y = Strength.corrected))+geom_point(aes(size = 1), alpha = 0.5, show.legend =  c(size=FALSE, alpha = FALSE))+xlab("Individuals characteristics")+theme(text = element_text(size=13))+labs(tag = "(b)")
+    p3 = ggplot(df, aes( x= att, y = Exposure))+geom_point(aes(size = 1), alpha = 0.5, show.legend =  c(size=FALSE, alpha = FALSE))+xlab("Individuals characteristics")+theme(text = element_text(size=13))+ labs(tag = "(b)")
+    p4 = ggplot(df, aes( x= att, y = Censoring))+geom_point(aes(size = 1),alpha = 0.5,  show.legend =  c(size=FALSE, alpha = FALSE))+xlab("Individuals characteristics")+theme(text = element_text(size=13))+ labs(tag = "(c)")
     
     result = NULL
     test = lm(Strength~att, data = df)
@@ -102,34 +106,12 @@ test.function <- function(att = NULL,
       print(s)
     }
     
-    test = lm(Strength.corrected~att, data = df)
-    s = summary(test)
-    estimate = s$coefficients[2,1]
-    se = s$coefficients[2,2]
-    sig = s$coefficients[2,4]
-    result[[2]] = test
-    if(print){
-      cat("Relationship between individuals characteristics and strength corrected ---------------------------------", '\n')
-      print(s)
-    }
-    
-    test = lm(Strength.corrected~att, data = df, weights =Exposure)
-    s = summary(test)
-    estimate = s$coefficients[2,1]
-    se = s$coefficients[2,2]
-    sig = s$coefficients[2,4]
-    result[[3]] = test
-    if(print){
-      cat("Relationship between individuals characteristics and strength corrected and lm with weigth---------------------------------", '\n')
-      print(s)
-    }
-    
     test = lm(Exposure~att, data = df)
     s = summary(test)
     estimate = s$coefficients[2,1]
     se = s$coefficients[2,2]
     sig = s$coefficients[2,4]
-    result[[4]] = test
+    result[[2]] = test
     if(print){
       cat("Relationship between individuals characteristics and exposure ---------------------------------", '\n')
       print(s)
@@ -140,16 +122,16 @@ test.function <- function(att = NULL,
     estimate = s$coefficients[2,1]
     se = s$coefficients[2,2]
     sig = s$coefficients[2,4]
-    result[[5]] = test
+    result[[3]] = test
     if(print){
       cat("Relationship between individuals characteristics and censoring ---------------------------------", '\n')
       print(s)
     }
     
-    names(result) = c('Strength', 'Strength.corrected', 'Strength.corrected.weigthed', 'Exposure', 'Censoring')
+    names(result) = c('Strength', 'Exposure', 'Censoring')
     
     return(list('data' = data, 'result' = result, 
-                'plots' = annotate_figure(ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2), 
+                'plots' = annotate_figure(ggarrange(p1, p3, p4, ncol = 3, nrow = 1), 
                                           bottom  = text_grob(legend, color = "black",
                                                               hjust = 1, x = 1, face = "italic", size = 10)
                 )))

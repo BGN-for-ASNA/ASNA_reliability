@@ -70,28 +70,28 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
                                                                cens_slope = c(Inf,Inf), #Change this to affect characteristics effect on detectability
                                                                simulate.interactions = TRUE){
   
-    N_id = 30
-    B = NULL
-    V = 3
-    groups=NULL
-    sr_mu = c(0,0)
-    sr_sigma = c(0.3, 1.5)
-    sr_rho = 0.6
-    dr_mu = c(0,0)
-    dr_sigma = 1
-    dr_rho = 0.7
-    individual_predictors = NULL
-    dyadic_predictors = NULL
-    individual_effects = NULL
-    dyadic_effects = NULL
-    exposure_predictors = NULL
-    exposure_effects = NULL
-    exposure_sigma = 1.9
-    exposure_baseline = 50
-    simulate.censoring = TRUE
-    cens_intercept = c(Inf,Inf)
-    cens_slope = c(Inf,Inf)
-    simulate.interactions = TRUE
+    #N_id = 30
+    #B = NULL
+    #V = 3
+    #groups=NULL
+    #sr_mu = c(0,0)
+    #sr_sigma = c(0.3, 1.5)
+    #sr_rho = 0.6
+    #dr_mu = c(0,0)
+    #dr_sigma = 1
+    #dr_rho = 0.7
+    #individual_predictors = NULL
+    #dyadic_predictors = NULL
+    #individual_effects = NULL
+    #dyadic_effects = NULL
+    #exposure_predictors = NULL
+    #exposure_effects = NULL
+    #exposure_sigma = 1.9
+    #exposure_baseline = 50
+    #simulate.censoring = TRUE
+    #cens_intercept = c(Inf,Inf)
+    #cens_slope = c(Inf,Inf)
+    #simulate.interactions = TRUE
     
   
   require(STRAND)
@@ -321,7 +321,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
               ideal_samps=ideal_samps,
               ideal_exposure=ideal_exposure,
               true_exposure=true_exposure,
-              netInt = net))
+              censoring = censoring))
 
 }
 

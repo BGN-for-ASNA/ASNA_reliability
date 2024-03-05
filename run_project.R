@@ -105,7 +105,7 @@ result5 = simulations(Reps = 100, ncores = 100,
 write.csv(result5, "2.Results/Simulations/Differences in sociality, exposure bias.csv", row.names = FALSE)
 
 
-## Differences in sociality, censorign bias----------
+## Differences in sociality, censoring bias----------
 result6 = simulations(Reps = 100, ncores = 100, 
                       sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
                       dr_rho = 0.8, dr_sigma = 1.2,

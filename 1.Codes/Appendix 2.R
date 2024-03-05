@@ -21,13 +21,13 @@ Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 ## Run parallel functions: to assess simulation parameter accuracy..1. Individual characteristics do not impact sociality, exposure, or censoring
 test1 = test.function(att = Hairy,
                       N_id = N_id,
-                      individual_predictors=NULL, # individuals characteristics
+                      individual_predictors=Hairy, # individuals characteristics
                       individual_effects=matrix(c(0,0),ncol=1, nrow=2), # individuals characteristics on interaction probability
                       exposure_predictors = NULL,
                       exposure_effects = c(0, 0), exposure_sigma = 1, # exposure effect
                       int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf),#no censoring effect
                       simulate.interactions = T,
-                      legend = "Figure 1. No Relationship between individuals characteristics (a) sociality, (b) sociality corrected by exposure, (c) exposure, or (d) censoring.") 
+                      legend = "Figure 1. No Relationship between individuals characteristics (a) sociality, (b) exposure, or (d) censoring.") 
 test1$plots
 
 #' The results of the regressions show, as expected, no significant effect in the relationship between individual characteristics, sociality, exposure, or censoring.
@@ -36,13 +36,13 @@ test1$plots
 test2 = test.function(att = Hairy,
                       N_id = N_id,
                       individual_predictors=Hairy, # individuals characteristics
-                      individual_effects=matrix(c(0.4,0.4),ncol=1, nrow=2), # individuals characteristics on interaction probability
-                      exposure_predictors = NULL,
+                      individual_effects=matrix(c(-4,-4),ncol=1, nrow=2), # individuals characteristics on interaction probability
+                      exposure_predictors = Hairy,
                       exposure_effects = NULL,exposure_sigma = 1, #no exposure effect
                       int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf), #no censoring effect
-                      simulate.interactions = T, 
-                      legend = "Figure 2. Relationship between individuals characteristics and (a) sociality, (b) sociality corrected by exposure, 
-                      but no relationship betweenindividuals characteristics (c) exposure, (d) censoring, or (d) censoring.") 
+                      simulate.interactions = T,
+                      legend = "Figure 2. Relationship between individuals characteristics and (a) sociality, 
+                      but no relationship betweenindividuals characteristics (b) exposure, (d) censoring, or (d) censoring.") 
 test2$plots
 
 #' The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and sociality, but no significant effect between  individuals characteristics exposure, and censoring.
@@ -53,10 +53,9 @@ test3 = test.function(att = Hairy,
                       individual_predictors=Hairy, # individuals characteristics
                       individual_effects=matrix(c(0,0),ncol=1, nrow=2), # individuals characteristics on interaction probability
                       exposure_predictors = cbind(rep(1,N_id),Hairy),
-                      exposure_effects = c(-1, 4), exposure_sigma = 1, # exposure effect
+                      exposure_effects = c(4, 4), exposure_sigma = 1, # exposure effect
                       int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf),#no censoring effect
-                      simulate.interactions = TRUE, 
-                      legend = "Figure 3. No relationship between individuals characteristics and (a) sociality, (b) sociality corrected by exposure, (d) censoring, 
+                      legend = "Figure 3. No relationship between individuals characteristics and (a) sociality, (d) censoring, 
                       but precense of relationship betweenindividuals characteristics and (c) exposure.") 
 test3$plots
 
@@ -70,10 +69,9 @@ test4 = test.function(att = Hairy,
                       individual_effects=matrix(c(0,0),ncol=1, nrow=2), # individuals characteristics on interaction probability
                       exposure_predictors = NULL,
                       exposure_effects = c(0, 0), exposure_sigma = 1, # exposure effect
-                      int_intercept = c(0,0), int_slope = c(0.4,0.4),# censoring effect
-                      simulate.interactions = T, 
-                      legend = "Figure 5. No relationship between individuals characteristics and (a) sociality, (b) sociality corrected by exposure,
-                      (c) exposure, but precense of relationship between individuals characteristics and (d) censoring.") 
+                      int_intercept = c(4,4), int_slope = c(40,40),# censoring effect
+                      legend = "Figure 5. No relationship between individuals characteristics and (a) sociality,
+                      (b) exposure, but precense of relationship between individuals characteristics and (d) censoring.") 
 test4$plots
 #' 
 #' The results of the regressions show, as expected, a significant effect in the relationship between individual characteristics and censoring 
@@ -83,6 +81,7 @@ test4$plots
 
 
 #' # 3. Testing when the coefficient of individual characteristics (individual_effects parameter) results in a significant effect on simulated data
+
 N_id = 30
 Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
 TEST = seq(from = 0, to = 0.6, by = 0.05)
@@ -93,12 +92,13 @@ for (a in a:length(TEST)) {
   for(b in 1:10){
     r[[length(r)+1]] = test.function(att = Hairy,
                                      N_id = N_id,
+                                     sr_rho =0.5, dr_sigma = 0.5, dr_rho = 0.5, sr_sigma = c(1,1),
                                      individual_predictors=Hairy, # individuals characteristics
                                      individual_effects=matrix(c(TEST[a],TEST[a]),ncol=1, nrow=2), # individuals characteristics on interaction probability
                                      exposure_predictors = NULL,
                                      exposure_effects = c(0, 0), exposure_sigma = 0.5, # exposure effect
                                      int_intercept = c(Inf,Inf), int_slope = c(Inf,Inf),#no censoring effect
-                                     simulate.interactions = FALSE, print = FALSE) 
+                                     simulate.interactions = T, print = FALSE) 
   }
 }
 d = NULL
