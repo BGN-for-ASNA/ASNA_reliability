@@ -21,9 +21,10 @@ source('1.Codes/2.data_simulation.R')
 source('1.Codes/3.simulation.R')
 ## False positives rates ------------
 ### No differences in sociality, no biases----------
-result1 = simulations(Reps = 10, ncores = 10, 
-                      N_id =  seq(30, 90, by = 10), 
-                      hairy_tie_effect = seq(-0.20, 0.20, by = 0.01),
+result1 = simulations(Reps = 100, ncores = 100, 
+                      N_id =  seq(30, 90, by = 10),
+                      sr_rho =0.5, dr_sigma = 0.5, dr_rho = 0.5, sr_sigma = c(1,1),
+                      hairy_tie_effect = seq(-0.25, 0.25, by = 0.01),
                       hairy_detect_effect = seq(0, 0, by = 0.5),
                       BISON = FALSE,
                       STRAND = T, 
@@ -35,10 +36,11 @@ result1 = simulations(Reps = 10, ncores = 10,
 write.csv(result1, "2.Results/Simulations/No differences in sociality, no biases.csv", row.names = FALSE)
 
 ### No differences in sociality, exposure bias----------
-result2 = simulations(Reps = 10, ncores = 10, 
+result2 = simulations(Reps = 100, ncores = 100, 
                       exposure_sigma = 1, 
                       N_id =  seq(30, 90, by = 10), 
-                      hairy_tie_effect = seq(-0.20, 0.20, by = 0.01),
+                      sr_rho =0.5, dr_sigma = 0.5, dr_rho = 0.5, sr_sigma = c(1,1),
+                      hairy_tie_effect = seq(-0.25, 0.25, by = 0.01),
                       hairy_detect_effect = seq(-0.40, 0.40, by = 0.1),
                       BISON = FALSE,
                       STRAND = T, 
@@ -51,7 +53,7 @@ result2 = simulations(Reps = 10, ncores = 10,
 write.csv(result2, "2.Results/Simulations/No differences in sociality, exposure bias.csv", row.names = FALSE)
 
 ### No differences in sociality, censoring bias----------
-result3 = simulations(Reps = 10, ncores = 10, 
+result3 = simulations(Reps = 100, ncores = 100, 
                       exposure_sigma = 1, 
                       N_id =  seq(30, 90, by = 10), 
                       hairy_tie_effect = seq(-0.25, 0.25, by = 0.01),
@@ -59,9 +61,9 @@ result3 = simulations(Reps = 10, ncores = 10,
                       BISON = FALSE,
                       STRAND = T, 
                       simulate.interactions = F,
-                      simulate.censoring = F,
+                      simulate.censoring = T,
                       cens_intercept = c(4,4), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-                      cens_slope = c(-1,-1),# No effect of individuals attributes
+                      cens_slope = c(4, 4),# No effect of individuals attributes
                       blockModel = TRUE) # No block model
 
 write.csv(result3, "2.Results/Simulations/No differences in sociality, censoring bias.csv", row.names = FALSE)
@@ -71,11 +73,9 @@ write.csv(result3, "2.Results/Simulations/No differences in sociality, censoring
 ## False Negatives rates ------------
 ### Differences in sociality, no biases----------
 result4 = simulations(Reps = 100, ncores = 100, 
-                      sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
-                      dr_rho = 0.8, dr_sigma = 1.2,
-                      exposure_sigma = 1,
                       N_id =  seq(30, 90, by = 10), 
-                      hairy_tie_effect =  c(seq(-1, -0.40, by = 0.01), seq(0.40, 1, by = 0.01)),
+                      sr_rho =0.5, dr_sigma = 0.5, dr_rho = 0.5, sr_sigma = c(1,1),
+                      hairy_tie_effect =  c(seq(-0.51, -0.26, by = 0.01), seq(0.26, 0.51, by = 0.01)),
                       hairy_detect_effect = seq(0, 0, by = 0.5),
                       BISON = FALSE,
                       STRAND = T, 
@@ -89,11 +89,9 @@ write.csv(result4, "2.Results/Simulations/Differences in sociality, no biases.cs
 
 ## Differences in sociality, exposure bias----------
 result5 = simulations(Reps = 100, ncores = 100, 
-                      sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
-                      dr_rho = 0.8, dr_sigma = 1.2,
-                      exposure_sigma = 1,
                       N_id =  seq(30, 90, by = 10), 
-                      hairy_tie_effect =  c(seq(-1, -0.40, by = 0.01), seq(0.40, 1, by = 0.01)),
+                      sr_rho =0.5, dr_sigma = 0.5, dr_rho = 0.5, sr_sigma = c(1,1),
+                      hairy_tie_effect = c(seq(-0.51, -0.26, by = 0.01), seq(0.26, 0.51, by = 0.01)),
                       hairy_detect_effect = seq(-0.80, -0.20, by = 0.5),
                       BISON = FALSE,
                       STRAND = T, 
@@ -107,18 +105,16 @@ write.csv(result5, "2.Results/Simulations/Differences in sociality, exposure bia
 
 ## Differences in sociality, censoring bias----------
 result6 = simulations(Reps = 100, ncores = 100, 
-                      sr_rho = 0.5, sr_sigma =  c(1.7,0.8),
-                      dr_rho = 0.8, dr_sigma = 1.2,
-                      exposure_sigma = 1,
                       N_id =  seq(30, 90, by = 10), 
-                      hairy_tie_effect =  c(seq(-1, -0.40, by = 0.01), seq(0.40, 1, by = 0.01)),
+                      sr_rho =0.5, dr_sigma = 0.5, dr_rho = 0.5, sr_sigma = c(1,1),
+                      hairy_tie_effect =  c(seq(-0.51, -0.26, by = 0.01), seq(0.26, 0.51, by = 0.01)),
                       hairy_detect_effect = seq(0, 0, by = 0.5),
                       BISON = FALSE,
                       STRAND = T, 
                       simulate.interactions = F, 
-                      simulate.censoring = F, 
+                      simulate.censoring = T, 
                       cens_intercept = c(4,4), #invert log of inf = 1 of prob to observe interaction for both focal and alter
-                      cens_slope = c(-1,-1),# No effect of individuals attributes
+                      cens_slope = c(4,4),# No effect of individuals attributes
                       blockModel = TRUE) # No block model
 write.csv(result6, "2.Results/Simulations/Differences in sociality, censoring bias.csv", row.names = FALSE)
 save.image("2.Results/Simulations/Simulations.RData")
@@ -181,7 +177,7 @@ get.rates <- function(path, threshold = 0.2){
   rownames(errors) = NULL
   return(list(errors, results))
 }
-error = get.rates(path = '~/ASNA_reliability/2.Results/Simulations', threshold = 0.20)
+error = get.rates(path = '~/ASNA_reliability/2.Results/Simulations', threshold = 0.26)
 
 ## Plots------------------
 ### Rates------------------
@@ -231,8 +227,8 @@ ggplot(tmp[tmp$approach == '2.Rates weigthed' & tmp$type == 'Exposure bias',], a
 
 ### False negatives----------------
 tmp = error[[1]]
-tmp4 = tmp[tmp$type %in% c("Differences in sociality, censorign bias", "Differences in sociality, exposure bias", "Differences in sociality, no biases"),]
-tmp4$type = ifelse(tmp4$type == "Differences in sociality, censorign bias", 'Censoring biases', tmp4$type)
+tmp4 = tmp[tmp$type %in% c("Differences in sociality, censoring bias", "Differences in sociality, exposure bias", "Differences in sociality, no biases"),]
+tmp4$type = ifelse(tmp4$type == "Differences in sociality, censoring bias", 'Censoring biases', tmp4$type)
 tmp4$type = ifelse(tmp4$type == "Differences in sociality, exposure bias", 'Exposure biases', tmp4$type)
 tmp4$type = ifelse(tmp4$type == "Differences in sociality, no biases", 'No biases', tmp4$type)
 
