@@ -1,9 +1,12 @@
-###############################
-#######  Model outcomes #######
-###############################
-# Create an interaction matrix according to the ties probability matrix and observation bias.
-# Network variables----------------------
+#' Create an interaction matrix according to the ties probability matrix and observation bias.
+#' Network variables----------------------
 #' @param N_id Number of individuals
+#' @param individual_predictors A matrix of covariates
+#' @param dyadic_predictors A array of covariates
+#' @param exposure_predictors A matrix of covariates
+#' @param censoring_predictors An array of covariates
+
+# Block variables----------------------
 #' @param B Tie probabilities
 #' @param V Blocking variables (subgroups within the network)
 #' @param groups Subgroup IDs
@@ -18,11 +21,20 @@
 #' @param dr_sigma Variance of dyad effects
 #' @param dr_rho Correlation of i to j dyad effect and j to i dyad effect
 
-# Individuals characteristics----------------------
-#' @param individual_predictors A matrix of covariates
-#' @param dyadic_predictors An array of covariates
+# Exposure variables---------------------------
+#' @param exposure_mu Average log odds scale
+#' @param exposure_sigma Variance of random effects
+#' @param exposure_max Max count of observations per focal
+
+# Censoring variables---------------------------
+#' @param censoring_mu Average log odds scale
+#' @param censoring_sigma Variance of random effects
+
+# Effects----------------------
 #' @param individual_effects The effects of predictors on sender effects (row 1) and receiver effects (row 2)
 #' @param dyadic_effects The effects of predictors on dyadic ties
+#' @param exposure_effects The effects of predictors on observation count
+#' @param censoring_effects The effects of predictors on censoring
 
 # Exposure variables----------------------
 #' @param exposure_predictors A matrix of covariates
@@ -31,18 +43,20 @@
 #' @param exposure_baseline Baseline exposure (observations) rate
 
 # Censoring variables----------------------
-#' @param simulate.censoring A boolean to generate censoring bias or not
-#' @param cens_intercept Intercept value
-#' @param cens_slope Slope value
+#' @param simulate_censoring A boolean to generate censoring bias or not
 
 # Censoring variables----------------------
-#' @param simulate.interactions A boolean to generate interaction, edge list or matrix of interactions (Require censoring to be siumulated)
+#' @param simulate_interactions A boolean to generate interaction, edge list or matrix of interactions (Require censoring to be siumulated)
 
 
 #' @return
 
-simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
-
+simulate_sbm_plus_srm_network_with_measurement_bias = function(N_id = 30,
+                                                               individual_predictors = NULL,
+                                                               dyadic_predictors = NULL,                                                               
+                                                               exposure_predictors = NULL,
+                                                               censoring_predictors = NULL,
+                                                               
                                                                B = NULL,
                                                                V = 3,
                                                                groups=NULL,
@@ -55,47 +69,22 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
                                                                dr_sigma = 1,
                                                                dr_rho = 0.7,
 
-                                                               individual_predictors = NULL,
-                                                               dyadic_predictors = NULL,
+                                                               exposure_mu = 1.9,
+                                                               exposure_sigma = 1.0,
+                                                               exposure_max = 50,
+                                                               
+                                                               censoring_mu = 1.9,
+                                                               censoring_sigma = 1.0,
+                                                               N_trials = 20,
+
                                                                individual_effects = NULL,
                                                                dyadic_effects = NULL,
-
-                                                               exposure_predictors = NULL,
                                                                exposure_effects = NULL,
-                                                               exposure_sigma = 1.9,
-                                                               exposure_baseline = 50,
-                                                                
-                                                               simulate.censoring = TRUE,
-                                                               cens_intercept = c(Inf,Inf),
-                                                               cens_slope = c(Inf,Inf), #Change this to affect characteristics effect on detectability
-                                                               simulate.interactions = TRUE){
-  
-    #N_id = 30
-    #B = NULL
-    #V = 3
-    #groups=NULL
-    #sr_mu = c(0,0)
-    #sr_sigma = c(0.3, 1.5)
-    #sr_rho = 0.6
-    #dr_mu = c(0,0)
-    #dr_sigma = 1
-    #dr_rho = 0.7
-    #individual_predictors = NULL
-    #dyadic_predictors = NULL
-    #individual_effects = NULL
-    #dyadic_effects = NULL
-    #exposure_predictors = NULL
-    #exposure_effects = NULL
-    #exposure_sigma = 1.9
-    #exposure_baseline = 50
-    #simulate.censoring = TRUE
-    #cens_intercept = c(Inf,Inf)
-    #cens_slope = c(Inf,Inf)
-    #simulate.interactions = TRUE
-    
-  
+                                                               censoring_effects = NULL, 
+
+                                                               simulate_censoring = TRUE,
+                                                               simulate_interactions = TRUE){  
   require(STRAND)
-  require(ANTs)
   ###############################
   ####### Run some checks #######
   ###############################
@@ -130,7 +119,7 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   # ## Determine for each dyad its baseline interaction frequencies (rmvnorm2) +
   # ## individuals' characteristics effect on interactions sum(individual_effects[1,] * individual_predictors[i,])
   sr = matrix(NA, nrow=N_id, ncol=2)
-  for( i in 1:N_id){
+  for(i in 1:N_id){
     sr[i,] = rmvnorm2(1 , Mu=sr_mu, sigma=sr_sigma, Rho= Rho_sr)
 
     if(!is.null(individual_predictors)){
@@ -139,13 +128,13 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
     }
   }
 
-  # Build true network
-  dr = p = y_true = matrix(NA, N_id, N_id)
+  # Build network
+  dr = p = y = matrix(0, N_id, N_id)
   # Loop over upper triangle and create ties from i to j, and j to i
   # Determine for each interaction its baseline interaction frequencies (rmvnorm2) +
   # dyads' characteristics effect on interactions sum(dyadic_effects * dyadic_predictors[i, j,])
-  for ( i in 1:(N_id-1) ){
-    for ( j in (i+1):N_id){
+  for(i in 1:(N_id-1)){
+    for(j in (i+1):N_id){
       # Dyadic effects
        dr_scrap = rmvnorm2(1, Mu=c(dr_mu), sigma=rep(dr_sigma,2), Rho=Rho_dr)
 
@@ -165,108 +154,70 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
     }
   }
 
-  # Sum dyad and interaction probabilities and create ties probabilities matrix.
-  for ( i in 1:(N_id-1) ){
-    for ( j in (i+1):N_id){
-      p[i,j] = inv_logit( sr[i,1] + sr[j,2] + dr[i,j])
-      p[j,i] = inv_logit( sr[j,1] + sr[i,2] + dr[j,i])
+  # Sum dyad and interaction weights and create tie probability matrix.
+  for (i in 1:(N_id-1) ){
+    for (j in (i+1):N_id){
+      p[i,j] = inv_logit(sr[i,1] + sr[j,2] + dr[i,j])
+      p[j,i] = inv_logit(sr[j,1] + sr[i,2] + dr[j,i])
     }
   }
 
   ##################################
-  #######  Model exposure bias###
+  #######  Model exposure bias   ###
   ##################################
-  ideal_samps = matrix(NA, nrow=N_id, ncol=N_id) #Sample without bias.
-  true_samps = matrix(NA, nrow=N_id, ncol=N_id) #Sample with bias.
-  exposure_prob = rep(NA, N_id) #The probability of sample based on individual characteristics.
-  ideal_exposure = rep(NA, N_id) #Observation time without bias.
-  true_exposure = rep(NA, N_id) #Observation time with bias.
-  exposure_offset = rep(NA, N_id) #Observation
+  ideal_samps = matrix(NA, nrow=N_id, ncol=N_id) # Sample without bias.
+  true_samps = matrix(NA, nrow=N_id, ncol=N_id)  # Sample with bias.
+  exposure_prob = rep(NA, N_id)                  # The probability of sample based on individual characteristics.
+  true_exposure = rep(NA, N_id)                  # Observation time with bias.
+  exposure_offset = rep(NA, N_id)                # Observation
+  exposure_factors = rep(0, N_id)               
   diag(true_samps) = 0
   diag(ideal_samps) = 0
-  mu = rep(NA, N_id)
   
-  ##  For each individual, determine:
-  #for( i in 1:N_id){
-  #  ideal_exposure[i] = rpois(1, lambda=exposure_baseline)
-  #  exposure_offset[i] = rnorm(1, 0.001, exposure_sigma)/10# Reduce variance as scale is exponential
-  #  mu[i] = exp(sum(exposure_effects*exposure_predictors[i,]) + exposure_offset[i])
-  #  true_exposure[i] = ceiling(rgamma(n = 1, shape = mu[i]*ideal_exposure[i]/10, scale = ideal_exposure[i]/10))
-  #}
-  #hist(true_exposure)
-  ##  For each individual, determine:
-  #for( i in 1:N_id){
-  #  ideal_exposure[i] = rpois(1, lambda=exposure_baseline)
-  #  exposure_offset[i] = rnorm(1, 0, exposure_sigma)
-  #  mu[i] = sum(exposure_effects*exposure_predictors[i,]) + 1
-  #  true_exposure[i] = ceiling(rnorm(n = 1, mean = mu[i]*ideal_exposure[i], sd = abs(exposure_offset[i])))
-  #}
-  #hist(true_exposure)
-  #
-  #  For each individual, determine:
-  for( i in 1:N_id){
-    ideal_exposure[i] = rpois(1, lambda=exposure_baseline) # Observation baseline.
-    exposure_offset[i] = rnorm(1,0,exposure_sigma) # Observation bias.
-    exposure_prob[i] = inv_logit(sum(exposure_effects*exposure_predictors[i,]) + exposure_offset[i]) # Its observation probabilities based on individual characteristics.
-    true_exposure[i] = rbinom(1, size=ideal_exposure[i], prob=exposure_prob[i]) # Its observations with bias.
+  # For each individual, determine:
+  for(i in 1:N_id){
+        
+    if(!is.null(exposure_predictors)){
+    exposure_factors[i] = exposure_factors[i] + sum(exposure_effects*exposure_predictors[i,])
+    }
+
+    exposure_offset[i] = rnorm(1, 0, exposure_sigma)                                             # Observation bias.
+    exposure_prob[i] = inv_logit(exposure_mu + exposure_factors[i] + exposure_offset[i])         # Its observation probabilities based on individual characteristics.
+    true_exposure[i] = rbinom(1, size=exposure_max, prob=exposure_prob[i])                       # Its observations with bias.
   }
 
-  # For each dyad, determine its sampling with and without bias according to previous steps.
-  for ( i in 1:(N_id-1) ){
-    for ( j in (i+1):N_id){
-      ideal_samps[i,j] = sum(ideal_exposure[i] + ideal_exposure[j])
+  # For each dyad, determine its sampling with and without bias according to previous steps. 
+  for(i in 1:(N_id-1)){
+    for(j in (i+1):N_id){
+      ideal_samps[i,j] = sum(exposure_max + exposure_max)
       ideal_samps[j,i] = ideal_samps[i,j]
+
       true_samps[i,j] = sum(true_exposure[i] + true_exposure[j])
       true_samps[j,i] = true_samps[i,j]
     }
   }
   
   ###################################
-  #######  Model censoring bias###
+  #######  Model censoring bias   ###
   ###################################
-  if(simulate.censoring){
-    censoring = matrix(0, N_id, N_id)
-    cens = rep(0, N_id)
-    interactions = NULL
-    for(a in 1:N_id){
-      for(b in 1:N_id){
-        if(a == b){next}
-        if(!is.null(individual_predictors) &
-           !is.infinite(cens_intercept[1]) &
-           !is.infinite(cens_intercept[2])){
-          p.ego =  cens_intercept[1] + cens_slope[1]*individual_predictors[a]
-          p.alter = cens_intercept[2] + cens_slope[2]*individual_predictors[b]
-        }else{
-          p.ego =  cens_intercept[1]
-          p.alter = cens_intercept[2]
-        }
+   censoring_offset = rep(NA, N_id)                
+   censoring_prob = rep(0, N_id) 
+   censoring_factors = rep(0, N_id)               
 
-        censoring[a,b] = inv_logit(p.ego)*inv_logit(p.alter)
-        #censoring[b,a] = inv_logit(p.ego)*inv_logit(p.alter)
-        
-        #if(true_exposure[a] == 0){next}
-        #
-        ##Probability of censor data
-        #observedWithoutCensoring = rbinom(true_exposure[a] , size = 1, prob = p[a,b])
-        #Nobservations = sum(observedWithoutCensoring == 1)
-        #
-        #observed = observedWithoutCensoring
-        #observed[which(observed == 1)] = rbinom(Nobservations, size = 1, prob = censoring[a,b]) 
-        #
-        #cens[a] = cens[a] + sum(observedWithoutCensoring - observed)
-        #cens[b] = cens[b] + sum(observedWithoutCensoring - observed)
-        #interactions = rbind(interactions, data.frame('follow' = a, 'focal' = 1:true_exposure[a], 'sender' = a,  'receiver' = b, 'interaction' = observed,
-        #                                             'exposure' = true_exposure[a], 'sr_p' = p[a,b], 's_i' = inv_logit(p.ego), 'r_i' = inv_logit(p.alter)))
-      }
+   if(simulate_censoring == TRUE){
+   # For each individual, determine:
+   for(i in 1:N_id){
+
+    if(!is.null(censoring_predictors)){
+    censoring_factors[i] = censoring_factors[i] + sum(censoring_effects*censoring_predictors[i,])
     }
 
-    diag(censoring) = 0
-  }else{
-    censoring = matrix(1, N_id, N_id)
-    diag(censoring) = 0
-    interactions = NULL
-  }
+    censoring_offset[i] = rnorm(1, 0, censoring_sigma)                                                                 
+    censoring_prob[i] = inv_logit(censoring_mu + censoring_factors[i] + censoring_offset[i])                                      
+    }
+     }
 
+  eta = 1 - censoring_prob             # Flip to represent NOT censoring
 
   ###############################
   #######  Model outcomes #######
@@ -274,42 +225,37 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
   # Create an interaction matrix according to the ties probability matrix and observation bias.
   for ( i in 1:(N_id-1) ){
     for ( j in (i+1):N_id){
-      y_true[i,j] = rbinom( 1 , size=true_samps[i,j], prob = p[i,j]*censoring[i,j] ) # This concider undirected behaviours
-      y_true[j,i] = rbinom( 1 , size=true_samps[j,i], prob = p[j,i]*censoring[j,i])
+      y[i,j] = rbinom( 1 , size=true_samps[i,j], prob = p[i,j]*eta[i]*eta[j] ) 
+      y[j,i] = rbinom( 1 , size=true_samps[j,i], prob = p[j,i]*eta[j]*eta[i] )
     }
   }
+  
+  
+  trials = rep(N_trials, N_id)
+  detected = NULL
+  for(i in 1: N_id){
+    detected[i]  = rbinom(1, size = trials[i], prob = eta[i])
+  }
 
-  diag(y_true) = 0
+  diag(y) = 0
   diag(p) = 0
   diag(dr) = 0
-  y_true[is.na(y_true)] = 0
   
-  colnames(y_true) = rownames(y_true) = 1:ncol(y_true)
+  colnames(y) = rownames(y) = 1:ncol(y)
   interactions = NULL
 
-  for(a in 1:N_id){
-    for(b in a:N_id){
-      if(a != b){
-        samp = true_samps[a,b]
-        if(y_true[a,b] != 0){
-          interactions = rbind(interactions, data.frame('i' = a, 'j' = b,
-                                                        'int' = rep(1, y_true[a,b])))
-        }
-        if(y_true[b,a] != 0){
-          interactions = rbind(interactions, data.frame('i' = b, 'j' = a,
-                                                        'int' = rep(1,y_true[b,a])))
-        }else{receive = NULL}
+ if(simulate_interactions==TRUE){
+    for(i in 1:(N_id-1)){
+    for(j in (i+1):N_id){
+          temp_dat_ij = data.frame(focal=i, target=j, outcome=y[i,j], duration=true_samps[i,j])
+          temp_dat_ji = data.frame(focal=j, target=i, outcome=y[j,i], duration=true_samps[j,i])
 
-      }
+         interactions = rbind(interactions, temp_dat_ij, temp_dat_ji)
+      }}
     }
-  }
-  #tmp = df.to.mat(interactions, 'i', 'j', weighted = 'int', sym = F)
-  #tmp = tmp[order(as.numeric(colnames(tmp))),order(as.numeric(colnames(tmp)))]
-  #all(tmp == y_true)
-  
   
   return(list(interactions = interactions,
-              network= y_true,
+              network= y,
               tie_strength=p,
               group_ids=groups,
               individual_predictors=individual_predictors,
@@ -319,9 +265,66 @@ simulate_sbm_plus_srm_network_with_measurement_bias <- function(N_id = 30,
               dr=dr,
               true_samps=true_samps,
               ideal_samps=ideal_samps,
-              ideal_exposure=ideal_exposure,
               true_exposure=true_exposure,
-              censoring = censoring))
+              censoring = simulate_censoring,
+              detected = detected,
+              trials = trials))
 
 }
+
+
+                                                               
+                                                               
+                                                             
+                                                                                       
+                                                 
+
+                                                                
+
+# Test ----------------------------------------------------------------------
+#V = 1           # One blocking variable
+#G = 3           # Three categories in this variable
+#N_id = 30       # Number of people
+
+#clique = sample(1:3, N_id, replace=TRUE)
+#B = matrix(-8, nrow=G, ncol=G)
+#diag(B) = -4.5 # Block matrix
+
+#B[1,3] = -5.9
+#B[3,2] = -6.9
+
+
+#                                                                
+#A = simulate_sbm_plus_srm_network_with_measurement_bias(N_id = N_id, 
+#                                                    B=list(B=B),
+#                                                    V=V,
+#                                                    groups=data.frame(clique=factor(clique)),
+#                                                    individual_predictors=matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1),
+#                                                    individual_effects=matrix(c(1.7, 0.3),ncol=1, nrow=2),
+#                                                    dyadic_predictors = array(rnorm(N_id*N_id, 0, 1), c(N_id, N_id, 1)),
+#                                                    dyadic_effects = c(0.03),
+#                                                    sr_mu = c(0,0),
+#                                                    sr_sigma = c(1.4, 0.8),
+#                                                    sr_rho = 0.5,
+#                                                    dr_mu = c(0,0),
+#                                                    dr_sigma = 1.2,
+#                                                    dr_rho = 0.8,
+#                                                    exposure_mu = 1.9,
+#                                                    exposure_sigma = 1.0,
+#                                                    exposure_max = 50,
+#                                                    censoring_mu = -1.9,
+#                                                    censoring_sigma = 1.0,
+#                                                    exposure_predictors = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1),
+#                                                    censoring_predictors = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1),
+#                                                    simulate_censoring = TRUE,
+#                                                    simulate_interactions = TRUE,
+#                                                    exposure_effects = c(-1.1),
+#                                                    censoring_effects = c(-1.1)
+#                                                    )
+#                               
+
+#Net = graph_from_adjacency_matrix(A$network, mode = c("directed"))
+#V(Net)$color = c("turquoise4","gray13", "goldenrod3")[A$group_ids$clique]
+#
+#plot(Net, edge.arrow.size =0.1, edge.curved = 0.3, vertex.label=NA, vertex.size = 5)
 

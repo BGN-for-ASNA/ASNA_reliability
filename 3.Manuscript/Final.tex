@@ -82,7 +82,7 @@
 
 \definecolor{airforceblue}{rgb}{0.0, 0.53, 0.74}
 \definecolor{asparagus}{rgb}{0.31, 0.47, 0.26}
-
+  
 \lstset{ 
   language=R,                     % the language of the code
   basicstyle=\ttfamily, 
@@ -369,7 +369,7 @@ allowing estimation of social-network parameters that are robust to censoring, o
 Using the previously explained simulation model, we generated six types of scenarios. Scenario 1, we simulated data where individuals' characteristics have no effect on their social ties and without sampling or censoring biases. This will allow to assess rates of false positives for each approach tested. Scenario 2, we simukated data where individuals' characteristics have an effect on their social ties and without sampling or censoring biases. This will allow to assess rates of false negatives for each approach tested. 
 In Scenario 3, we simulated data where individuals' characteristics have no effect on their social ties, introducing sampling bias but without censoring biases. This helps assess rates of false positives for each approach tested in the presence of sampling biases. In Scenario 4, data simulation includes individuals' characteristics affecting social ties with sampling biases and no censoring biases, allowing us to assess rates of false negatives for each approach tested under sampling biases conditions. In scenario 5, we simulated data where individuals' characteristics have no effect on their social ties, introducing censoring biases without sampling biases. This helps assess rates of false positives for each approach tested in the presence of censoring biases. In scenario 6, data simulation includes individuals' characteristics affecting social ties without sampling biases and with censoring biases, allowing us to assess rates of false negatives for each approach tested under censoring biases conditions. 
 
-For each scenario, we generated 100 simulations with random variations in the simulation parameters related to the effect size of individuals' characteristics on social ties, sampling biases, and censoring bias. Details on the range of parameter variations are presented in Table 1.
+For each scenario, we generated 500 simulations with random variations in the simulation parameters related to the effect size of individuals' characteristics on social ties, sampling biases, and censoring bias. Details on the range of parameter variations are presented in Table 1.
 
 \subsubsection{Tested approaches:}
 For each simulation, we assessed 5 approaches. Initially, we tested the association index without permutations, along with network and double permutations. Next, we examined the interaction index with the same permutation variations. Additionally, Bayesian generative networks modeling interaction observations (e.g., Bison) and link weight probabilities (e.g., STRAND) have been tested. Finally, we introduced a new method using weigthed regression model for association and interaction indices. 
@@ -428,7 +428,9 @@ For each approach in every simulation, we calculated the estimated effect size a
 
 \section{Results}
 \subsection{Evaluating the accuracy of the simulation model.}
-We assessed the simulation method reliability based on variations in three terms. Initially, we simulated data without any influence of individuals' characteristics on their social interaction patterns, observations, or censoring (Fig. \ref{figSimTest}.A). Next, we simulated data with only an effect of individuals' characteristics on their social interaction patterns (Fig. \ref{figSimTest}.B). Additionally, we conducted a simulation with only an effect of individuals' characteristics on their observations (Fig. \ref{figSimTest}.C). Finally, we performed a simulation with only an effect of individuals' characteristics on their censoring (Fig. \ref{figSimTest}.D). For each simulation type, we used linear regressions to examine the relationship between individuals' characteristics and their social interaction patterns, observations, and censoring, ensuring the reliability of the simulation results. Regression outcomes are summarized in Table 2.
+As our simulation process shares a similar structure with the STRAND model, specifically a block model and reciprocity, we assessed the reliability of the simulation method using estimations from the STRAND model (Figure X). Furthermore, we also explored the data structure based on the independent variation of three parameters. Initially, we simulated data without any influence of individuals' characteristics on their social interaction patterns, observations, or censoring (Fig. \ref{figSimTest}.A). Next, we simulated data with only an effect of individuals' characteristics on their social interaction patterns (Fig. \ref{figSimTest}.B). Additionally, we conducted a simulation with only an effect of individuals' characteristics on their observations (Fig. \ref{figSimTest}.C). Finally, we performed a simulation with only an effect of individuals' characteristics on their censoring (Fig. \ref{figSimTest}.D). For each simulation type, we used linear regressions to examine the relationship between individuals' characteristics and their social interaction patterns, observations, and censoring, ensuring the reliability of the simulation results. Regression outcomes are summarized in Table 2.
+
+
 
 \begin{figure*}[t]
   \caption{XXXX}\label{figSimTest}
@@ -438,16 +440,13 @@ We assessed the simulation method reliability based on variations in three terms
 
 
 \subsection{Scenario 1}
+Overall results for simulations  without biases indicates consistent trends across all methods in the absence of exposure or censoring bias. Moreover, the majority of tests identified a statistically significant impact when the simulated effect size was approximately 0.25 (Fig. X.A).  Upon reaching an effect size of XXX, we observed statistically significant results for all methods. These results serve as evidence that all methods functioned effectively in bias-free conditions and are capable of detecting with precision relativelly smaller effect sizes . 
+
+In our study comparing the performance of various methods for significance threshold sets at an effect size of 0.25, we noted notably elevated false positive and false negative rates for each method (Figure X). These observed rates surpassed the desired 5\% threshold. Additionally, distinctive variations among methods emerged, with those displaying lower false positive and false negative rates being denoted as XXX, exhibiting false positive rates of X\% and false negative rates of X\%. In contrast, methods exhibiting higher false positive and false negative rates were identified as XXX, characterized by false positive rates of X\% and false negative rates of X\%.
 
 \subsection{Scenario 2}
 
 \subsection{Scenario 3}
-
-\subsection{Scenario 4}
-
-\subsection{Scenario 5}
-
-\subsection{Scenario 6}
 
 \section{Discussion}
 

@@ -20,6 +20,9 @@ data{
     int export_network;
     int outcome_mode; 
     
+    array[N_id] int detected;
+    array[N_id] int trials;
+    
     //vector[N_id] censoring_factor; 
     //array[N_id] int<lower=0,upper=1> censoring;
 }
@@ -72,24 +75,23 @@ parameters{
     cholesky_factor_corr[2] dr_L;
     matrix[N_id, N_id] dr_raw;
     
-    //vector<lower=0>[2] censoring_sigma;  //# Variation of censoring effects
-    //cholesky_factor_corr[2] censoring_L;
-    array[N_id] vector[2] censoring_raw;
+    real<lower=0> censoring_sigma;  //# Variation of censoring effects
+    array[N_id] real censoring_raw;
+    real censoring_alpha;
+    
 
     //# Effects of covariate
     vector[N_params[1]-1] focal_effects;
     vector[N_params[2]-1] target_effects;
     vector[N_params[3]-1] dyad_effects;  
     vector[N_params[4]-1] censoring_effects; 
-    
-    real alpha;
-    real beta;
+
 }
 
 model{
   array[N_id] vector[2] sr;
   matrix[N_id, N_id] dr;
-  array[N_id] vector[1] cens;
+  array[N_id] real cens;
   
   vector[2] scrap;
 
@@ -150,16 +152,19 @@ model{
     //}
     
     // Binomial regression for censoring ---------------------------------------------
-    for(i in 1:N_id)
-      censoring_raw[i] ~ normal(0,1);
+    censoring_raw ~ normal(0,1);
+    censoring_alpha ~ normal(0,1);
+    censoring_sigma ~ exponential(priors[15,1]);   
+    
     for (i in 1:N_id){
       //censoring[i] = inv_logit(alpha + beta* censoring_factor[i]);
       vector[1] censoring_terms;
       censoring_terms[1] = dot_product(censoring_effects,  to_vector(censoring_individual_predictors[i]));
-      cens[i] = censoring_raw[i] + censoring_terms[1];
+      cens[i] = censoring_alpha + censoring_raw[i]*censoring_sigma + censoring_terms[1];
     }
     
-
+    
+    detected ~ binomial(trials, inv_logit(cens));
     
     //# likelihood
     for ( i in 1:N_id ) {
@@ -167,19 +172,15 @@ model{
         if ( i != j ) {
           if(outcome_mode==1){
             //outcomes[i,j,1] ~ bernoulli_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]);  //# Then model the outcomes
-             outcomes[i,j,1] ~ bernoulli(inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] + cens[i] + cens[j]));
+             outcomes[i,j,1] ~ bernoulli(inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]) * inv_logit(cens[i]) * inv_logit(cens[j]));
           }
           if(outcome_mode==2){
             //outcomes[i,j,1] ~ binomial_logit(exposure[i,j,1], B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] );  //# Then model the outcomes
-             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] + cens[i] + cens[j]));
+             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]) * inv_logit(cens[i]) * inv_logit(cens[j]));
           }
-          if(outcome_mode==3){
-            outcomes[i,j,1] ~ poisson_log(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]);  //# Then model the outcomes
-          }
-          if(outcome_mode==4){
-             outcomes[i,j,1] ~ binomial(exposure[i,j,1], inv_logit(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]+ cens[i] + cens[j]));
-            //outcomes[i,j,1] ~ binomial_logit(exposure[i,j,1], B[1,1] + sr[i,1] + sr[j,2] + dr[i,j] + cens[i,1]);
-          }
+          //if(outcome_mode==3){
+          //  outcomes[i,j,1] ~ poisson_log(B[1,1] + sr[i,1] + sr[j,2] + dr[i,j]);  //How to add censoring to poisson
+          //}
         }
       }
     }

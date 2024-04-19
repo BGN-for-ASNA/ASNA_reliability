@@ -1,32 +1,13 @@
-library(STRAND)
-source("./1.Codes/2.data_simulation.R")
-
-N_id = 30
-Hairy = matrix(rnorm(N_id, 0, 1), nrow=N_id, ncol=1)
-indiv =  data.frame(Hairy = Hairy)
-individual_effects=matrix(c(1, 1),ncol=1, nrow=2)
-A = simulate_sbm_plus_srm_network_with_measurement_bias(N_id = N_id, individual_predictors= Hairy, individual_effects=individual_effects)
-
-nets = list(Grooming = A$network)
-exposure_nets = list(Exposure = A$true_samps)
-
-NG = sample(c(1,3,7), 1) # Random number of groups
-clique = sample(1:NG, N_id, replace = TRUE)
-mean.within.GR = sample(c(seq(from = -9, to = 9, by = 1)), 1) # Probability of random ties within a group.
-B = matrix(rnorm(NG*NG, mean.within.GR, sd = 1), NG, NG)
-mean.between.GR = sample(c(seq(from = 0, to = 9, by = 1)), 1) # Increase randomly the probability of  ties within groups.
-diag(B) = diag(B) + rnorm(NG, mean.between.GR, sd = 1)
-block = data.frame(Clique=factor(clique))
-
-make_strand_data_censoring = function(outcome = nets,
-                                       individual_covariates = indiv,
-                                       block_covariates = block,
+make_strand_data_censoring = function(outcome = NULL,
+                                       individual_covariates = NULL,
+                                       block_covariates = NULL,
                                        outcome_mode = "binomial",
-                                       exposure = exposure_nets,
+                                       exposure = NULL,
                                        self_report = NULL,
                                        ground_truth = NULL,
                                        dyadic_covariates = NULL,
-                                       censoring = indiv){
+                                       detected = NULL,
+                                       trials = NULL){
 
   outcome_mode_numeric = NULL
   if (outcome_mode == "bernoulli") {
@@ -37,9 +18,6 @@ make_strand_data_censoring = function(outcome = nets,
   }
   if (outcome_mode == "poisson") {
     outcome_mode_numeric = 3
-  }
-  if (outcome_mode == "binomial" & !is.null(censoring)) {
-    outcome_mode_numeric = 4
   }
   
   if (is.null(outcome_mode_numeric)) 
@@ -166,19 +144,7 @@ make_strand_data_censoring = function(outcome = nets,
   }
   
   # Adding censoring bias
-  if(is.null(censoring)){
-    N_censoring_predictors = 0
-    censoring_predictors = 0
-    model_dat = list(N_networktypes = N_networktypes, N_id = N_id, 
-                     N_responses = N_responses, N_periods = N_periods, N_individual_predictors = N_individual_predictors, 
-                     N_dyadic_predictors = N_dyadic_predictors, outcomes = outcomes, 
-                     flows = flows, individual_predictors = individual_predictors, 
-                     dyadic_predictors = dyadic_predictors, N_block_predictors = N_block_types, 
-                     N_groups_per_block_type = N_groups_per_type, block_predictors = group_ids, 
-                     outcome_mode = outcome_mode_numeric, exposure = exposure_risk)
-  }else{
-    N_censoring_predictors = dim(censoring)[2]
-    censoring_predictors = censoring
+
     model_dat = list(N_networktypes = N_networktypes, N_id = N_id, 
                      N_responses = N_responses, N_periods = N_periods, N_individual_predictors = N_individual_predictors, 
                      N_dyadic_predictors = N_dyadic_predictors, outcomes = outcomes, 
@@ -186,13 +152,9 @@ make_strand_data_censoring = function(outcome = nets,
                      dyadic_predictors = dyadic_predictors, N_block_predictors = N_block_types, 
                      N_groups_per_block_type = N_groups_per_type, block_predictors = group_ids, 
                      outcome_mode = outcome_mode_numeric, exposure = exposure_risk,
-                     N_censoring_predictors = N_censoring_predictors, censoring_predictors = censoring_predictors
+                     N_censoring_predictors = N_individual_predictors, detected = detected, trials = trials
     )
-    attr(model_dat, "censoring") = N_censoring_predictors
-  }
-  
-
-  
+  attr(model_dat, "censoring") = N_individual_predictors
   attr(model_dat, "class") = "STRAND Data Object"
   attr(model_dat, "supported_models") = supported_models
   attr(model_dat, "group_ids_character") = group_ids_character
@@ -205,5 +167,4 @@ make_strand_data_censoring = function(outcome = nets,
 }
 
 
-model_dat = make_strand_data_censoring()
 
