@@ -904,4 +904,4 @@ for (a in 1:N) {
                                       a))
 }
 exposure.bias = sum(result$Pr...t.. < 0.05) / nrow(result) * 100
-cat(exposure.bias, '%')
+cat('Rate of exposure biases in simulations:', exposure.bias, '%')
